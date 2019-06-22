@@ -1,0 +1,14 @@
+name: ${project.name}
+main: jp.azisaba.lgw.kdstatus.KDStatusReloaded
+version: ${project.version}
+author: siloneco
+description: "KDStatus reloaded."
+website: ${project.url}
+commands:
+  mystatus:
+    aliases: ["ms", "status", "st"]
+    permission: mystatus.command.mystatus
+    permission-message: "§c権限がありません。運営に報告してください。"
+permissions:
+  mystatus.command.mystatus:
+    default: true

@@ -15,34 +15,34 @@ import jp.azisaba.lgw.kdstatus.KDUserData;
 
 public class MyStatusCommand implements CommandExecutor {
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		if (sender instanceof Player) {
-			Player p = (Player) sender;
-			KDUserData data = KDManager.getPlayerData(p, true);
+        if ( sender instanceof Player ) {
+            Player p = (Player) sender;
+            KDUserData data = KDManager.getPlayerData(p, true);
 
-			StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
 
-			builder.append(ChatColor.GREEN + Strings.repeat("=", 7) + ChatColor.RED + "[" + ChatColor.YELLOW
-					+ "Status" + ChatColor.RED + "]" + ChatColor.GREEN + Strings.repeat("=", 7) + "\n");
+            builder.append(ChatColor.GREEN + Strings.repeat("=", 7) + ChatColor.RED + "[" + ChatColor.YELLOW
+                    + "Status" + ChatColor.RED + "]" + ChatColor.GREEN + Strings.repeat("=", 7) + "\n");
 
-			builder.append(
-					ChatColor.RED + "Kills" + ChatColor.GREEN + ": " + ChatColor.YELLOW + data.getKills() + "\n");
-			builder.append(
-					ChatColor.RED + "Deaths" + ChatColor.GREEN + ": " + ChatColor.YELLOW + data.getDeaths() + "\n");
-			builder.append(ChatColor.RED + "Daily Kills" + ChatColor.GREEN + ": " + ChatColor.YELLOW
-					+ data.getDailyKills() + "\n");
+            builder.append(
+                    ChatColor.RED + "Kills" + ChatColor.GREEN + ": " + ChatColor.YELLOW + data.getKills() + "\n");
+            builder.append(
+                    ChatColor.RED + "Deaths" + ChatColor.GREEN + ": " + ChatColor.YELLOW + data.getDeaths() + "\n");
+            builder.append(ChatColor.RED + "Daily Kills" + ChatColor.GREEN + ": " + ChatColor.YELLOW
+                    + data.getDailyKills() + "\n");
 
-			double kd = (double) data.getKills() / (double) data.getDeaths();
+            double kd = (double) data.getKills() / (double) data.getDeaths();
 
-			builder.append(ChatColor.RED + "K/D" + ChatColor.GREEN + ": " + ChatColor.YELLOW
-					+ String.format("%.2f", kd) + "\n");
+            builder.append(ChatColor.RED + "K/D" + ChatColor.GREEN + ": " + ChatColor.YELLOW
+                    + String.format("%.2f", kd) + "\n");
 
-			builder.append(ChatColor.GREEN + StringUtils.repeat("=", 21));
+            builder.append(ChatColor.GREEN + StringUtils.repeat("=", 21));
 
-			p.sendMessage(builder.toString());
-		}
-		return true;
-	}
+            p.sendMessage(builder.toString());
+        }
+        return true;
+    }
 }

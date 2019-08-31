@@ -10,16 +10,16 @@ import jp.azisaba.lgw.kdstatus.KDManager;
 
 public class JoinQuitListener implements Listener {
 
-	@EventHandler
-	public void onPlayerJoinEvent(PlayerJoinEvent e) {
-		Player p = e.getPlayer();
+    @EventHandler
+    public void onPlayerJoinEvent(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
 
-		KDManager.registerPlayer(p);
-	}
+        KDManager.registerPlayer(p);
+    }
 
-	@EventHandler
-	public void onQuit(PlayerQuitEvent e) {
-		Player p = e.getPlayer();
-		KDManager.unRegisterPlayer(p, true);
-	}
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        Player p = e.getPlayer();
+        KDManager.unRegisterPlayer(p, true);
+    }
 }

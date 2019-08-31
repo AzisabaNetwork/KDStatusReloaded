@@ -17,176 +17,176 @@ import net.md_5.bungee.api.ChatColor;
 
 public class KDStatusConfig {
 
-	private final KDStatusReloaded plugin;
-	private final FileConfiguration conf;
+    private final KDStatusReloaded plugin;
+    private final FileConfiguration conf;
 
-	@ConfigOptions(path = "Logger.ShowLogInConsole")
-	public boolean showLogInConsole = false;
+    @ConfigOptions(path = "Logger.ShowLogInConsole")
+    public boolean showLogInConsole = false;
 
-	@ConfigOptions(path = "Death.disableWorlds")
-	public List<String> disableDeathWorldList = new ArrayList<>();
-	@ConfigOptions(path = "Kill.disableWorlds")
-	public List<String> disableKillWorldList = new ArrayList<>();
+    @ConfigOptions(path = "Death.disableWorlds")
+    public List<String> disableDeathWorldList = new ArrayList<>();
+    @ConfigOptions(path = "Kill.disableWorlds")
+    public List<String> disableKillWorldList = new ArrayList<>();
 
-	@ConfigOptions(path = "Items.EmeraldAmount")
-	public int emeraldAmount = 2;
+    @ConfigOptions(path = "Items.EmeraldAmount")
+    public int emeraldAmount = 2;
 
-	public KDStatusConfig(KDStatusReloaded plugin) {
-		this.plugin = plugin;
-		conf = plugin.getConfig();
+    public KDStatusConfig(KDStatusReloaded plugin) {
+        this.plugin = plugin;
+        conf = plugin.getConfig();
 
-		disableDeathWorldList.add("world");
-		disableKillWorldList.add("world");
-	}
+        disableDeathWorldList.add("world");
+        disableKillWorldList.add("world");
+    }
 
-	public void loadConfig() {
-		for (Field field : getClass().getFields()) {
-			ConfigOptions anno = field.getAnnotation(ConfigOptions.class);
+    public void loadConfig() {
+        for ( Field field : getClass().getFields() ) {
+            ConfigOptions anno = field.getAnnotation(ConfigOptions.class);
 
-			if (anno == null) {
-				continue;
-			}
+            if ( anno == null ) {
+                continue;
+            }
 
-			String path = anno.path();
+            String path = anno.path();
 
-			if (conf.get(path) == null) {
+            if ( conf.get(path) == null ) {
 
-				try {
+                try {
 
-					if (anno.type() == OptionType.NONE) {
-						conf.set(path, field.get(this));
-					} else if (anno.type() == OptionType.LOCATION) {
-						Location loc = (Location) field.get(this);
+                    if ( anno.type() == OptionType.NONE ) {
+                        conf.set(path, field.get(this));
+                    } else if ( anno.type() == OptionType.LOCATION ) {
+                        Location loc = (Location) field.get(this);
 
-						conf.set(path, loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ()
-								+ "," + loc.getYaw() + "," + loc.getPitch());
-					} else if (anno.type() == OptionType.CHAT_FORMAT) {
+                        conf.set(path, loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ()
+                                + "," + loc.getYaw() + "," + loc.getPitch());
+                    } else if ( anno.type() == OptionType.CHAT_FORMAT ) {
 
-						String msg = (String) field.get(this);
-						conf.set(path, msg);
+                        String msg = (String) field.get(this);
+                        conf.set(path, msg);
 
-						msg = ChatColor.translateAlternateColorCodes('&', msg);
-						field.set(this, msg);
-					} else if (anno.type() == OptionType.SOUND) {
-						conf.set(path, field.get(this).toString());
-					} else if (anno.type() == OptionType.LOCATION_LIST) {
-						@SuppressWarnings("unchecked")
-						List<Location> locations = (List<Location>) field.get(this);
+                        msg = ChatColor.translateAlternateColorCodes('&', msg);
+                        field.set(this, msg);
+                    } else if ( anno.type() == OptionType.SOUND ) {
+                        conf.set(path, field.get(this).toString());
+                    } else if ( anno.type() == OptionType.LOCATION_LIST ) {
+                        @SuppressWarnings("unchecked")
+                        List<Location> locations = (List<Location>) field.get(this);
 
-						List<String> strs = new ArrayList<>();
+                        List<String> strs = new ArrayList<>();
 
-						if (!locations.isEmpty()) {
+                        if ( !locations.isEmpty() ) {
 
-							for (Location loc : locations) {
-								strs.add(loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + ","
-										+ loc.getZ()
-										+ "," + loc.getYaw() + "," + loc.getPitch());
-							}
-						} else {
-							strs.add("WorldName,X,Y,Z,Yaw,Pitch");
-						}
+                            for ( Location loc : locations ) {
+                                strs.add(loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + ","
+                                        + loc.getZ()
+                                        + "," + loc.getYaw() + "," + loc.getPitch());
+                            }
+                        } else {
+                            strs.add("WorldName,X,Y,Z,Yaw,Pitch");
+                        }
 
-						conf.set(path, strs);
-					}
+                        conf.set(path, strs);
+                    }
 
-					plugin.saveConfig();
-				} catch (Exception e) {
-					Bukkit.getLogger().warning("Error: " + e.getMessage());
-					e.printStackTrace();
-				}
-			} else {
+                    plugin.saveConfig();
+                } catch ( Exception e ) {
+                    Bukkit.getLogger().warning("Error: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
 
-				try {
-					if (anno.type() == OptionType.NONE) {
-						field.set(this, conf.get(path));
-					} else if (anno.type() == OptionType.LOCATION) {
+                try {
+                    if ( anno.type() == OptionType.NONE ) {
+                        field.set(this, conf.get(path));
+                    } else if ( anno.type() == OptionType.LOCATION ) {
 
-						String[] strings = conf.getString(path).split(",");
-						Location loc = null;
-						try {
-							loc = new Location(Bukkit.getWorld(strings[0]), Double.parseDouble(strings[1]),
-									Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
-							loc.setYaw(Float.parseFloat(strings[4]));
-							loc.setPitch(Float.parseFloat(strings[5]));
-						} catch (Exception e) {
-							// None
-						}
+                        String[] strings = conf.getString(path).split(",");
+                        Location loc = null;
+                        try {
+                            loc = new Location(Bukkit.getWorld(strings[0]), Double.parseDouble(strings[1]),
+                                    Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
+                            loc.setYaw(Float.parseFloat(strings[4]));
+                            loc.setPitch(Float.parseFloat(strings[5]));
+                        } catch ( Exception e ) {
+                            // None
+                        }
 
-						if (loc == null) {
-							Bukkit.getLogger().warning("Error. " + path + " の値がロードできませんでした。");
-							continue;
-						}
+                        if ( loc == null ) {
+                            Bukkit.getLogger().warning("Error. " + path + " の値がロードできませんでした。");
+                            continue;
+                        }
 
-						field.set(this, loc);
-					} else if (anno.type() == OptionType.SOUND) {
+                        field.set(this, loc);
+                    } else if ( anno.type() == OptionType.SOUND ) {
 
-						String name = conf.getString(path);
-						Sound sound;
+                        String name = conf.getString(path);
+                        Sound sound;
 
-						try {
-							sound = Sound.valueOf(name.toUpperCase());
-						} catch (Exception e) {
-							Bukkit.getLogger().warning("Error. " + path + " の値がロードできませんでした。");
-							continue;
-						}
+                        try {
+                            sound = Sound.valueOf(name.toUpperCase());
+                        } catch ( Exception e ) {
+                            Bukkit.getLogger().warning("Error. " + path + " の値がロードできませんでした。");
+                            continue;
+                        }
 
-						field.set(this, sound);
-					} else if (anno.type() == OptionType.CHAT_FORMAT) {
+                        field.set(this, sound);
+                    } else if ( anno.type() == OptionType.CHAT_FORMAT ) {
 
-						String unformatMessage = conf.getString(path);
+                        String unformatMessage = conf.getString(path);
 
-						unformatMessage = ChatColor.translateAlternateColorCodes('&', unformatMessage);
+                        unformatMessage = ChatColor.translateAlternateColorCodes('&', unformatMessage);
 
-						field.set(this, unformatMessage);
-					} else if (anno.type() == OptionType.LOCATION_LIST) {
+                        field.set(this, unformatMessage);
+                    } else if ( anno.type() == OptionType.LOCATION_LIST ) {
 
-						List<String> strList = conf.getStringList(path);
+                        List<String> strList = conf.getStringList(path);
 
-						List<Location> locList = new ArrayList<>();
+                        List<Location> locList = new ArrayList<>();
 
-						for (String str : strList) {
+                        for ( String str : strList ) {
 
-							String[] strings = str.split(",");
-							Location loc = null;
-							try {
-								loc = new Location(Bukkit.getWorld(strings[0]), Double.parseDouble(strings[1]),
-										Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
-								loc.setYaw(Float.parseFloat(strings[4]));
-								loc.setPitch(Float.parseFloat(strings[5]));
-							} catch (Exception e) {
-								// None
-							}
+                            String[] strings = str.split(",");
+                            Location loc = null;
+                            try {
+                                loc = new Location(Bukkit.getWorld(strings[0]), Double.parseDouble(strings[1]),
+                                        Double.parseDouble(strings[2]), Double.parseDouble(strings[3]));
+                                loc.setYaw(Float.parseFloat(strings[4]));
+                                loc.setPitch(Float.parseFloat(strings[5]));
+                            } catch ( Exception e ) {
+                                // None
+                            }
 
-							if (loc == null) {
-								Bukkit.getLogger().warning("Error. " + path + " の " + str + "がロードできませんでした。");
-								continue;
-							}
+                            if ( loc == null ) {
+                                Bukkit.getLogger().warning("Error. " + path + " の " + str + "がロードできませんでした。");
+                                continue;
+                            }
 
-							locList.add(loc);
-						}
+                            locList.add(loc);
+                        }
 
-						field.set(this, locList);
-					}
-				} catch (Exception e) {
-					Bukkit.getLogger().warning("Error. " + e.getMessage());
-				}
-			}
-		}
-	}
+                        field.set(this, locList);
+                    }
+                } catch ( Exception e ) {
+                    Bukkit.getLogger().warning("Error. " + e.getMessage());
+                }
+            }
+        }
+    }
 
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target(ElementType.FIELD)
-	public @interface ConfigOptions {
-		public String path();
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    public @interface ConfigOptions {
+        public String path();
 
-		public OptionType type() default OptionType.NONE;
-	}
+        public OptionType type() default OptionType.NONE;
+    }
 
-	public enum OptionType {
-		LOCATION,
-		LOCATION_LIST,
-		SOUND,
-		CHAT_FORMAT,
-		NONE
-	}
+    public enum OptionType {
+        LOCATION,
+        LOCATION_LIST,
+        SOUND,
+        CHAT_FORMAT,
+        NONE
+    }
 }

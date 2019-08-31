@@ -10,42 +10,42 @@ import jp.azisaba.lgw.kdstatus.listeners.KillDeathListener;
 
 public class KDStatusReloaded extends JavaPlugin {
 
-	private final String PLUGIN_NAME = "KDStatus";
+    private final String PLUGIN_NAME = "KDStatus";
 
-	public KDStatusConfig config;
-	private BukkitTask saveTask;
+    public KDStatusConfig config;
+    private BukkitTask saveTask;
 
-	@Override
-	public void onEnable() {
+    @Override
+    public void onEnable() {
 
-		config = new KDStatusConfig(this);
-		config.loadConfig();
+        config = new KDStatusConfig(this);
+        config.loadConfig();
 
-		KDManager.init(this);
+        KDManager.init(this);
 
-		Bukkit.getPluginManager().registerEvents(new JoinQuitListener(), this);
-		Bukkit.getPluginManager().registerEvents(new KillDeathListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new JoinQuitListener(), this);
+        Bukkit.getPluginManager().registerEvents(new KillDeathListener(this), this);
 
-		Bukkit.getPluginCommand("mystatus").setExecutor(new MyStatusCommand());
+        Bukkit.getPluginCommand("mystatus").setExecutor(new MyStatusCommand());
 
-		if (Bukkit.getOnlinePlayers().size() > 0) {
+        if ( Bukkit.getOnlinePlayers().size() > 0 ) {
 
-			Bukkit.getOnlinePlayers().forEach(player -> {
-				KDManager.registerPlayer(player);
-			});
-		}
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                KDManager.registerPlayer(player);
+            });
+        }
 
-		Bukkit.getLogger().info(PLUGIN_NAME + " enabled.");
-	}
+        Bukkit.getLogger().info(PLUGIN_NAME + " enabled.");
+    }
 
-	@Override
-	public void onDisable() {
+    @Override
+    public void onDisable() {
 
-		if (saveTask != null) {
-			saveTask.cancel();
-		}
+        if ( saveTask != null ) {
+            saveTask.cancel();
+        }
 
-		KDManager.saveAllPlayerData(false, true);
-		Bukkit.getLogger().info(PLUGIN_NAME + " disabled.");
-	}
+        KDManager.saveAllPlayerData(false, true);
+        Bukkit.getLogger().info(PLUGIN_NAME + " disabled.");
+    }
 }

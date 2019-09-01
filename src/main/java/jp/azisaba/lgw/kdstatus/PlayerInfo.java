@@ -2,20 +2,12 @@ package jp.azisaba.lgw.kdstatus;
 
 import java.util.UUID;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public class PlayerInfo {
     private final UUID uuid;
     private final String name;
-
-    public PlayerInfo(UUID uuid, String name) {
-        this.uuid = uuid;
-        this.name = name;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

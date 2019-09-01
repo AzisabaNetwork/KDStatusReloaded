@@ -66,6 +66,7 @@ public class KDStatusReloaded extends JavaPlugin {
     }
 
     public void reloadPluginConfig() {
+        reloadConfig();
         this.pluginConfig = new KDStatusConfig(this);
         this.pluginConfig.loadConfig();
     }

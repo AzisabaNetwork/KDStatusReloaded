@@ -44,10 +44,6 @@
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
     </repository>
-    <repository>
-      <id>azisaba-repo</id>
-      <url>https://repo.azisaba.net/</url>
-    </repository>
   </repositories>
 
   <dependencies>

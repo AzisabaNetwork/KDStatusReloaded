@@ -6,20 +6,25 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import jp.azisaba.lgw.kdstatus.KDManager;
+import lombok.RequiredArgsConstructor;
 
+import jp.azisaba.lgw.kdstatus.KillDeathDataContainer;
+
+@RequiredArgsConstructor
 public class JoinQuitListener implements Listener {
+
+    private final KillDeathDataContainer dataContainer;
 
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent e) {
         Player p = e.getPlayer();
 
-        KDManager.registerPlayer(p);
+        dataContainer.registerPlayer(p);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
-        KDManager.unRegisterPlayer(p, true);
+        dataContainer.unRegisterPlayer(p, true);
     }
 }

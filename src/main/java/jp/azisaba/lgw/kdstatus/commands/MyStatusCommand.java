@@ -10,17 +10,23 @@ import com.google.common.base.Strings;
 
 import net.md_5.bungee.api.ChatColor;
 
-import jp.azisaba.lgw.kdstatus.KDManager;
-import jp.azisaba.lgw.kdstatus.KDUserData;
+import lombok.RequiredArgsConstructor;
 
+import jp.azisaba.lgw.kdstatus.KDUserData;
+import jp.azisaba.lgw.kdstatus.KillDeathDataContainer;
+import jp.azisaba.lgw.kdstatus.KillDeathDataContainer.TimeUnit;
+
+@RequiredArgsConstructor
 public class MyStatusCommand implements CommandExecutor {
+
+    private final KillDeathDataContainer dataContainer;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
         if ( sender instanceof Player ) {
             Player p = (Player) sender;
-            KDUserData data = KDManager.getPlayerData(p, true);
+            KDUserData data = dataContainer.getPlayerData(p, true);
 
             StringBuilder builder = new StringBuilder();
 
@@ -32,7 +38,7 @@ public class MyStatusCommand implements CommandExecutor {
             builder.append(
                     ChatColor.RED + "Deaths" + ChatColor.GREEN + ": " + ChatColor.YELLOW + data.getDeaths() + "\n");
             builder.append(ChatColor.RED + "Daily Kills" + ChatColor.GREEN + ": " + ChatColor.YELLOW
-                    + data.getDailyKills() + "\n");
+                    + data.getKills(TimeUnit.DAILY) + "\n");
 
             double kd = (double) data.getKills() / (double) data.getDeaths();
 

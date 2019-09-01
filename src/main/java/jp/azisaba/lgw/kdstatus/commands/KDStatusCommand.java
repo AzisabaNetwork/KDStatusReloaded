@@ -1,6 +1,5 @@
 package jp.azisaba.lgw.kdstatus.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import lombok.RequiredArgsConstructor;
 
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
+import jp.azisaba.lgw.kdstatus.utils.Chat;
 
 @RequiredArgsConstructor
 public class KDStatusCommand implements CommandExecutor {
@@ -17,7 +17,7 @@ public class KDStatusCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if ( args.length <= 0 ) {
-            sender.sendMessage(ChatColor.RED + "Usage: " + cmd.getUsage().replace("{LABEL}", label));
+            sender.sendMessage(Chat.f("&cUsage: {0}", cmd.getUsage().replace("{LABEL}", label)));
             return true;
         }
 
@@ -26,11 +26,11 @@ public class KDStatusCommand implements CommandExecutor {
             plugin.reloadPluginConfig();
             long finish = System.currentTimeMillis();
 
-            sender.sendMessage(ChatColor.GREEN + "Configを再読み込みしました！ " + ChatColor.AQUA + "(" + (finish - start) + "ms)");
+            sender.sendMessage(Chat.f("&aConfigを再読み込みしました！ &b({0}ms)", finish - start));
             return true;
         }
 
-        sender.sendMessage(ChatColor.RED + "Usage: " + cmd.getUsage().replace("{LABEL}", label));
+        sender.sendMessage(Chat.f("&cUsage: {0}", cmd.getUsage().replace("{LABEL}", label)));
         return true;
     }
 }

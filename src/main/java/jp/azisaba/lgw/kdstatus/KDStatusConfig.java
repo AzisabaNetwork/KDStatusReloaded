@@ -13,7 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import net.md_5.bungee.api.ChatColor;
+import jp.azisaba.lgw.kdstatus.utils.Chat;
 
 public class KDStatusConfig {
 
@@ -65,7 +65,7 @@ public class KDStatusConfig {
                         String msg = (String) field.get(this);
                         conf.set(path, msg);
 
-                        msg = ChatColor.translateAlternateColorCodes('&', msg);
+                        msg = Chat.f(msg);
                         field.set(this, msg);
                     } else if ( anno.type() == OptionType.SOUND ) {
                         conf.set(path, field.get(this).toString());
@@ -135,7 +135,7 @@ public class KDStatusConfig {
 
                         String unformatMessage = conf.getString(path);
 
-                        unformatMessage = ChatColor.translateAlternateColorCodes('&', unformatMessage);
+                        unformatMessage = Chat.f(unformatMessage);
 
                         field.set(this, unformatMessage);
                     } else if ( anno.type() == OptionType.LOCATION_LIST ) {

@@ -7,8 +7,6 @@ import org.bukkit.entity.Player;
 
 import com.google.common.base.Strings;
 
-import net.md_5.bungee.api.ChatColor;
-
 import lombok.RequiredArgsConstructor;
 
 import jp.azisaba.lgw.kdstatus.KDUserData;
@@ -27,7 +25,7 @@ public class MyStatusCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
         if ( !(sender instanceof Player) ) {
-            sender.sendMessage(ChatColor.RED + "このコマンドはプレイヤーのみ有効です！");
+            sender.sendMessage(Chat.f("&cこのコマンドはプレイヤーのみ有効です！"));
             return true;
         }
 

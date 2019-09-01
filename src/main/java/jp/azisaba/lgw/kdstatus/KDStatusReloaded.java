@@ -4,14 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.md_5.bungee.api.ChatColor;
-
 import lombok.Getter;
 
 import jp.azisaba.lgw.kdstatus.commands.KDStatusCommand;
 import jp.azisaba.lgw.kdstatus.commands.MyStatusCommand;
 import jp.azisaba.lgw.kdstatus.listeners.JoinQuitListener;
 import jp.azisaba.lgw.kdstatus.listeners.KillDeathListener;
+import jp.azisaba.lgw.kdstatus.utils.Chat;
 
 public class KDStatusReloaded extends JavaPlugin {
 
@@ -41,9 +40,9 @@ public class KDStatusReloaded extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new KillDeathListener(this), this);
 
         Bukkit.getPluginCommand("mystatus").setExecutor(new MyStatusCommand(kdDataContainer));
-        Bukkit.getPluginCommand("mystatus").setPermissionMessage(ChatColor.RED + "権限がありません。運営に報告してください。");
+        Bukkit.getPluginCommand("mystatus").setPermissionMessage(Chat.f("&c権限がありません。運営に報告してください。"));
         Bukkit.getPluginCommand("kdstatus").setExecutor(new KDStatusCommand(this));
-        Bukkit.getPluginCommand("kdstatus").setPermissionMessage(ChatColor.RED + "このコマンドを実行する権限がありません！");
+        Bukkit.getPluginCommand("kdstatus").setPermissionMessage(Chat.f("&cこのコマンドを実行する権限がありません！"));
 
         if ( Bukkit.getOnlinePlayers().size() > 0 ) {
 

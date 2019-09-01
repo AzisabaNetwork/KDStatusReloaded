@@ -9,6 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import lombok.RequiredArgsConstructor;
 
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
+import jp.azisaba.lgw.kdstatus.utils.Chat;
 
 @RequiredArgsConstructor
 public class KillDeathListener implements Listener {
@@ -27,8 +28,7 @@ public class KillDeathListener implements Listener {
 
         if ( plugin.getPluginConfig().disableKillWorldList.contains(killer.getWorld().getName()) ) {
             if ( plugin.getPluginConfig().showLogInConsole ) {
-                plugin.getLogger()
-                        .info(killer.getName() + "のキル数加算をキャンセル (\"" + world.getName() + "\" が無効なワールドに設定されている)");
+                plugin.getLogger().info(Chat.f("{0}のキル数加算をキャンセル (\"{1}\" が無効にするワールドに指定されているため)", killer.getName(), world.getName()));
             }
             return;
         }
@@ -43,8 +43,7 @@ public class KillDeathListener implements Listener {
 
         if ( plugin.getPluginConfig().disableDeathWorldList.contains(world.getName()) ) {
             if ( plugin.getPluginConfig().showLogInConsole ) {
-                plugin.getLogger()
-                        .info(p.getName() + "のデス数加算をキャンセル (\"" + world.getName() + "\" が無効化されているワールドに設定されている)");
+                plugin.getLogger().info(Chat.f("{0}のデス数加算をキャンセル (\"{1}\" が無効化にするワールドに指定されているため)", p.getName(), world.getName()));
             }
             return;
         }

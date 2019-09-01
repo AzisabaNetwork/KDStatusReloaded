@@ -1,6 +1,5 @@
 package jp.azisaba.lgw.kdstatus.commands;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,40 +14,52 @@ import lombok.RequiredArgsConstructor;
 import jp.azisaba.lgw.kdstatus.KDUserData;
 import jp.azisaba.lgw.kdstatus.KillDeathDataContainer;
 import jp.azisaba.lgw.kdstatus.KillDeathDataContainer.TimeUnit;
+import jp.azisaba.lgw.kdstatus.utils.Chat;
 
 @RequiredArgsConstructor
 public class MyStatusCommand implements CommandExecutor {
 
     private final KillDeathDataContainer dataContainer;
 
+    private final String arrow = "➣";
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if ( sender instanceof Player ) {
-            Player p = (Player) sender;
-            KDUserData data = dataContainer.getPlayerData(p, true);
-
-            StringBuilder builder = new StringBuilder();
-
-            builder.append(ChatColor.GREEN + Strings.repeat("=", 7) + ChatColor.RED + "[" + ChatColor.YELLOW
-                    + "Status" + ChatColor.RED + "]" + ChatColor.GREEN + Strings.repeat("=", 7) + "\n");
-
-            builder.append(
-                    ChatColor.RED + "Kills" + ChatColor.GREEN + ": " + ChatColor.YELLOW + data.getKills() + "\n");
-            builder.append(
-                    ChatColor.RED + "Deaths" + ChatColor.GREEN + ": " + ChatColor.YELLOW + data.getDeaths() + "\n");
-            builder.append(ChatColor.RED + "Daily Kills" + ChatColor.GREEN + ": " + ChatColor.YELLOW
-                    + data.getKills(TimeUnit.DAILY) + "\n");
-
-            double kd = (double) data.getKills() / (double) data.getDeaths();
-
-            builder.append(ChatColor.RED + "K/D" + ChatColor.GREEN + ": " + ChatColor.YELLOW
-                    + String.format("%.2f", kd) + "\n");
-
-            builder.append(ChatColor.GREEN + StringUtils.repeat("=", 21));
-
-            p.sendMessage(builder.toString());
+        if ( !(sender instanceof Player) ) {
+            sender.sendMessage(ChatColor.RED + "このコマンドはプレイヤーのみ有効です！");
+            return true;
         }
+
+        Player p = (Player) sender;
+        KDUserData data = dataContainer.getPlayerData(p, true);
+
+        int kills = data.getKills();
+        int deaths = data.getDeaths();
+        double kdRaito;
+        if ( deaths > 0 ) {
+            kdRaito = (double) kills / (double) deaths;
+        } else {
+            kdRaito = (double) kills;
+        }
+
+        int dailyKills = data.getKills(TimeUnit.DAILY);
+        int monthlyKills = data.getKills(TimeUnit.MONTHLY);
+        int yearlyKills = data.getKills(TimeUnit.YEARLY);
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(Chat.f("&b&m&l{0}&c&l[{1}の戦績]&b&m&l{0}&r", Strings.repeat("━", 18), p.getName())).append("\n \n");
+        builder.append(Chat.f("&9{0}&eキル数&a: &b{1}&r", arrow, kills)).append("\n");
+        builder.append(Chat.f("&9{0}&eデス数&a: &b{1}&r", arrow, deaths)).append("\n \n");
+        builder.append(Chat.f("&9{0}&eK/D&a: &b{1}&r", arrow, String.format("%.3f", kdRaito))).append("\n \n");
+        builder.append(Chat.f("&9{0}&eDailyキル数&a: &b{1}&r", arrow, dailyKills)).append("\n");
+        builder.append(Chat.f("&9{0}&eMonthlyキル数&a: &b{1}&r", arrow, monthlyKills)).append("\n");
+        builder.append(Chat.f("&9{0}&eYearlyキル数&a: &b{1} &7(正確ではありません※1)&r", arrow, yearlyKills)).append("\n \n");
+        builder.append(Chat.f("&7※1 &cYearlyキル数は集計を始めたばかりのため、正しい値ではありません！&r")).append("\n");
+        builder.append(Chat.f("&b&m&l{0}", Strings.repeat("━", 52)));
+
+        p.sendMessage(builder.toString());
         return true;
     }
 }

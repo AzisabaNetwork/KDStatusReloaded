@@ -7,7 +7,12 @@ website: ${project.url}
 commands:
   mystatus:
     aliases: ["ms", "status", "st"]
-    permission: mystatus.command.mystatus
+    permission: kdstatusreloaded.command.mystatus
+  kdstatus:
+    alias: ["kds"]
+    permission: kdstatusreloaded.command.kdstatus
 permissions:
   mystatus.command.mystatus:
     default: true
+  kdstatusreloaded.command.kdstatus:
+    default: op

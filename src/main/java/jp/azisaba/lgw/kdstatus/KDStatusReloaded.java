@@ -8,6 +8,7 @@ import net.md_5.bungee.api.ChatColor;
 
 import lombok.Getter;
 
+import jp.azisaba.lgw.kdstatus.commands.KDStatusCommand;
 import jp.azisaba.lgw.kdstatus.commands.MyStatusCommand;
 import jp.azisaba.lgw.kdstatus.listeners.JoinQuitListener;
 import jp.azisaba.lgw.kdstatus.listeners.KillDeathListener;
@@ -41,8 +42,8 @@ public class KDStatusReloaded extends JavaPlugin {
 
         Bukkit.getPluginCommand("mystatus").setExecutor(new MyStatusCommand(kdDataContainer));
         Bukkit.getPluginCommand("mystatus").setPermissionMessage(ChatColor.RED + "権限がありません。運営に報告してください。");
-
-        // 権限がありません。運営に報告してください。
+        Bukkit.getPluginCommand("kdstatus").setExecutor(new KDStatusCommand(this));
+        Bukkit.getPluginCommand("kdstatus").setPermissionMessage(ChatColor.RED + "このコマンドを実行する権限がありません！");
 
         if ( Bukkit.getOnlinePlayers().size() > 0 ) {
 
@@ -63,6 +64,11 @@ public class KDStatusReloaded extends JavaPlugin {
 
         kdDataContainer.saveAllPlayerData(false, true);
         Bukkit.getLogger().info(getName() + " disabled.");
+    }
+
+    public void reloadPluginConfig() {
+        this.pluginConfig = new KDStatusConfig(this);
+        this.pluginConfig.loadConfig();
     }
 
     @SuppressWarnings("deprecation")

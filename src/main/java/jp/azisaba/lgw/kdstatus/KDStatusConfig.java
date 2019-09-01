@@ -28,9 +28,6 @@ public class KDStatusConfig {
     @ConfigOptions(path = "Kill.disableWorlds")
     public List<String> disableKillWorldList = new ArrayList<>();
 
-    @ConfigOptions(path = "Items.EmeraldAmount")
-    public int emeraldAmount = 2;
-
     public KDStatusConfig(KDStatusReloaded plugin) {
         this.plugin = plugin;
         conf = plugin.getConfig();

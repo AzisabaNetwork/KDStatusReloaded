@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import lombok.RequiredArgsConstructor;
 
-import jp.azisaba.lgw.kdstatus.KillDeathDataContainer;
+import jp.azisaba.lgw.kdstatus.sql.KillDeathDataContainer;
 
 @RequiredArgsConstructor
 public class JoinQuitListener implements Listener {
@@ -19,12 +19,12 @@ public class JoinQuitListener implements Listener {
     public void onPlayerJoinEvent(PlayerJoinEvent e) {
         Player p = e.getPlayer();
 
-        dataContainer.registerPlayer(p);
+        dataContainer.loadPlayerData(p);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
-        dataContainer.unRegisterPlayer(p, true);
+        dataContainer.unloadPlayer(p, true);
     }
 }

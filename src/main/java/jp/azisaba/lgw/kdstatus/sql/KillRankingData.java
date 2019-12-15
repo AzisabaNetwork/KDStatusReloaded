@@ -1,13 +1,16 @@
-package jp.azisaba.lgw.kdstatus;
+package jp.azisaba.lgw.kdstatus.sql;
 
 import java.util.UUID;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
 @RequiredArgsConstructor
-public class PlayerInfo {
+@Getter
+public class KillRankingData {
+
     private final UUID uuid;
     private final String name;
+    private final int kills;
+
 }

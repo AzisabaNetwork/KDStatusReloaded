@@ -9,10 +9,10 @@ import com.google.common.base.Strings;
 
 import lombok.RequiredArgsConstructor;
 
-import jp.azisaba.lgw.kdstatus.KDUserData;
-import jp.azisaba.lgw.kdstatus.KillDeathDataContainer;
-import jp.azisaba.lgw.kdstatus.KillDeathDataContainer.TimeUnit;
+import jp.azisaba.lgw.kdstatus.sql.KDUserData;
+import jp.azisaba.lgw.kdstatus.sql.KillDeathDataContainer;
 import jp.azisaba.lgw.kdstatus.utils.Chat;
+import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
 
 @RequiredArgsConstructor
 public class MyStatusCommand implements CommandExecutor {
@@ -32,7 +32,7 @@ public class MyStatusCommand implements CommandExecutor {
         Player p = (Player) sender;
         KDUserData data = dataContainer.getPlayerData(p, true);
 
-        int kills = data.getKills();
+        int kills = data.getKills(TimeUnit.LIFETIME);
         int deaths = data.getDeaths();
         double kdRaito;
         if ( deaths > 0 ) {

@@ -162,7 +162,7 @@ public class PlayerDataSQLController {
         }
 
         String cmd = "insert or replace into " + tableName + " (uuid, name, kills, deaths, daily_kills, monthly_kills, yearly_kills, last_updated) values "
-                + String.join(" ", values) + ";";
+                + String.join(", ", values) + ";";
 
         int changed = handler.executeCommand(cmd);
         return changed >= 0;

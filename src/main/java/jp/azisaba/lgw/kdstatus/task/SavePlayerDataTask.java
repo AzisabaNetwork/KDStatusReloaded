@@ -1,0 +1,31 @@
+package jp.azisaba.lgw.kdstatus.task;
+
+import org.bukkit.scheduler.BukkitRunnable;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
+
+/**
+ * プレイヤーのキルデス情報をセーブするタスク
+ *
+ * @author siloneco
+ *
+ */
+@RequiredArgsConstructor
+public class SavePlayerDataTask extends BukkitRunnable {
+
+    private final KDStatusReloaded plugin;
+    @Getter
+    private long lastSavedTime = System.currentTimeMillis();
+
+    @Override
+    public void run() {
+        // 全プレイヤーのデータをセーブする
+        plugin.getKdDataContainer().saveAllPlayerData(true, false);
+
+        lastSavedTime = System.currentTimeMillis();
+        plugin.getLogger().info("全プレイヤーデータをセーブしました。");
+    }
+}

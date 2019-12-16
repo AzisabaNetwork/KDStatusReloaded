@@ -14,18 +14,19 @@ import jp.azisaba.lgw.kdstatus.listeners.KillDeathListener;
 import jp.azisaba.lgw.kdstatus.sql.KillDeathDataContainer;
 import jp.azisaba.lgw.kdstatus.sql.PlayerDataSQLController;
 import jp.azisaba.lgw.kdstatus.sql.SQLHandler;
+import jp.azisaba.lgw.kdstatus.task.SavePlayerDataTask;
 import jp.azisaba.lgw.kdstatus.utils.Chat;
 
 public class KDStatusReloaded extends JavaPlugin {
 
     @Getter
     private KDStatusConfig pluginConfig;
-
     @Getter
     private KillDeathDataContainer kdDataContainer;
-
     @Getter
     private static KDStatusReloaded plugin;
+    @Getter
+    private SavePlayerDataTask saveTask;
 
     private SQLHandler sqlHandler = null;
 
@@ -39,6 +40,9 @@ public class KDStatusReloaded extends JavaPlugin {
 
         sqlHandler = new SQLHandler(new File(getDataFolder(), "playerData.db"));
         kdDataContainer = new KillDeathDataContainer(new PlayerDataSQLController(sqlHandler).init());
+
+        saveTask = new SavePlayerDataTask(this);
+        saveTask.runTaskTimer(this, 20 * 60 * 3, 20 * 60 * 3);
 
         Bukkit.getPluginManager().registerEvents(new JoinQuitListener(kdDataContainer), this);
         Bukkit.getPluginManager().registerEvents(new KillDeathListener(this), this);
@@ -62,7 +66,7 @@ public class KDStatusReloaded extends JavaPlugin {
     public void onDisable() {
         kdDataContainer.saveAllPlayerData(false, true);
 
-        if (sqlHandler != null) {
+        if ( sqlHandler != null ) {
             sqlHandler.closeConnection();
         }
         Bukkit.getLogger().info(getName() + " disabled.");

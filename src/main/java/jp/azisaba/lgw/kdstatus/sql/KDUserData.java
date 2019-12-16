@@ -47,6 +47,8 @@ public class KDUserData {
     protected KDUserData(UUID uuid) {
         this.uuid = uuid;
         loadFile();
+
+        fixCorrectValue();
     }
 
     protected KDUserData(UUID uuid, String name, int totalKills, int deaths, int dailyKills, int monthlyKills, int yearlyKills, long lastUpdated) {
@@ -58,6 +60,8 @@ public class KDUserData {
         this.yearlyKills = yearlyKills;
         this.deaths = deaths;
         this.lastUpdated = lastUpdated;
+
+        fixCorrectValue();
     }
 
     /**

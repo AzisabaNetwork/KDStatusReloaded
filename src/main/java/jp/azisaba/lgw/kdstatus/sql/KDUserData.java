@@ -192,15 +192,15 @@ public class KDUserData {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(lastUpdated);
 
-        if ( now.get(Calendar.DATE) != cal.get(Calendar.DATE) ) {
-            dailyKills = 0;
-        } else if ( now.get(Calendar.MONTH) != cal.get(Calendar.MONTH) ) {
-            dailyKills = 0;
-            monthlyKills = 0;
-        } else if ( now.get(Calendar.YEAR) != cal.get(Calendar.YEAR) ) {
+        if ( now.get(Calendar.YEAR) != cal.get(Calendar.YEAR) ) {
             dailyKills = 0;
             monthlyKills = 0;
             yearlyKills = 0;
+        } else if ( now.get(Calendar.MONTH) != cal.get(Calendar.MONTH) ) {
+            dailyKills = 0;
+            monthlyKills = 0;
+        } else if ( now.get(Calendar.DATE) != cal.get(Calendar.DATE) ) {
+            dailyKills = 0;
         }
     }
 

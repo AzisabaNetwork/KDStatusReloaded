@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import lombok.NonNull;
@@ -149,6 +150,12 @@ public class KillDeathDataContainer {
 
                     if ( success && clear ) {
                         playerDataCache.clear();
+                    } else {
+                        for ( UUID uuid : new ArrayList<UUID>(playerDataCache.keySet()) ) {
+                            if ( Bukkit.getPlayer(uuid) == null ) {
+                                playerDataCache.remove(uuid);
+                            }
+                        }
                     }
                 }
             }.start();

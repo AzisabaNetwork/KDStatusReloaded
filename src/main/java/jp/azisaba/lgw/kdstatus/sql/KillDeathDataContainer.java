@@ -150,7 +150,7 @@ public class KillDeathDataContainer {
 
                     if ( success && clear ) {
                         playerDataCache.clear();
-                    } else {
+                    } else if ( success ) {
                         for ( UUID uuid : new ArrayList<UUID>(playerDataCache.keySet()) ) {
                             if ( Bukkit.getPlayer(uuid) == null ) {
                                 playerDataCache.remove(uuid);

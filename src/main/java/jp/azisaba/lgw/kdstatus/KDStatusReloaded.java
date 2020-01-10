@@ -42,7 +42,7 @@ public class KDStatusReloaded extends JavaPlugin {
         kdDataContainer = new KillDeathDataContainer(new PlayerDataSQLController(sqlHandler).init());
 
         saveTask = new SavePlayerDataTask(this);
-        saveTask.runTaskTimer(this, 20 * 60 * 3, 20 * 60 * 3);
+        saveTask.runTaskTimerAsynchronously(this, 20 * 60 * 3, 20 * 60 * 3);
 
         Bukkit.getPluginManager().registerEvents(new JoinQuitListener(kdDataContainer), this);
         Bukkit.getPluginManager().registerEvents(new KillDeathListener(this), this);

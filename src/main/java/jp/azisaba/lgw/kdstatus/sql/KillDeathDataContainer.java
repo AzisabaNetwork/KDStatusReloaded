@@ -146,17 +146,7 @@ public class KillDeathDataContainer {
         if ( async ) {
             new Thread() {
                 public void run() {
-                    boolean success = sqlController.save(data.toArray(new KDUserData[data.size()]));
-
-                    if ( success && clear ) {
-                        playerDataCache.clear();
-                    } else if ( success ) {
-                        for ( UUID uuid : new ArrayList<UUID>(playerDataCache.keySet()) ) {
-                            if ( Bukkit.getPlayer(uuid) == null ) {
-                                playerDataCache.remove(uuid);
-                            }
-                        }
-                    }
+                    saveAllPlayerData(false, clear);
                 }
             }.start();
             return;
@@ -165,6 +155,12 @@ public class KillDeathDataContainer {
         boolean success = sqlController.save(data.toArray(new KDUserData[data.size()]));
         if ( success && clear ) {
             playerDataCache.clear();
+        } else if ( success ) {
+            for ( UUID uuid : new ArrayList<UUID>(playerDataCache.keySet()) ) {
+                if ( Bukkit.getPlayer(uuid) == null ) {
+                    playerDataCache.remove(uuid);
+                }
+            }
         }
     }
 

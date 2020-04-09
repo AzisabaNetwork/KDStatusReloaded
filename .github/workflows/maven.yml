@@ -1,6 +1,6 @@
+---
 name: Maven
-
-on: [push]
+"on": [push]
 
 jobs:
   build:
@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: "8"
       - run: java -version
       - run: mvn --version
       - uses: actions/cache@v1
@@ -26,9 +26,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          repository: AzisabaNetwork/mvn-repo
+          path: mvn-repo
       - uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: "8"
       - run: java -version
       - run: mvn --version
       - uses: actions/cache@v1
@@ -37,20 +41,15 @@ jobs:
           key: ${{ runner.os }}-maven-deploy-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-deploy-
-      - run: mvn -B package
-
-      - uses: actions/checkout@v2
-        with:
-          repository: AzisabaNetwork/mvn-repo
-          path: mvn-repo
       - run: mvn -B -DaltDeploymentRepository=mvn-repo::default::file://mvn-repo deploy
       - uses: webfactory/ssh-agent@v0.2.0
         with:
           ssh-private-key: ${{ secrets.MAVEN_REPO_KEY }}
-      - run: git config --global url.'ssh://git@github.com/'.insteadOf 'https://github.com/'
-      - run: git config --global user.email 'null@azisaba.net'
+      - run: git config --global url."ssh://git@github.com/".insteadOf "https://github.com/"
+      - run: git config --global user.email "null@azisaba.net"
       - run: git config --global user.name "$GITHUB_ACTOR"
-      - run: |
-          git commit -a -m "Deploy @ $(date)"
+      - working-directory: mvn-repo
+        run: |
+          git add -A
+          git commit -m "Deploy @ $(date)"
           git push origin master
-        working-directory: mvn-repo

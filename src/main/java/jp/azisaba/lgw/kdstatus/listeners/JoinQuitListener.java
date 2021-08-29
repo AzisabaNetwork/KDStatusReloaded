@@ -9,10 +9,13 @@ import lombok.RequiredArgsConstructor;
 
 import jp.azisaba.lgw.kdstatus.sql.KillDeathDataContainer;
 
-@RequiredArgsConstructor
 public class JoinQuitListener implements Listener {
 
     private final KillDeathDataContainer dataContainer;
+
+    public JoinQuitListener(KillDeathDataContainer dataContainer) {
+        this.dataContainer = dataContainer;
+    }
 
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent e) {

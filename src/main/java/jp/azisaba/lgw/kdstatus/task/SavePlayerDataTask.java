@@ -13,12 +13,15 @@ import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
  * @author siloneco
  *
  */
-@RequiredArgsConstructor
 public class SavePlayerDataTask extends BukkitRunnable {
 
     private final KDStatusReloaded plugin;
     @Getter
     private long lastSavedTime = System.currentTimeMillis();
+
+    public SavePlayerDataTask(KDStatusReloaded plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public void run() {
@@ -27,5 +30,9 @@ public class SavePlayerDataTask extends BukkitRunnable {
 
         lastSavedTime = System.currentTimeMillis();
         plugin.getLogger().info("全プレイヤーデータをセーブしました。");
+    }
+
+    public long getLastSavedTime() {
+        return lastSavedTime;
     }
 }

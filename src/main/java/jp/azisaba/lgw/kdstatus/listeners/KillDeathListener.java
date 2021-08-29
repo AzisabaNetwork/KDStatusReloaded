@@ -11,10 +11,13 @@ import lombok.RequiredArgsConstructor;
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import jp.azisaba.lgw.kdstatus.utils.Chat;
 
-@RequiredArgsConstructor
 public class KillDeathListener implements Listener {
 
     private final KDStatusReloaded plugin;
+
+    public KillDeathListener(KDStatusReloaded plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onKill(PlayerDeathEvent e) {

@@ -5,7 +5,6 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Getter
 public class KillRankingData {
 
@@ -13,4 +12,21 @@ public class KillRankingData {
     private final String name;
     private final int kills;
 
+    public KillRankingData(UUID uuid, String name, int kills) {
+        this.uuid = uuid;
+        this.name = name;
+        this.kills = kills;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getKills() {
+        return kills;
+    }
 }

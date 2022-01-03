@@ -14,12 +14,15 @@ import jp.azisaba.lgw.kdstatus.sql.KillDeathDataContainer;
 import jp.azisaba.lgw.kdstatus.utils.Chat;
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
 
-@RequiredArgsConstructor
 public class MyStatusCommand implements CommandExecutor {
 
     private final KillDeathDataContainer dataContainer;
 
     private final String arrow = "➣";
+
+    public MyStatusCommand(KillDeathDataContainer dataContainer) {
+        this.dataContainer = dataContainer;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

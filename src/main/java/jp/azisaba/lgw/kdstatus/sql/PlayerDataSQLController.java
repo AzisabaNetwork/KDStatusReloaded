@@ -2,6 +2,7 @@ package jp.azisaba.lgw.kdstatus.sql;
 
 import java.math.BigInteger;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
 import jp.azisaba.lgw.kdstatus.utils.UUIDConverter;
 
-@RequiredArgsConstructor
 public class PlayerDataSQLController {
 
     @Getter(value = AccessLevel.PROTECTED)
@@ -22,6 +22,10 @@ public class PlayerDataSQLController {
 
     @Getter(value = AccessLevel.PROTECTED)
     private final String tableName = "killdeathdata";
+
+    public PlayerDataSQLController(SQLHandler handler){
+        this.handler = handler;
+    }
 
     /**
      * テーブルの作成など初期に必要な処理を行います
@@ -48,6 +52,13 @@ public class PlayerDataSQLController {
                 ");");
 
         return this;
+    }
+
+    protected SQLHandler getHandler(){
+        return handler;
+    }
+    protected String getTableName(){
+        return tableName;
     }
 
     public BigInteger getKills(@NonNull UUID uuid, @NonNull TimeUnit unit) {
@@ -108,6 +119,33 @@ public class PlayerDataSQLController {
 
     public ResultSet getRawData(@NonNull UUID uuid) {
         return handler.executeQuery("select * from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
+    }
+
+    public List<KDUserData> getAllData(){
+
+        List<KDUserData> list = new ArrayList<>();
+
+        ResultSet set = handler.executeQuery("SELECT * FROM \"" + tableName +"\";");
+
+        try {
+            while (set.next()){
+                UUID uuid = UUID.fromString(UUIDConverter.insertDashUUID(set.getString("uuid")));
+                String name = set.getString("name");
+                int totalKills = set.getInt("kills");
+                int deaths = set.getInt("deaths");
+                int dailyKills = set.getInt("daily_kills");
+                int monthlyKills = set.getInt("monthly_kills");
+                int yearlyKills = set.getInt("yearly_kills");
+                long lastUpdated = set.getLong("last_updated");
+
+                list.add(new KDUserData(uuid,name,totalKills,deaths,dailyKills,monthlyKills,yearlyKills,lastUpdated));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return list;
+
     }
 
     public boolean save(@NonNull KDUserData data) {

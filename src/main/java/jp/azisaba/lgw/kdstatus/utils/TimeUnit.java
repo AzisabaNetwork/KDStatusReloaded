@@ -3,7 +3,6 @@ package jp.azisaba.lgw.kdstatus.utils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public enum TimeUnit {
     LIFETIME("kills"),
     DAILY("daily_kills"),
@@ -12,4 +11,12 @@ public enum TimeUnit {
 
     @Getter
     private final String sqlColumnName;
+
+    TimeUnit(String sqlColumnName){
+        this.sqlColumnName = sqlColumnName;
+    }
+
+    public String getSqlColumnName() {
+        return sqlColumnName;
+    }
 }

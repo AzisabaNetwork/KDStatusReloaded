@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import org.bukkit.Bukkit;
 
 import lombok.AccessLevel;
@@ -19,7 +20,6 @@ import lombok.RequiredArgsConstructor;
  * @author siloneco
  *
  */
-@RequiredArgsConstructor
 public class SQLHandler {
 
     private final File file;
@@ -27,6 +27,20 @@ public class SQLHandler {
     private Connection connection;
     @Getter(value = AccessLevel.PROTECTED)
     private boolean initialized = false;
+
+    private final String host = KDStatusReloaded.getPlugin().getConfig().getString("host");
+    private final String port = KDStatusReloaded.getPlugin().getConfig().getString("port");;
+    private final String database = KDStatusReloaded.getPlugin().getConfig().getString("database");;
+    private final String user = KDStatusReloaded.getPlugin().getConfig().getString("username");;
+    private final String password = KDStatusReloaded.getPlugin().getConfig().getString("password");;
+
+    public SQLHandler(File file){
+        this.file = file;
+    }
+
+    public boolean isConnected(){
+        return (connection != null);
+    }
 
     protected void init() {
         // ドライバの登録
@@ -117,5 +131,9 @@ public class SQLHandler {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean isInitialized() {
+        return initialized;
     }
 }

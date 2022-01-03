@@ -21,12 +21,17 @@ import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
 import jp.azisaba.lgw.kdstatus.utils.UUIDConverter;
 import me.rayzr522.jsonmessage.JSONMessage;
 
-@RequiredArgsConstructor
 public class KillDeathDataContainer {
 
     private final PlayerDataSQLController sqlController;
 
     private HashMap<UUID, KDUserData> playerDataCache = new HashMap<>();
+
+    private boolean isMigrated = KDStatusReloaded.getPlugin().getConfig().getBoolean("migrated",false);
+
+    public KillDeathDataContainer(PlayerDataSQLController sqlController) {
+        this.sqlController = sqlController;
+    }
 
     /**
      * プレイヤーの戦績を取得します
@@ -73,7 +78,7 @@ public class KillDeathDataContainer {
         // ファイルが存在している場合はそこから読み込む。なければSQLiteから読み込む
         if ( file.exists() ) {
             data = new KDUserData(p);
-        } else {
+        } else if(!isMigrated){
             ResultSet set = sqlController.getRawData(p.getUniqueId());
 
             try {
@@ -92,6 +97,31 @@ public class KillDeathDataContainer {
             } catch ( Exception e ) {
                 e.printStackTrace();
             }
+        }else if(isMigrated){
+
+            ResultSet set = KDStatusReloaded.getPlugin().getKDData().getRawData(p.getUniqueId());
+
+            try {
+                if ( set.next() ) {
+                    int totalKills = set.getInt("kills");
+                    int deaths = set.getInt("deaths");
+                    int dailyKills = set.getInt("daily_kills");
+                    int monthlyKills = set.getInt("monthly_kills");
+                    int yearlyKills = set.getInt("yearly_kills");
+                    long lastUpdated = set.getLong("last_updated");
+
+                    data = new KDUserData(p.getUniqueId(), p.getName(), totalKills, deaths, dailyKills, monthlyKills, yearlyKills, lastUpdated);
+                } else {
+                    data = new KDUserData(p.getUniqueId(), p.getName(), 0, 0, 0, 0, 0, -1);
+                    KDStatusReloaded.getPlugin().getKDData().create(data);
+                }
+
+                set.close();
+
+            } catch ( Exception e ) {
+                e.printStackTrace();
+            }
+
         }
 
         // データがnullの場合はnullを返す
@@ -127,7 +157,11 @@ public class KillDeathDataContainer {
     }
 
     public boolean savePlayerData(@NonNull KDUserData data) {
-        return sqlController.save(data);
+        if(!isMigrated){
+            return sqlController.save(data);
+        }else {
+            return KDStatusReloaded.getPlugin().getKDData().update(data);
+        }
     }
 
     /**
@@ -137,6 +171,7 @@ public class KillDeathDataContainer {
      * @param clear 保存した後cacheから削除するかどうか
      */
     public void saveAllPlayerData(boolean async, boolean clear) {
+
         List<KDUserData> data = new ArrayList<>(playerDataCache.values());
 
         if ( data.size() <= 0 ) {
@@ -152,7 +187,15 @@ public class KillDeathDataContainer {
             return;
         }
 
-        boolean success = sqlController.save(data.toArray(new KDUserData[data.size()]));
+        boolean success;
+
+        if(!isMigrated){
+            success = sqlController.save(data.toArray(new KDUserData[data.size()]));
+        }else {
+            data.forEach(d -> KDStatusReloaded.getPlugin().getKDData().update(d));
+            success = true;
+        }
+
         if ( success && clear ) {
             playerDataCache.clear();
         } else if ( success ) {
@@ -172,6 +215,9 @@ public class KillDeathDataContainer {
      * @throws IllegalStateException SQLHandlerが初期化されていなかった場合
      */
     public List<KillRankingData> getTopKillRankingData(TimeUnit unit, int count) throws IllegalStateException {
+
+        if(!isMigrated){
+
         // SQLHandlerが初期化されていない場合
         if ( !sqlController.getHandler().isInitialized() ) {
             throw new IllegalStateException("SQLHandler is not initialized yet.");
@@ -206,12 +252,19 @@ public class KillDeathDataContainer {
         } catch ( Exception e ) {
             e.printStackTrace();
         }
+        }else {
+
+            return KDStatusReloaded.getPlugin().getKDData().getTopKillRankingData(unit,count);
+
+        }
 
         // 失敗したらnull
         return null;
     }
 
     public int getRanking(@NonNull UUID uuid, @NonNull TimeUnit unit) {
+
+        if(!isMigrated){
         ResultSet set = sqlController.getHandler().executeQuery(
                 "select uuid, name, kills, (SELECT count(*) FROM " + sqlController.getTableName()
                         + " as p1 WHERE p1." + unit.getSqlColumnName() + " > p." + unit.getSqlColumnName()
@@ -228,6 +281,12 @@ public class KillDeathDataContainer {
             e.printStackTrace();
             return -1;
         }
+        }else {
+
+            return KDStatusReloaded.getPlugin().getKDData().getRank(uuid,unit);
+
+        }
+
     }
 
     private long getFirstMilliSecond(TimeUnit unit) {
@@ -285,5 +344,31 @@ public class KillDeathDataContainer {
                 JSONMessage.create(Chat.f("&a完了！")).actionbar(p);
             }
         }.start();
+    }
+
+    public void migrationToMySQL(Player p){
+
+        new Thread(){
+
+            private int finished = 0;
+
+            public void run(){
+
+                sqlController.getAllData().forEach(data -> {
+
+                    KDStatusReloaded.getPlugin().getKDData().create(data);
+
+                    finished++;
+                    p.sendMessage(Chat.f("&e移行中... &d{0}個完了", finished));
+                });
+
+                KDStatusReloaded.getPlugin().getConfig().set("migrated",true);
+                KDStatusReloaded.getPlugin().saveConfig();
+                p.sendMessage(Chat.f("&a完了！"));
+
+            }
+
+        }.start();
+
     }
 }

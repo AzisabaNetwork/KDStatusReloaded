@@ -10,10 +10,13 @@ import lombok.RequiredArgsConstructor;
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import jp.azisaba.lgw.kdstatus.utils.Chat;
 
-@RequiredArgsConstructor
 public class KDStatusCommand implements CommandExecutor {
 
     private final KDStatusReloaded plugin;
+
+    public KDStatusCommand(KDStatusReloaded plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -31,8 +34,8 @@ public class KDStatusCommand implements CommandExecutor {
             return true;
         }
 
-        if ( args[0].equalsIgnoreCase("miguration") ) {
-            plugin.getKdDataContainer().miguration((Player) sender);
+        if ( args[0].equalsIgnoreCase("migration") ) {
+            plugin.getKdDataContainer().migrationToMySQL((Player) sender);
             return true;
         }
 

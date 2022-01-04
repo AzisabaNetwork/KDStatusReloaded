@@ -97,7 +97,7 @@ public class KillDeathDataContainer {
             } catch ( Exception e ) {
                 e.printStackTrace();
             }
-        }else if(isMigrated){
+        }else{
 
             ResultSet set = KDStatusReloaded.getPlugin().getKDData().getRawData(p.getUniqueId());
 
@@ -364,7 +364,9 @@ public class KillDeathDataContainer {
 
                 KDStatusReloaded.getPlugin().getConfig().set("migrated",true);
                 KDStatusReloaded.getPlugin().saveConfig();
+                isMigrated = true;
                 p.sendMessage(Chat.f("&a完了！"));
+
 
             }
 

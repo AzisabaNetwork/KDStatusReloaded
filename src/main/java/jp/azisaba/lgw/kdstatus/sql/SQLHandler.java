@@ -94,6 +94,10 @@ public class SQLHandler {
         }
     }
 
+    synchronized public Connection getConnection(){
+        return connection;
+    }
+
     /**
      * 接続するためにドライバを登録する
      */

@@ -22,10 +22,8 @@ public class PlayerDataMySQLController {
 
     public void createTable(){
 
-        PreparedStatement ps;
         try{
-
-            ps = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS killdeathdata "
+            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS killdeathdata "
                     + "(UUID VARCHAR(64) NOT NULL ,NAME VARCHAR(36) NOT NULL," +
                     "kills INT DEFAULT 0, " +
                     "deaths INT DEFAULT 0 ," +

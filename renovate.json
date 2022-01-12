@@ -1,5 +1,6 @@
 {
   "extends": [
-    "config:base"
-  ]
+    "github>AzisabaNetwork/renovate-config"
+  ],
+  "assignees": ["siloneco", "matsu1213"]
 }

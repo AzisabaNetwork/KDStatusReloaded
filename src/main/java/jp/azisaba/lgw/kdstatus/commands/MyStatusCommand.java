@@ -56,8 +56,7 @@ public class MyStatusCommand implements CommandExecutor {
         builder.append(Chat.f("&9{0}&eK/D&a: &b{1}&r", arrow, String.format("%.3f", kdRaito))).append("\n \n");
         builder.append(Chat.f("&9{0}&eDailyキル数&a: &b{1}&r", arrow, dailyKills)).append("\n");
         builder.append(Chat.f("&9{0}&eMonthlyキル数&a: &b{1}&r", arrow, monthlyKills)).append("\n");
-        builder.append(Chat.f("&9{0}&eYearlyキル数&a: &b{1} &7(正確ではありません※1)&r", arrow, yearlyKills)).append("\n \n");
-        builder.append(Chat.f("&7※1 &cYearlyキル数は集計を始めたばかりのため、正しい値ではありません！&r")).append("\n");
+        builder.append(Chat.f("&9{0}&eYearlyキル数&a: &b{1}&r", arrow, yearlyKills)).append("\n \n");
         builder.append(Chat.f("&b&m&l{0}", Strings.repeat("━", 52)));
 
         p.sendMessage(builder.toString());

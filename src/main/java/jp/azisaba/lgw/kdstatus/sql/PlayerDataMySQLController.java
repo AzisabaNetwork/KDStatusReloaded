@@ -251,27 +251,19 @@ public class PlayerDataMySQLController {
     public List<KillRankingData> getTopKillRankingData(TimeUnit unit, int count){
 
         try {
-            /*
+
             PreparedStatement ps = plugin.sql.getConnection().prepareStatement("select uuid, name, " + unit.getSqlColumnName()
                     + " from kill_death_data"
-                    + " where last_updated >= " + getFirstMilliSecond(unit)
+                    + " where last_updated >= ?"
                     + " order by " + unit.getSqlColumnName() + " DESC"
-                    + " LIMIT " + count);
+                    + " LIMIT ?");
 
-             */
-
-            //最新機種
-            PreparedStatement ps5 = plugin.sql.getConnection().prepareStatement("SELECT uuid, name, ? from kill_death_data" +
-                    " where last_updated >= ? order by ? DESC LIMIT ?");
-
-            ps5.setString(1,unit.getSqlColumnName());
-            ps5.setLong(2,getFirstMilliSecond(unit));
-            ps5.setString(3,unit.getSqlColumnName());
-            ps5.setInt(4,count);
+            ps.setLong(1,getFirstMilliSecond(unit));
+            ps.setInt(2,count);
 
             List<KillRankingData> ranking = new ArrayList<>();
 
-            ResultSet result = ps5.executeQuery();
+            ResultSet result = ps.executeQuery();
 
             while (result.next()){
 
@@ -287,7 +279,7 @@ public class PlayerDataMySQLController {
 
             }
 
-            ps5.close();
+            ps.close();
 
             return ranking;
 

@@ -25,7 +25,7 @@ public class MySQLHandler {
     public void connect() throws SQLException {
 
         if(!isConnected())
-            connection = DriverManager.getConnection("jdbc:mysql://" + host +":"+ port + "/" + database + "?useSLL=false",user,password );
+            connection = DriverManager.getConnection("jdbc:mysql://" + host +":"+ port + "/" + database + "?useSSL=false",user,password );
 
     }
 

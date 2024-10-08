@@ -225,11 +225,11 @@ public class PlayerDataMySQLController {
         return null;
     }
 
-    private static final String RANK_QUERY = "SELECT kills, uuid, (SELECT count(*) FROM kill_death_data i2 WHERE i1.%s < i2.%s) + 1 AS 'rank' FROM kill_death_data i1 WHERE uuid=?";
+    private static final String RANK_QUERY = "SELECT kills, uuid, (SELECT count(*) FROM kill_death_data i2 WHERE i1.%s < i2.%s) + 1 AS 'rank' FROM kill_death_data i1 WHERE uuid=? and last_updated > %s";
 
     public int getRank(UUID uuid,TimeUnit unit){
         String columnName = unit.getSqlColumnName();
-        try(PreparedStatement p = plugin.sql.getConnection().prepareStatement(String.format(RANK_QUERY, columnName, columnName))) {
+        try(PreparedStatement p = plugin.sql.getConnection().prepareStatement(String.format(RANK_QUERY, columnName, columnName, getFirstMilliSecond(unit)))) {
             p.setString(1, uuid.toString());
             ResultSet result = p.executeQuery();
             if(result.next()) {

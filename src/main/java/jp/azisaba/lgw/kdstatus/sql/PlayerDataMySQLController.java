@@ -225,23 +225,18 @@ public class PlayerDataMySQLController {
         return null;
     }
 
+    private static final String RANK_QUERY = "SELECT kills, uuid, (SELECT count(*) FROM kill_death_data i2 WHERE i1.%s < i2.%s) + 1 AS 'rank' FROM kill_death_data i1 WHERE uuid=?";
+
     public int getRank(UUID uuid,TimeUnit unit){
-
-        try {
-            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("select uuid, name, kills, (SELECT count(*) FROM kill_death_data"
-                                            + " as p1 WHERE p1." + unit.getSqlColumnName() + " > p." + unit.getSqlColumnName()
-                                            + ") + 1 as rank FROM kill_death_data as p"
-                                            + " where uuid=? and last_updated > " + getFirstMilliSecond(unit) + " order by rank");
-            ps.setString(1, uuid.toString());
-
-            ResultSet result = ps.executeQuery();
-
-            if(result.next()){
+        String columnName = unit.getSqlColumnName();
+        try(PreparedStatement p = plugin.sql.getConnection().prepareStatement(String.format(RANK_QUERY, columnName, columnName))) {
+            p.setString(1, uuid.toString());
+            ResultSet result = p.executeQuery();
+            if(result.next()) {
                 return result.getInt("rank");
             }
-            ps.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return -1;

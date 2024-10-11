@@ -2,7 +2,6 @@ package jp.azisaba.lgw.kdstatus.sql;
 
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
-import jp.azisaba.lgw.kdstatus.utils.UUIDConverter;
 import lombok.NonNull;
 
 import java.math.BigInteger;
@@ -10,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -231,7 +229,7 @@ public class PlayerDataMySQLController {
         String columnName = unit.getSqlColumnName();
         try(PreparedStatement p = plugin.sql.getConnection().prepareStatement(String.format(RANK_QUERY, columnName, columnName))) {
             p.setString(1, uuid.toString());
-            p.setLong(2, getFirstMilliSecond(unit));
+            p.setLong(2, TimeUnit.getFirstMilliSecond(unit));
             ResultSet result = p.executeQuery();
             if(result.next()) {
                 return result.getInt("rank");
@@ -254,7 +252,7 @@ public class PlayerDataMySQLController {
                     + " order by " + unit.getSqlColumnName() + " DESC"
                     + " LIMIT ?");
 
-            ps.setLong(1,getFirstMilliSecond(unit));
+            ps.setLong(1,TimeUnit.getFirstMilliSecond(unit));
             ps.setInt(2,count);
 
             List<KillRankingData> ranking = new ArrayList<>();
@@ -285,29 +283,6 @@ public class PlayerDataMySQLController {
 
         return null;
 
-    }
-
-    private long getFirstMilliSecond(TimeUnit unit) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.MILLISECOND, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-
-        if ( unit == TimeUnit.DAILY )
-            return cal.getTimeInMillis();
-
-        cal.set(Calendar.DATE, 1);
-
-        if ( unit == TimeUnit.MONTHLY )
-            return cal.getTimeInMillis();
-
-        cal.set(Calendar.MONTH, 0);
-
-        if ( unit == TimeUnit.YEARLY )
-            return cal.getTimeInMillis();
-
-        return -1;
     }
 
 }

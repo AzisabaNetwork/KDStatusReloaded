@@ -10,7 +10,6 @@ import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
 import jp.azisaba.lgw.kdstatus.utils.UUIDConverter;
@@ -52,13 +51,6 @@ public class PlayerDataSQLController {
                 ");");
 
         return this;
-    }
-
-    protected SQLHandler getHandler(){
-        return handler;
-    }
-    protected String getTableName(){
-        return tableName;
     }
 
     public BigInteger getKills(@NonNull UUID uuid, @NonNull TimeUnit unit) {

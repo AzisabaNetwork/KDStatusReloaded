@@ -7,8 +7,6 @@ import org.bukkit.entity.Player;
 
 import com.google.common.base.Strings;
 
-import lombok.RequiredArgsConstructor;
-
 import jp.azisaba.lgw.kdstatus.sql.KDUserData;
 import jp.azisaba.lgw.kdstatus.sql.KillDeathDataContainer;
 import jp.azisaba.lgw.kdstatus.utils.Chat;

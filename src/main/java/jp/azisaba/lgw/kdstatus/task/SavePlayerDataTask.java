@@ -3,7 +3,6 @@ package jp.azisaba.lgw.kdstatus.task;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 
@@ -30,9 +29,5 @@ public class SavePlayerDataTask extends BukkitRunnable {
 
         lastSavedTime = System.currentTimeMillis();
         plugin.getLogger().info("全プレイヤーデータをセーブしました。");
-    }
-
-    public long getLastSavedTime() {
-        return lastSavedTime;
     }
 }

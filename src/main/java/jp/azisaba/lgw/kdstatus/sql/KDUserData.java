@@ -92,14 +92,6 @@ public class KDUserData {
         updateLastUpdated();
     }
 
-    public UUID getUuid(){
-        return uuid;
-    }
-
-    public String getName(){
-        return name;
-    }
-
     /**
      * 最終アップデートをミリ秒で取得します
      *

@@ -3,7 +3,6 @@ package jp.azisaba.lgw.kdstatus.sql;
 import java.util.UUID;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class KillRankingData {

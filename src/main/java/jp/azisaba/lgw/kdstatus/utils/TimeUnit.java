@@ -1,8 +1,5 @@
 package jp.azisaba.lgw.kdstatus.utils;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.util.Calendar;
 
 public enum TimeUnit {
@@ -11,7 +8,6 @@ public enum TimeUnit {
     MONTHLY("monthly_kills"),
     YEARLY("yearly_kills");
 
-    @Getter
     private final String sqlColumnName;
 
     TimeUnit(String sqlColumnName){

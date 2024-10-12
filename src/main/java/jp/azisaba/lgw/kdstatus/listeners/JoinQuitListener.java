@@ -5,8 +5,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import lombok.RequiredArgsConstructor;
-
 import jp.azisaba.lgw.kdstatus.sql.KillDeathDataContainer;
 
 public class JoinQuitListener implements Listener {

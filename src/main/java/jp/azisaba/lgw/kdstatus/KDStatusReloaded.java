@@ -33,10 +33,6 @@ public class KDStatusReloaded extends JavaPlugin {
 
     private PlayerDataMySQLController kdData;
 
-    public static KDStatusReloaded getPlugin() {
-        return plugin;
-    }
-
     @Override
     public void onEnable() {
 
@@ -115,15 +111,6 @@ public class KDStatusReloaded extends JavaPlugin {
         this.pluginConfig.loadConfig();
     }
 
-    public KDStatusConfig getPluginConfig(){
-        return pluginConfig;
-    }
-    public KillDeathDataContainer getKdDataContainer(){
-        return kdDataContainer;
-    }
-    public SavePlayerDataTask getSaveTask(){
-        return saveTask;
-    }
     public PlayerDataMySQLController getKDData(){
         return kdData;
     }

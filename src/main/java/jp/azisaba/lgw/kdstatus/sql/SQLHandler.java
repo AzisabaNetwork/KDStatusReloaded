@@ -10,10 +10,6 @@ import java.sql.SQLException;
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import org.bukkit.Bukkit;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 /**
  * SQLの基本操作を行うクラス
  *
@@ -25,7 +21,6 @@ public class SQLHandler {
     private final File file;
 
     private Connection connection;
-    @Getter(value = AccessLevel.PROTECTED)
     private boolean initialized = false;
 
     private final String host = KDStatusReloaded.getPlugin().getConfig().getString("host");

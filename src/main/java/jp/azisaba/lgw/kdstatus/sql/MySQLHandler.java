@@ -5,6 +5,8 @@ import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MySQLHandler {
 
@@ -24,7 +26,11 @@ public class MySQLHandler {
 
         if(!isConnected())
             connection = DriverManager.getConnection("jdbc:mysql://" + host +":"+ port + "/" + database + "?useSLL=false",user,password );
+    }
 
+    public void reconnect() throws SQLException {
+        close();
+        connect();
     }
 
     public void close(){
@@ -36,7 +42,7 @@ public class MySQLHandler {
                 throwables.printStackTrace();
             }
         }
-
+        connection = null;
     }
 
     public Connection getConnection() {

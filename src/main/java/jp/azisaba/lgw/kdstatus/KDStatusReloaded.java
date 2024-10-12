@@ -1,7 +1,9 @@
 package jp.azisaba.lgw.kdstatus;
 
 import java.io.File;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import jp.azisaba.lgw.kdstatus.sql.*;
 import org.bukkit.Bukkit;
@@ -29,7 +31,7 @@ public class KDStatusReloaded extends JavaPlugin {
 
     private SQLHandler sqlHandler = null;
 
-    public MySQLHandler sql;
+    public HikariMySQLDatabase sql;
 
     private PlayerDataMySQLController kdData;
 
@@ -57,21 +59,32 @@ public class KDStatusReloaded extends JavaPlugin {
         sqlHandler = new SQLHandler(new File(getDataFolder(), "playerData.db"));
         kdDataContainer = new KillDeathDataContainer(new PlayerDataSQLController(sqlHandler).init());
 
-        sql = new MySQLHandler();
-
         this.kdData = new PlayerDataMySQLController(this);
 
-        try {
-            sql.connect();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            getLogger().warning("Failed to connect SQLDatabase.");
-        }
+        DBAuthConfig.loadAuthConfig();
+        sql = DBAuthConfig.getDatabase(getLogger(), 10);
+
+        sql.connect();
+
         if(sql.isConnected()){
+            getLogger().info("SQL Testing...");
+            try(PreparedStatement pstmt = sql.getConnection().prepareStatement("SELECT 1")) {
+                if(pstmt.executeQuery().next()) {
+                    getLogger().info("SQL Test was success!");
+                } else {
+                    getLogger().warning("Failed to test SQL Connection");
+                }
+            } catch (SQLException e) {
+                getLogger().log(Level.SEVERE, "Error on SQL Testing", e);
+            }
+            getLogger().info("SQL Test is finished!");
+
             getLogger().info("Connected SQLDatabase!");
 
             //ここでテーブル作るぞ
             this.kdData.createTable();
+
+            getLogger().info("Table was created!");
 
         }
 

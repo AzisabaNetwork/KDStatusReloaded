@@ -68,7 +68,7 @@
           </filters>
           <artifactSet>
             <excludes>
-              <exclude>org.spigotmc:1.12.2-R0.1-SNAPSHOT</exclude>
+              <exclude>org.spigotmc:1.16.5-R0.1-SNAPSHOT</exclude>
               <exclude>org.junit.jupiter:junit-jupiter</exclude>
             </excludes>
           </artifactSet>
@@ -111,7 +111,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.12.2-R0.1-SNAPSHOT</version>
+      <version>1.16.5-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

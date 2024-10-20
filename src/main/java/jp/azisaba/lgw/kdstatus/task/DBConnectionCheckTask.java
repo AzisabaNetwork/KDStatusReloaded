@@ -30,11 +30,7 @@ public class DBConnectionCheckTask extends BukkitRunnable {
             plugin.getLogger().log(Level.WARNING, "Failed to pass health check", e);
         }
         plugin.getLogger().info("Reconnecting to database...");
-        try {
-            plugin.sql.reconnect();
-            plugin.getLogger().info("Successfully to reconnect database!");
-        } catch (SQLException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Failed to reconnect database", ex);
-        }
+        plugin.sql.reconnect();
+        plugin.getLogger().info("Successfully to reconnect database!");
     }
 }

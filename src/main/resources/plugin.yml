@@ -1,7 +1,7 @@
 name: ${project.name}
 main: jp.azisaba.lgw.kdstatus.KDStatusReloaded
 version: ${project.version}
-author: [siloneco , matsu1213]
+authors: [siloneco, matsu1213, sysnote8main]
 description: "KDStatus reloaded."
 website: ${project.url}
 commands:

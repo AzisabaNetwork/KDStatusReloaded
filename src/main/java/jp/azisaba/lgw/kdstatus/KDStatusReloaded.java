@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 
 import jp.azisaba.lgw.kdstatus.sql.*;
+import jp.azisaba.lgw.kdstatus.task.DBConnectionCheckTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,6 +29,7 @@ public class KDStatusReloaded extends JavaPlugin {
     private static KDStatusReloaded plugin;
     @Getter
     private SavePlayerDataTask saveTask;
+    private DBConnectionCheckTask dbCheckTask;
 
     private SQLHandler sqlHandler = null;
 
@@ -87,6 +89,9 @@ public class KDStatusReloaded extends JavaPlugin {
         saveTask = new SavePlayerDataTask(this);
         saveTask.runTaskTimerAsynchronously(this, 20 * 60 * 3, 20 * 60 * 3);
 
+        dbCheckTask = new DBConnectionCheckTask(this);
+        dbCheckTask.runTaskTimerAsynchronously(this, 20, 20 * 5);
+
         Bukkit.getPluginManager().registerEvents(new JoinQuitListener(kdDataContainer), this);
         Bukkit.getPluginManager().registerEvents(new KillDeathListener(this), this);
 
@@ -115,6 +120,8 @@ public class KDStatusReloaded extends JavaPlugin {
         if(sql.isConnected()){
             sql.close();
         }
+        saveTask.cancel();
+        dbCheckTask.cancel();
         Bukkit.getLogger().info(getName() + " disabled.");
     }
 

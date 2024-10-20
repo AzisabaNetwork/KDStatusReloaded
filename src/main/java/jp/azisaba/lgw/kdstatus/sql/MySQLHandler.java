@@ -6,6 +6,8 @@ import lombok.Getter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MySQLHandler {
 
@@ -37,7 +39,7 @@ public class MySQLHandler {
     }
 
     public void reconnect() throws SQLException {
-        if(isConnected()) close();
+        close();
         connect();
     }
 
@@ -46,7 +48,7 @@ public class MySQLHandler {
         if(isConnected()) {
             connection.close();
         }
-
+        connection = null;
     }
 
 }

@@ -19,6 +19,7 @@ public class PlayerDataMySQLController {
     public void createTable(){
 
         try{
+            plugin.getLogger().info("Creating database table...");
             PreparedStatement ps = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS kill_death_data "
                     + "(uuid VARCHAR(64) NOT NULL ,name VARCHAR(36) NOT NULL," +
                     "kills INT DEFAULT 0, " +
@@ -29,6 +30,8 @@ public class PlayerDataMySQLController {
                     "last_updated BIGINT DEFAULT -1 )");
 
             ps.executeUpdate();
+            ps.close();
+            plugin.getLogger().info("Successfully to create database table!");
 
         }catch (SQLException e){e.printStackTrace();}
 
@@ -221,13 +224,14 @@ public class PlayerDataMySQLController {
         return null;
     }
 
-    private static final String RANK_QUERY = "SELECT kills, uuid, (SELECT count(*) FROM kill_death_data i2 WHERE i1.%s < i2.%s) + 1 AS 'rank' FROM kill_death_data i1 WHERE uuid=? and last_updated > ?";
+    public static final String RANK_QUERY = "SELECT * FROM (SELECT uuid, ?, last_updated, RANK() over (ORDER BY ? DESC) as 'rank' FROM kill_death_data WHERE last_updated > ?) s WHERE s.uuid=?";
 
     public int getRank(UUID uuid,TimeUnit unit){
-        String columnName = unit.getSqlColumnName();
-        try(PreparedStatement p = plugin.sql.getConnection().prepareStatement(String.format(RANK_QUERY, columnName, columnName))) {
-            p.setString(1, uuid.toString());
-            p.setLong(2, TimeUnit.getFirstMilliSecond(unit));
+        try(PreparedStatement p = plugin.sql.getConnection().prepareStatement(RANK_QUERY)) {
+            p.setString(1, unit.getSqlColumnName());
+            p.setString(2, unit.getSqlColumnName());
+            p.setLong(3, TimeUnit.getFirstMilliSecond(unit));
+            p.setString(4, uuid.toString());
             ResultSet result = p.executeQuery();
             if(result.next()) {
                 return result.getInt("rank");

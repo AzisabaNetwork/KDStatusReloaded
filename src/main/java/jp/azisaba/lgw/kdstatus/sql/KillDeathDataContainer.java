@@ -97,30 +97,7 @@ public class KillDeathDataContainer {
                 e.printStackTrace();
             }
         }else{
-
-            ResultSet set = KDStatusReloaded.getPlugin().getKDData().getRawData(p.getUniqueId());
-
-            try {
-                if ( set.next() ) {
-                    int totalKills = set.getInt("kills");
-                    int deaths = set.getInt("deaths");
-                    int dailyKills = set.getInt("daily_kills");
-                    int monthlyKills = set.getInt("monthly_kills");
-                    int yearlyKills = set.getInt("yearly_kills");
-                    long lastUpdated = set.getLong("last_updated");
-
-                    data = new KDUserData(p.getUniqueId(), p.getName(), totalKills, deaths, dailyKills, monthlyKills, yearlyKills, lastUpdated);
-                } else {
-                    data = new KDUserData(p.getUniqueId(), p.getName(), 0, 0, 0, 0, 0, -1);
-                    KDStatusReloaded.getPlugin().getKDData().create(data);
-                }
-
-                set.close();
-
-            } catch ( Exception e ) {
-                e.printStackTrace();
-            }
-
+            data = KDStatusReloaded.getPlugin().getKDData().getUserData(p.getUniqueId(), p.getName());
         }
 
         // データがnullの場合はnullを返す

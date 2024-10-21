@@ -214,6 +214,38 @@ public class PlayerDataMySQLController {
         return null;
     }
 
+    /**
+     * @param uuid UUID of target player
+     * @param name Name of target player
+     * @return returns userdata. If failed, returns null.
+     */
+    public KDUserData getUserData(@NonNull UUID uuid, @NonNull String name) {
+        try(Connection conn = plugin.sql.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM kill_death_data WHERE uuid=?")) {
+            ps.setString(1, uuid.toString());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                int totalKills = rs.getInt("kills");
+                int deaths = rs.getInt("deaths");
+                int dailyKills = rs.getInt("daily_kills");
+                int monthlyKills = rs.getInt("monthly_kills");
+                int yearlyKills = rs.getInt("yearly_kills");
+                long lastUpdated = rs.getLong("last_updated");
+                rs.close();
+
+                return new KDUserData(uuid, name, totalKills, deaths, dailyKills, monthlyKills, yearlyKills, lastUpdated);
+            } else {
+                rs.close();
+                KDUserData data = new KDUserData(uuid, name, 0, 0, 0, 0, 0, -1);
+                KDStatusReloaded.getPlugin().getKDData().create(data);
+                return data;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
     public static final String RANK_QUERY = "SELECT * FROM (SELECT uuid, ?, last_updated, RANK() over (ORDER BY ? DESC) as 'rank' FROM kill_death_data WHERE last_updated > ?) s WHERE s.uuid=?";
 
     public int getRank(UUID uuid,TimeUnit unit){

@@ -110,6 +110,10 @@ public class KillDeathDataContainer {
         return data;
     }
 
+    public boolean removeUserDataFromCache(UUID uuid) {
+        return playerDataCache.remove(uuid) != null;
+    }
+
     /**
      * cacheに保存されている戦績を(ファイルに保存して)cacheから削除します
      *
@@ -138,6 +142,12 @@ public class KillDeathDataContainer {
         }else {
             return KDStatusReloaded.getPlugin().getKDData().update(data);
         }
+    }
+
+    public boolean savePlayerData(@NonNull Player p) {
+        KDUserData userData = getPlayerData(p, false);
+        if (userData == null) return true;
+        return savePlayerData(userData);
     }
 
     /**

@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import jp.azisaba.lgw.kdstatus.sql.KillDeathDataContainer;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class JoinQuitListener implements Listener {
 
@@ -20,5 +21,13 @@ public class JoinQuitListener implements Listener {
         Player p = e.getPlayer();
 
         dataContainer.loadPlayerData(p);
+    }
+
+    @EventHandler
+    public void onPlayerQuitEvent(PlayerQuitEvent e) {
+        Player p = e.getPlayer();
+
+        dataContainer.savePlayerData(p);
+        dataContainer.removeUserDataFromCache(p.getUniqueId());
     }
 }

@@ -83,7 +83,7 @@ public class PlayerDataMySQLController {
     public boolean update(KDUserData data){
 
         try(Connection conn = plugin.sql.getConnection();
-            PreparedStatement ps = conn.prepareStatement("UPDATE kill_death_data SET name=? ,kills=? ,deaths=? ,daily_kills=? ,monthly_kills=? ,yearly_kills=? ,last_updated=? WHERE uuid=?");) {
+            PreparedStatement ps = conn.prepareStatement("UPDATE kill_death_data SET name=? ,kills=? ,deaths=? ,daily_kills=? ,monthly_kills=? ,yearly_kills=? ,last_updated=? WHERE uuid=?")) {
             ps.setString(8,data.getUuid().toString());
             ps.setString(1,data.getName());
             ps.setInt(2,data.getKills(TimeUnit.LIFETIME));

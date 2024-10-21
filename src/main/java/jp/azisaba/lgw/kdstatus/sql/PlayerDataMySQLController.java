@@ -39,19 +39,16 @@ public class PlayerDataMySQLController {
 
     public boolean exist(UUID uuid){
 
-        try {
-
-            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("SELECT * FROM kill_death_data WHERE name=?");
+        try(Connection conn = plugin.sql.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM kill_death_data WHERE name=?")) {
             ps.setString(1,uuid.toString());
 
             ResultSet result = ps.executeQuery();
 
-            if(result.next()){
-                return true;
-            }
+            boolean isExist = result.next();
+            result.close();
 
-            return false;
-
+            return isExist;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,9 +62,8 @@ public class PlayerDataMySQLController {
         if(exist(data.getUuid()))
             return;
 
-        try {
-
-            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("INSERT INTO kill_death_data (uuid,name,kills,deaths,daily_kills,monthly_kills,yearly_kills,last_updated) VALUES (?,?,?,?,?,?,?,?)");
+        try(Connection conn = plugin.sql.getConnection();
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO kill_death_data (uuid,name,kills,deaths,daily_kills,monthly_kills,yearly_kills,last_updated) VALUES (?,?,?,?,?,?,?,?)");) {
             ps.setString(1,data.getUuid().toString());
             ps.setString(2,data.getName());
             ps.setInt(3,data.getKills(TimeUnit.LIFETIME));
@@ -78,19 +74,16 @@ public class PlayerDataMySQLController {
             ps.setLong(8,data.getLastUpdated());
 
             ps.executeUpdate();
-            ps.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public boolean update(KDUserData data){
 
-        try {
-
-            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("UPDATE kill_death_data SET name=? ,kills=? ,deaths=? ,daily_kills=? ,monthly_kills=? ,yearly_kills=? ,last_updated=? WHERE uuid=?");
+        try(Connection conn = plugin.sql.getConnection();
+            PreparedStatement ps = conn.prepareStatement("UPDATE kill_death_data SET name=? ,kills=? ,deaths=? ,daily_kills=? ,monthly_kills=? ,yearly_kills=? ,last_updated=? WHERE uuid=?");) {
             ps.setString(8,data.getUuid().toString());
             ps.setString(1,data.getName());
             ps.setInt(2,data.getKills(TimeUnit.LIFETIME));
@@ -101,7 +94,6 @@ public class PlayerDataMySQLController {
             ps.setLong(7,data.getLastUpdated());
 
             ps.executeUpdate();
-            ps.close();
             return true;
 
         } catch (SQLException e) {
@@ -113,9 +105,8 @@ public class PlayerDataMySQLController {
 
     public BigInteger getKills(@NonNull UUID uuid, @NonNull TimeUnit unit) {
 
-        try {
-
-            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("SELECT "+ unit.getSqlColumnName() + " FROM kill_death_data WHERE uuid=?");
+        try(Connection conn = plugin.sql.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT "+ unit.getSqlColumnName() + " FROM kill_death_data WHERE uuid=?")) {
             ps.setString(1, uuid.toString());
 
             ResultSet result = ps.executeQuery();
@@ -125,6 +116,7 @@ public class PlayerDataMySQLController {
             }
 
             ps.close();
+            result.close();
 
             return BigInteger.valueOf(-1);
 
@@ -163,9 +155,8 @@ public class PlayerDataMySQLController {
 
     public String getName(@NonNull UUID uuid) {
 
-        try {
-
-            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("SELECT name FROM kill_death_data WHERE uuid=?");
+        try(Connection conn = plugin.sql.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT name FROM kill_death_data WHERE uuid=?")) {
             ps.setString(1, uuid.toString());
 
             ResultSet result = ps.executeQuery();
@@ -175,6 +166,7 @@ public class PlayerDataMySQLController {
             }
 
             ps.close();
+            result.close();
 
             return null;
 
@@ -212,10 +204,8 @@ public class PlayerDataMySQLController {
     }
 
     public ResultSet getRawData(@NonNull UUID uuid) {
-
-        PreparedStatement ps;
-        try {
-            ps = plugin.sql.getConnection().prepareStatement("SELECT * FROM kill_death_data WHERE uuid=?");
+        try(Connection conn = plugin.sql.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM kill_death_data WHERE uuid=?")) {
             ps.setString(1, uuid.toString());
             return ps.executeQuery();
         } catch (SQLException throwables) {
@@ -227,7 +217,8 @@ public class PlayerDataMySQLController {
     public static final String RANK_QUERY = "SELECT * FROM (SELECT uuid, ?, last_updated, RANK() over (ORDER BY ? DESC) as 'rank' FROM kill_death_data WHERE last_updated > ?) s WHERE s.uuid=?";
 
     public int getRank(UUID uuid,TimeUnit unit){
-        try(PreparedStatement p = plugin.sql.getConnection().prepareStatement(RANK_QUERY)) {
+        try(Connection conn = plugin.sql.getConnection();
+            PreparedStatement p = conn.prepareStatement(RANK_QUERY)) {
             p.setString(1, unit.getSqlColumnName());
             p.setString(2, unit.getSqlColumnName());
             p.setLong(3, TimeUnit.getFirstMilliSecond(unit));
@@ -236,6 +227,7 @@ public class PlayerDataMySQLController {
             if(result.next()) {
                 return result.getInt("rank");
             }
+            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

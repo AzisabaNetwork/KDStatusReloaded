@@ -1,6 +1,7 @@
 package jp.azisaba.lgw.kdstatus;
 
 import java.io.File;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -66,7 +67,8 @@ public class KDStatusReloaded extends JavaPlugin {
 
         if(sql.isConnected()){
             getLogger().info("SQL Testing...");
-            try(PreparedStatement pstmt = sql.getConnection().prepareStatement("SELECT 1")) {
+            try(Connection conn = sql.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement("SELECT 1")) {
                 if(pstmt.executeQuery().next()) {
                     getLogger().info("SQL Test was success!");
                 } else {
@@ -120,8 +122,8 @@ public class KDStatusReloaded extends JavaPlugin {
         if(sql.isConnected()){
             sql.close();
         }
-        saveTask.cancel();
-        dbCheckTask.cancel();
+        if(saveTask!=null) saveTask.cancel();
+        if(dbCheckTask!=null) dbCheckTask.cancel();
         Bukkit.getLogger().info(getName() + " disabled.");
     }
 

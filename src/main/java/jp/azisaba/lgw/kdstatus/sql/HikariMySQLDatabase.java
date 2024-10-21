@@ -53,6 +53,7 @@ public class HikariMySQLDatabase {
         config.setPassword(password);
         config.setJdbcUrl(jdbcUrl);
         config.setMaximumPoolSize(maxPoolSize);
+        config.setLeakDetectionThreshold(2000);
 //        config.setConnectionInitSql("SELECT 1");
         config.setAutoCommit(true);
         config.setConnectionTimeout(1500); // TODO change this
@@ -161,6 +162,16 @@ public class HikariMySQLDatabase {
             return true;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Failed to execute update", e);
+            return false;
+        }
+    }
+
+    public boolean isConnectionAlive() {
+        try(Connection conn = getConnection();
+        PreparedStatement pstmt = conn.prepareStatement("SELECT 1");
+        ResultSet rs = pstmt.executeQuery()) {
+            return rs.next();
+        } catch (SQLException e) {
             return false;
         }
     }

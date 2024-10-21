@@ -4,6 +4,7 @@ import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -13,19 +14,19 @@ public class DBConnectionCheckTask extends BukkitRunnable {
     private final KDStatusReloaded plugin;
     @Override
     public void run() {
-        try {
-            if(plugin.sql.getConnection() == null) {
+        try (Connection conn = plugin.sql.getConnection()){
+            if(conn == null) {
                 plugin.sql.connect();
             }
-            PreparedStatement pstmt = plugin.sql.getConnection().prepareStatement("SELECT 1");
-            if(pstmt.executeQuery().next()) {
-                if(plugin.getPluginConfig().showLogInConsole) {
-                    plugin.getLogger().info("SQL Connection is alive!");
+            try(Connection con = plugin.sql.getConnection();
+                PreparedStatement pstmt = con.prepareStatement("SELECT 1")) {
+                if (pstmt.executeQuery().next()) {
+                    if (plugin.getPluginConfig().showLogInConsole) {
+                        plugin.getLogger().info("SQL Connection is alive!");
+                    }
+                    return;
                 }
-                pstmt.close();
-                return;
             }
-            pstmt.close();
         } catch (SQLException e) {
             plugin.getLogger().log(Level.WARNING, "Failed to pass health check", e);
         }

@@ -18,16 +18,16 @@ public class PlayerDataMySQLController {
 
     public void createTable(){
 
-        try{
-            plugin.getLogger().info("Creating database table...");
-            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS kill_death_data "
+        try(Connection conn = plugin.sql.getConnection();
+            PreparedStatement ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS kill_death_data "
                     + "(uuid VARCHAR(64) NOT NULL ,name VARCHAR(36) NOT NULL," +
                     "kills INT DEFAULT 0, " +
                     "deaths INT DEFAULT 0 ," +
                     "daily_kills INT DEFAULT 0," +
                     "monthly_kills INT DEFAULT 0," +
                     "yearly_kills INT DEFAULT 0," +
-                    "last_updated BIGINT DEFAULT -1 )");
+                    "last_updated BIGINT DEFAULT -1 )")) {
+            plugin.getLogger().info("Creating database table...");
 
             ps.executeUpdate();
             ps.close();
@@ -246,13 +246,12 @@ public class PlayerDataMySQLController {
 
     public List<KillRankingData> getTopKillRankingData(TimeUnit unit, int count){
 
-        try {
-
-            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("select uuid, name, " + unit.getSqlColumnName()
+        try(Connection conn = plugin.sql.getConnection();
+            PreparedStatement ps = conn.prepareStatement("select uuid, name, " + unit.getSqlColumnName()
                     + " from kill_death_data"
                     + " where last_updated >= ?"
                     + " order by " + unit.getSqlColumnName() + " DESC"
-                    + " LIMIT ?");
+                    + " LIMIT ?")) {
 
             ps.setLong(1,TimeUnit.getFirstMilliSecond(unit));
             ps.setInt(2,count);
@@ -274,8 +273,6 @@ public class PlayerDataMySQLController {
                 ranking.add(data);
 
             }
-
-            ps.close();
 
             return ranking;
 

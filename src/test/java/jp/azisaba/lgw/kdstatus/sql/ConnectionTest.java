@@ -22,7 +22,7 @@ public class ConnectionTest {
                 10,
                 "localhost",
                 "3306",
-                "db",
+                "kdstatusreloaded",
                 "root",
                 "mariadb"
         );

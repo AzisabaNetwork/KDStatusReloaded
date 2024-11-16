@@ -3,22 +3,51 @@ package jp.azisaba.lgw.kdstatus.sql;
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+@RequiredArgsConstructor
 public class PlayerDataMySQLController {
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(PlayerDataMySQLController.class);
+    private final HikariMySQLDatabase sql;
+    private final Logger logger;
 
-    KDStatusReloaded plugin;
+    public void init() {
+        if(sql.isConnected()){
+            logger.info("SQL Testing...");
+            try(Connection conn = sql.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement("SELECT 1")) {
+                if(pstmt.executeQuery().next()) {
+                    logger.info("SQL Test was success!");
+                } else {
+                    logger.warning("Failed to test SQL Connection");
+                }
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, "Error on SQL Testing", e);
+            }
+            logger.info("SQL Test is finished!");
 
-    public PlayerDataMySQLController(KDStatusReloaded plugin){ this.plugin = plugin; }
+            logger.info("Connected SQLDatabase!");
+
+            //ここでテーブル作るぞ
+            createTable();
+
+            logger.info("Table was created!");
+
+        }
+    }
 
     public void createTable(){
 
-        try(Connection conn = plugin.sql.getConnection();
+        try(Connection conn = sql.getConnection();
             PreparedStatement ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS kill_death_data "
                     + "(uuid VARCHAR(64) NOT NULL ,name VARCHAR(36) NOT NULL," +
                     "kills INT DEFAULT 0, " +
@@ -27,11 +56,11 @@ public class PlayerDataMySQLController {
                     "monthly_kills INT DEFAULT 0," +
                     "yearly_kills INT DEFAULT 0," +
                     "last_updated BIGINT DEFAULT -1 )")) {
-            plugin.getLogger().info("Creating database table...");
+            logger.info("Creating database table...");
 
             ps.executeUpdate();
             ps.close();
-            plugin.getLogger().info("Successfully to create database table!");
+            logger.info("Successfully to create database table!");
 
         }catch (SQLException e){e.printStackTrace();}
 
@@ -39,7 +68,7 @@ public class PlayerDataMySQLController {
 
     public boolean exist(UUID uuid){
 
-        try(Connection conn = plugin.sql.getConnection();
+        try(Connection conn = sql.getConnection();
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM kill_death_data WHERE name=?")) {
             ps.setString(1,uuid.toString());
 
@@ -62,7 +91,7 @@ public class PlayerDataMySQLController {
         if(exist(data.getUuid()))
             return;
 
-        try(Connection conn = plugin.sql.getConnection();
+        try(Connection conn = sql.getConnection();
             PreparedStatement ps = conn.prepareStatement("INSERT INTO kill_death_data (uuid,name,kills,deaths,daily_kills,monthly_kills,yearly_kills,last_updated) VALUES (?,?,?,?,?,?,?,?)");) {
             ps.setString(1,data.getUuid().toString());
             ps.setString(2,data.getName());
@@ -82,7 +111,7 @@ public class PlayerDataMySQLController {
 
     public boolean update(KDUserData data){
 
-        try(Connection conn = plugin.sql.getConnection();
+        try(Connection conn = sql.getConnection();
             PreparedStatement ps = conn.prepareStatement("UPDATE kill_death_data SET name=? ,kills=? ,deaths=? ,daily_kills=? ,monthly_kills=? ,yearly_kills=? ,last_updated=? WHERE uuid=?")) {
             ps.setString(8,data.getUuid().toString());
             ps.setString(1,data.getName());
@@ -105,7 +134,7 @@ public class PlayerDataMySQLController {
 
     public BigInteger getKills(@NonNull UUID uuid, @NonNull TimeUnit unit) {
 
-        try(Connection conn = plugin.sql.getConnection();
+        try(Connection conn = sql.getConnection();
             PreparedStatement ps = conn.prepareStatement("SELECT "+ unit.getSqlColumnName() + " FROM kill_death_data WHERE uuid=?")) {
             ps.setString(1, uuid.toString());
 
@@ -132,7 +161,7 @@ public class PlayerDataMySQLController {
 
         try {
 
-            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("SELECT death FROM kill_death_data WHERE uuid=?");
+            PreparedStatement ps = sql.getConnection().prepareStatement("SELECT death FROM kill_death_data WHERE uuid=?");
             ps.setString(1, uuid.toString());
 
             ResultSet result = ps.executeQuery();
@@ -155,7 +184,7 @@ public class PlayerDataMySQLController {
 
     public String getName(@NonNull UUID uuid) {
 
-        try(Connection conn = plugin.sql.getConnection();
+        try(Connection conn = sql.getConnection();
             PreparedStatement ps = conn.prepareStatement("SELECT name FROM kill_death_data WHERE uuid=?")) {
             ps.setString(1, uuid.toString());
 
@@ -182,7 +211,7 @@ public class PlayerDataMySQLController {
 
         try {
 
-            PreparedStatement ps = plugin.sql.getConnection().prepareStatement("SELECT last_updated FROM kill_death_data WHERE uuid=?");
+            PreparedStatement ps = sql.getConnection().prepareStatement("SELECT last_updated FROM kill_death_data WHERE uuid=?");
             ps.setString(1, uuid.toString());
 
             ResultSet result = ps.executeQuery();
@@ -204,7 +233,7 @@ public class PlayerDataMySQLController {
     }
 
     public ResultSet getRawData(@NonNull UUID uuid) {
-        try(Connection conn = plugin.sql.getConnection();
+        try(Connection conn = sql.getConnection();
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM kill_death_data WHERE uuid=?")) {
             ps.setString(1, uuid.toString());
             return ps.executeQuery();
@@ -220,7 +249,7 @@ public class PlayerDataMySQLController {
      * @return returns userdata. If failed, returns null.
      */
     public KDUserData getUserData(@NonNull UUID uuid, @NonNull String name) {
-        try(Connection conn = plugin.sql.getConnection();
+        try(Connection conn = sql.getConnection();
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM kill_death_data WHERE uuid=?")) {
             ps.setString(1, uuid.toString());
             ResultSet rs = ps.executeQuery();
@@ -246,15 +275,14 @@ public class PlayerDataMySQLController {
         return null;
     }
 
-    public static final String RANK_QUERY = "SELECT * FROM (SELECT uuid, ?, last_updated, RANK() over (ORDER BY ? DESC) as 'rank' FROM kill_death_data WHERE last_updated > ?) s WHERE s.uuid=?";
+    public static final String RANK_QUERY = "SELECT * FROM (SELECT uuid, ${COLUMN_NAME}, last_updated, RANK() over (ORDER BY ${COLUMN_NAME} DESC) as 'rank' FROM kill_death_data WHERE last_updated > ?) s WHERE s.uuid=?";
 
     public int getRank(UUID uuid,TimeUnit unit){
-        try(Connection conn = plugin.sql.getConnection();
-            PreparedStatement p = conn.prepareStatement(RANK_QUERY)) {
-            p.setString(1, unit.getSqlColumnName());
-            p.setString(2, unit.getSqlColumnName());
-            p.setLong(3, TimeUnit.getFirstMilliSecond(unit));
-            p.setString(4, uuid.toString());
+        try(Connection conn = sql.getConnection();
+            PreparedStatement p = conn.prepareStatement(RANK_QUERY.replace("${COLUMN_NAME}", unit.getSqlColumnName()))) {
+            p.setLong(1, TimeUnit.getFirstMilliSecond(unit));
+            p.setString(2, uuid.toString());
+            logger.info("Executed query: " + p);
             ResultSet result = p.executeQuery();
             if(result.next()) {
                 return result.getInt("rank");
@@ -270,7 +298,7 @@ public class PlayerDataMySQLController {
 
     public List<KillRankingData> getTopKillRankingData(TimeUnit unit, int count){
 
-        try(Connection conn = plugin.sql.getConnection();
+        try(Connection conn = sql.getConnection();
             PreparedStatement ps = conn.prepareStatement("select uuid, name, " + unit.getSqlColumnName()
                     + " from kill_death_data"
                     + " where last_updated >= ?"

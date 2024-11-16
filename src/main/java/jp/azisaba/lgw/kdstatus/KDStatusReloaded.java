@@ -1,10 +1,6 @@
 package jp.azisaba.lgw.kdstatus;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.logging.Level;
 
 import jp.azisaba.lgw.kdstatus.sql.*;
 import jp.azisaba.lgw.kdstatus.task.DBConnectionCheckTask;
@@ -58,35 +54,14 @@ public class KDStatusReloaded extends JavaPlugin {
         sqlHandler = new SQLHandler(new File(getDataFolder(), "playerData.db"));
         kdDataContainer = new KillDeathDataContainer(new PlayerDataSQLController(sqlHandler).init());
 
-        this.kdData = new PlayerDataMySQLController(this);
-
         DBAuthConfig.loadAuthConfig();
         sql = DBAuthConfig.getDatabase(getLogger(), 10);
 
         sql.connect();
 
-        if(sql.isConnected()){
-            getLogger().info("SQL Testing...");
-            try(Connection conn = sql.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement("SELECT 1")) {
-                if(pstmt.executeQuery().next()) {
-                    getLogger().info("SQL Test was success!");
-                } else {
-                    getLogger().warning("Failed to test SQL Connection");
-                }
-            } catch (SQLException e) {
-                getLogger().log(Level.SEVERE, "Error on SQL Testing", e);
-            }
-            getLogger().info("SQL Test is finished!");
+        this.kdData = new PlayerDataMySQLController(sql, getLogger());
 
-            getLogger().info("Connected SQLDatabase!");
-
-            //ここでテーブル作るぞ
-            this.kdData.createTable();
-
-            getLogger().info("Table was created!");
-
-        }
+        this.kdData.init();
 
         saveTask = new SavePlayerDataTask(this);
         saveTask.runTaskTimerAsynchronously(this, 20 * 60 * 3, 20 * 60 * 3);

@@ -1,8 +1,8 @@
 package jp.azisaba.lgw.kdstatus.utils;
 
-import java.util.UUID;
-
 import lombok.NonNull;
+
+import java.util.UUID;
 
 public class UUIDConverter {
 

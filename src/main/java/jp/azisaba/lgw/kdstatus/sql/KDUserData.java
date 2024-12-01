@@ -1,18 +1,16 @@
 package jp.azisaba.lgw.kdstatus.sql;
 
+import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
+import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
+import lombok.Getter;
+import lombok.NonNull;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.UUID;
-
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-
-import lombok.Getter;
-import lombok.NonNull;
-
-import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
-import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
 
 public class KDUserData {
 
@@ -126,11 +124,11 @@ public class KDUserData {
     public void addKills(TimeUnit unit, int num) {
         fixCorrectValue();
 
-        if ( unit == TimeUnit.DAILY ) {
+        if (unit == TimeUnit.DAILY) {
             dailyKills += num;
-        } else if ( unit == TimeUnit.MONTHLY ) {
+        } else if (unit == TimeUnit.MONTHLY) {
             monthlyKills += num;
-        } else if ( unit == TimeUnit.YEARLY ) {
+        } else if (unit == TimeUnit.YEARLY) {
             yearlyKills += num;
         }
 
@@ -146,13 +144,13 @@ public class KDUserData {
     public int getKills(@NonNull TimeUnit unit) {
         fixCorrectValue();
 
-        if ( unit == TimeUnit.LIFETIME ) {
+        if (unit == TimeUnit.LIFETIME) {
             return totalKills;
-        } else if ( unit == TimeUnit.DAILY ) {
+        } else if (unit == TimeUnit.DAILY) {
             return dailyKills;
-        } else if ( unit == TimeUnit.MONTHLY ) {
+        } else if (unit == TimeUnit.MONTHLY) {
             return monthlyKills;
-        } else if ( unit == TimeUnit.YEARLY ) {
+        } else if (unit == TimeUnit.YEARLY) {
             return yearlyKills;
         }
 
@@ -168,7 +166,7 @@ public class KDUserData {
 
         long start = System.currentTimeMillis();
 
-        if ( async ) {
+        if (async) {
             new Thread(() -> {
                 saveData(false);
             }).start();
@@ -177,8 +175,8 @@ public class KDUserData {
 
         boolean success = KDStatusReloaded.getPlugin().getKdDataContainer().savePlayerData(this);
 
-        if ( success ) {
-            if ( KDStatusReloaded.getPlugin().getPluginConfig().showLogInConsole ) {
+        if (success) {
+            if (KDStatusReloaded.getPlugin().getPluginConfig().showLogInConsole) {
                 long end = System.currentTimeMillis();
                 KDStatusReloaded.getPlugin().getLogger().info("Saved " + name + "'s player data (" + (end - start) + " ms)");
             }
@@ -192,14 +190,14 @@ public class KDUserData {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(lastUpdated);
 
-        if ( now.get(Calendar.YEAR) != cal.get(Calendar.YEAR) ) {
+        if (now.get(Calendar.YEAR) != cal.get(Calendar.YEAR)) {
             dailyKills = 0;
             monthlyKills = 0;
             yearlyKills = 0;
-        } else if ( now.get(Calendar.MONTH) != cal.get(Calendar.MONTH) ) {
+        } else if (now.get(Calendar.MONTH) != cal.get(Calendar.MONTH)) {
             dailyKills = 0;
             monthlyKills = 0;
-        } else if ( now.get(Calendar.DATE) != cal.get(Calendar.DATE) ) {
+        } else if (now.get(Calendar.DATE) != cal.get(Calendar.DATE)) {
             dailyKills = 0;
         }
     }
@@ -213,16 +211,16 @@ public class KDUserData {
 
         // フォルダを取得し、なければ作成する
         File folder = new File(KDStatusReloaded.getPlugin().getDataFolder(), "PlayerData");
-        if ( !folder.exists() ) {
+        if (!folder.exists()) {
             folder.mkdirs();
         }
 
         // UUIDを元にファイルを取得、なければ作成する
         file = new File(folder, uuid.toString() + ".yml");
-        if ( !file.exists() ) {
+        if (!file.exists()) {
             try {
                 file.createNewFile();
-            } catch ( IOException e ) {
+            } catch (IOException e) {
                 // 失敗したらログを出力してreturn
                 e.printStackTrace();
                 return;

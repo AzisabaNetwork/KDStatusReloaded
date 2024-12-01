@@ -1,16 +1,13 @@
 package jp.azisaba.lgw.kdstatus.task;
 
-import org.bukkit.scheduler.BukkitRunnable;
-
-import lombok.Getter;
-
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
+import lombok.Getter;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * プレイヤーのキルデス情報をセーブするタスク
  *
  * @author siloneco
- *
  */
 public class SavePlayerDataTask extends BukkitRunnable {
 

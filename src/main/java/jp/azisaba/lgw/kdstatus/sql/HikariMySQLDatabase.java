@@ -29,7 +29,7 @@ public class HikariMySQLDatabase {
     private HikariDataSource hikari;
 
     public boolean isConnected() {
-        if(hikari == null) return false;
+        if (hikari == null) return false;
         return hikari.isRunning();
     }
 
@@ -167,9 +167,9 @@ public class HikariMySQLDatabase {
     }
 
     public boolean isConnectionAlive() {
-        try(Connection conn = getConnection();
-        PreparedStatement pstmt = conn.prepareStatement("SELECT 1");
-        ResultSet rs = pstmt.executeQuery()) {
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement("SELECT 1");
+             ResultSet rs = pstmt.executeQuery()) {
             return rs.next();
         } catch (SQLException e) {
             return false;

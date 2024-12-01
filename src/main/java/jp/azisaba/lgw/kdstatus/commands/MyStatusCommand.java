@@ -1,16 +1,14 @@
 package jp.azisaba.lgw.kdstatus.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.google.common.base.Strings;
-
 import jp.azisaba.lgw.kdstatus.sql.KDUserData;
 import jp.azisaba.lgw.kdstatus.sql.KillDeathDataContainer;
 import jp.azisaba.lgw.kdstatus.utils.Chat;
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class MyStatusCommand implements CommandExecutor {
 
@@ -25,7 +23,7 @@ public class MyStatusCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if ( !(sender instanceof Player) ) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(Chat.f("&cこのコマンドはプレイヤーのみ有効です！"));
             return true;
         }
@@ -36,7 +34,7 @@ public class MyStatusCommand implements CommandExecutor {
         int kills = data.getKills(TimeUnit.LIFETIME);
         int deaths = data.getDeaths();
         double kdRaito;
-        if ( deaths > 0 ) {
+        if (deaths > 0) {
             kdRaito = (double) kills / (double) deaths;
         } else {
             kdRaito = (double) kills;

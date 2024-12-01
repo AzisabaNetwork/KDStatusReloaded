@@ -14,12 +14,6 @@ public class MySQLHandler {
     @Getter
     private Connection connection;
 
-    private final String host = KDStatusReloaded.getPlugin().getConfig().getString("host");
-    private final String port = KDStatusReloaded.getPlugin().getConfig().getString("port");
-    private final String database = KDStatusReloaded.getPlugin().getConfig().getString("database");
-    private final String user = KDStatusReloaded.getPlugin().getConfig().getString("username");
-    private final String password = KDStatusReloaded.getPlugin().getConfig().getString("password");
-
     public boolean isConnected(){
         return (connection != null);
     }

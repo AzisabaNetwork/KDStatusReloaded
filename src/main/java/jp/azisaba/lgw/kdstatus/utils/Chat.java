@@ -1,10 +1,9 @@
 package jp.azisaba.lgw.kdstatus.utils;
 
-import java.text.MessageFormat;
-
+import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 
-import lombok.experimental.UtilityClass;
+import java.text.MessageFormat;
 
 @UtilityClass
 public class Chat {

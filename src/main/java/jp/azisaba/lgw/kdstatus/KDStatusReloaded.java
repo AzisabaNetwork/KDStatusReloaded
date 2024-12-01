@@ -1,20 +1,18 @@
 package jp.azisaba.lgw.kdstatus;
 
-import java.io.File;
-
-import jp.azisaba.lgw.kdstatus.sql.*;
-import jp.azisaba.lgw.kdstatus.task.DBConnectionCheckTask;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import lombok.Getter;
-
 import jp.azisaba.lgw.kdstatus.commands.KDStatusCommand;
 import jp.azisaba.lgw.kdstatus.commands.MyStatusCommand;
 import jp.azisaba.lgw.kdstatus.listeners.JoinQuitListener;
 import jp.azisaba.lgw.kdstatus.listeners.KillDeathListener;
+import jp.azisaba.lgw.kdstatus.sql.*;
+import jp.azisaba.lgw.kdstatus.task.DBConnectionCheckTask;
 import jp.azisaba.lgw.kdstatus.task.SavePlayerDataTask;
 import jp.azisaba.lgw.kdstatus.utils.Chat;
+import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 public class KDStatusReloaded extends JavaPlugin {
 
@@ -39,12 +37,12 @@ public class KDStatusReloaded extends JavaPlugin {
 
         plugin = this;
 
-        getConfig().addDefault("migrated",false);
-        getConfig().addDefault("host","localhost");
-        getConfig().addDefault("port",3306);
-        getConfig().addDefault("database","kdstatusreloaded");
-        getConfig().addDefault("username","root");
-        getConfig().addDefault("password","password");
+        getConfig().addDefault("migrated", false);
+        getConfig().addDefault("host", "localhost");
+        getConfig().addDefault("port", 3306);
+        getConfig().addDefault("database", "kdstatusreloaded");
+        getConfig().addDefault("username", "root");
+        getConfig().addDefault("password", "password");
         getConfig().options().copyDefaults(true);
         saveConfig();
 
@@ -77,7 +75,7 @@ public class KDStatusReloaded extends JavaPlugin {
         Bukkit.getPluginCommand("kdstatus").setExecutor(new KDStatusCommand(this));
         Bukkit.getPluginCommand("kdstatus").setPermissionMessage(Chat.f("&cこのコマンドを実行する権限がありません！"));
 
-        if ( Bukkit.getOnlinePlayers().size() > 0 ) {
+        if (Bukkit.getOnlinePlayers().size() > 0) {
 
             Bukkit.getOnlinePlayers().forEach(player -> {
                 kdDataContainer.loadPlayerData(player);
@@ -91,14 +89,14 @@ public class KDStatusReloaded extends JavaPlugin {
     public void onDisable() {
         kdDataContainer.saveAllPlayerData(false, true);
 
-        if ( sqlHandler != null ) {
+        if (sqlHandler != null) {
             sqlHandler.closeConnection();
         }
-        if(sql.isConnected()){
+        if (sql.isConnected()) {
             sql.close();
         }
-        if(saveTask!=null) saveTask.cancel();
-        if(dbCheckTask!=null) dbCheckTask.cancel();
+        if (saveTask != null) saveTask.cancel();
+        if (dbCheckTask != null) dbCheckTask.cancel();
         Bukkit.getLogger().info(getName() + " disabled.");
     }
 
@@ -108,7 +106,7 @@ public class KDStatusReloaded extends JavaPlugin {
         this.pluginConfig.loadConfig();
     }
 
-    public PlayerDataMySQLController getKDData(){
+    public PlayerDataMySQLController getKDData() {
         return kdData;
     }
 

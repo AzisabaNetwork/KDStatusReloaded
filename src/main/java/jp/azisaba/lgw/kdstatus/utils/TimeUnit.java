@@ -10,7 +10,7 @@ public enum TimeUnit {
 
     private final String sqlColumnName;
 
-    TimeUnit(String sqlColumnName){
+    TimeUnit(String sqlColumnName) {
         this.sqlColumnName = sqlColumnName;
     }
 
@@ -25,17 +25,17 @@ public enum TimeUnit {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.HOUR_OF_DAY, 0);
 
-        if ( unit == TimeUnit.DAILY )
+        if (unit == TimeUnit.DAILY)
             return cal.getTimeInMillis();
 
         cal.set(Calendar.DATE, 1);
 
-        if ( unit == TimeUnit.MONTHLY )
+        if (unit == TimeUnit.MONTHLY)
             return cal.getTimeInMillis();
 
         cal.set(Calendar.MONTH, 0);
 
-        if ( unit == TimeUnit.YEARLY )
+        if (unit == TimeUnit.YEARLY)
             return cal.getTimeInMillis();
 
         return -1;

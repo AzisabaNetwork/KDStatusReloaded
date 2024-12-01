@@ -1,5 +1,7 @@
 package jp.azisaba.lgw.kdstatus.sql;
 
+import org.bukkit.Bukkit;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -7,14 +9,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
-import org.bukkit.Bukkit;
-
 /**
  * SQLの基本操作を行うクラス
  *
  * @author siloneco
- *
  */
 public class SQLHandler {
 
@@ -23,17 +21,11 @@ public class SQLHandler {
     private Connection connection;
     private boolean initialized = false;
 
-    private final String host = KDStatusReloaded.getPlugin().getConfig().getString("host");
-    private final String port = KDStatusReloaded.getPlugin().getConfig().getString("port");;
-    private final String database = KDStatusReloaded.getPlugin().getConfig().getString("database");;
-    private final String user = KDStatusReloaded.getPlugin().getConfig().getString("username");;
-    private final String password = KDStatusReloaded.getPlugin().getConfig().getString("password");;
-
-    public SQLHandler(File file){
+    public SQLHandler(File file) {
         this.file = file;
     }
 
-    public boolean isConnected(){
+    public boolean isConnected() {
         return (connection != null);
     }
 
@@ -46,7 +38,7 @@ public class SQLHandler {
         // 接続
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -56,15 +48,14 @@ public class SQLHandler {
     /**
      * 指定したコマンドを実行します。このコマンドは {@link ResultSet} を返さない必要があります
      *
-     * @see #executeQuery(String)
-     *
      * @param cmd 実行したいコマンド
      * @return コマンドの実行に成功したかどうか
+     * @see #executeQuery(String)
      */
     synchronized public int executeCommand(String cmd) {
         try {
             return connection.prepareStatement(cmd).executeUpdate();
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             Bukkit.getLogger().warning("Command: " + cmd);
             e.printStackTrace();
             return -1;
@@ -74,22 +65,21 @@ public class SQLHandler {
     /**
      * 指定したコマンドを実行します。このコマンドは {@link ResultSet} を返す必要があります
      *
-     * @see #executeCommand(String)
-     *
      * @param cmd 実行したいコマンド
      * @return 取得されたResultSet, 実行に失敗した場合はnull
+     * @see #executeCommand(String)
      */
     synchronized public ResultSet executeQuery(String cmd) {
         try {
             return connection.prepareStatement(cmd).executeQuery();
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             Bukkit.getLogger().warning("Command: " + cmd);
             e.printStackTrace();
             return null;
         }
     }
 
-    synchronized public Connection getConnection(){
+    synchronized public Connection getConnection() {
         return connection;
     }
 
@@ -99,7 +89,7 @@ public class SQLHandler {
     private void registerDriver() {
         try {
             Class.forName("org.sqlite.JDBC");
-        } catch ( ClassNotFoundException e ) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -110,11 +100,11 @@ public class SQLHandler {
      * @param file 対象のファイル
      */
     private void createFileIfNotExists(File file) {
-        if ( !file.exists() ) {
+        if (!file.exists()) {
             try {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
-            } catch ( IOException e ) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -122,11 +112,11 @@ public class SQLHandler {
 
     public boolean closeConnection() {
         try {
-            if ( connection != null && !connection.isClosed() ) {
+            if (connection != null && !connection.isClosed()) {
                 connection.close();
             }
             return true;
-        } catch ( SQLException e ) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

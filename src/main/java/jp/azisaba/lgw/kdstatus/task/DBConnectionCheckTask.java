@@ -12,14 +12,15 @@ import java.util.logging.Level;
 @RequiredArgsConstructor
 public class DBConnectionCheckTask extends BukkitRunnable {
     private final KDStatusReloaded plugin;
+
     @Override
     public void run() {
-        try (Connection conn = plugin.sql.getConnection()){
-            if(conn == null) {
+        try (Connection conn = plugin.sql.getConnection()) {
+            if (conn == null) {
                 plugin.sql.connect();
             }
-            try(Connection con = plugin.sql.getConnection();
-                PreparedStatement pstmt = con.prepareStatement("SELECT 1")) {
+            try (Connection con = plugin.sql.getConnection();
+                 PreparedStatement pstmt = con.prepareStatement("SELECT 1")) {
                 if (pstmt.executeQuery().next()) {
                     if (plugin.getPluginConfig().showLogInConsole) {
                         plugin.getLogger().info("SQL Connection is alive!");

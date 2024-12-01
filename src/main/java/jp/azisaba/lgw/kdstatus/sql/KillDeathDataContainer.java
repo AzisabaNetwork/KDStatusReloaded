@@ -1,24 +1,17 @@
 package jp.azisaba.lgw.kdstatus.sql;
 
-import java.io.File;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import lombok.NonNull;
-
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import jp.azisaba.lgw.kdstatus.utils.Chat;
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
 import jp.azisaba.lgw.kdstatus.utils.UUIDConverter;
+import lombok.NonNull;
 import me.rayzr522.jsonmessage.JSONMessage;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.sql.ResultSet;
+import java.util.*;
 
 public class KillDeathDataContainer {
 
@@ -26,7 +19,7 @@ public class KillDeathDataContainer {
 
     private HashMap<UUID, KDUserData> playerDataCache = new HashMap<>();
 
-    private boolean isMigrated = KDStatusReloaded.getPlugin().getConfig().getBoolean("migrated",false);
+    private boolean isMigrated = KDStatusReloaded.getPlugin().getConfig().getBoolean("migrated", false);
 
     public KillDeathDataContainer(PlayerDataSQLController sqlController) {
         this.sqlController = sqlController;
@@ -43,12 +36,12 @@ public class KillDeathDataContainer {
     public KDUserData getPlayerData(Player p, boolean loadIfNotLoaded) {
 
         // cacheに保存されている場合はそこから取得
-        if ( playerDataCache.containsKey(p.getUniqueId()) ) {
+        if (playerDataCache.containsKey(p.getUniqueId())) {
             return playerDataCache.get(p.getUniqueId());
         }
 
         // cacheから呼び出さない&cacheにも無かった場合はnullを返す
-        if ( !loadIfNotLoaded ) {
+        if (!loadIfNotLoaded) {
             return null;
         }
 
@@ -61,11 +54,10 @@ public class KillDeathDataContainer {
      *
      * @param p 対象プレイヤー
      * @return cacheに保存されている戦績か、ファイルから読み込まれたプレイヤーの戦績
-     *
-     * @exception NullPointerException 対象プレイヤーがnullの場合
+     * @throws NullPointerException 対象プレイヤーがnullの場合
      */
     public KDUserData loadPlayerData(@NonNull Player p) {
-        if ( playerDataCache.containsKey(p.getUniqueId()) ) {
+        if (playerDataCache.containsKey(p.getUniqueId())) {
             return playerDataCache.get(p.getUniqueId());
         }
 
@@ -75,13 +67,13 @@ public class KillDeathDataContainer {
         KDUserData data = null;
 
         // ファイルが存在している場合はそこから読み込む。なければSQLiteから読み込む
-        if ( file.exists() ) {
+        if (file.exists()) {
             data = new KDUserData(p);
-        } else if(!isMigrated){
+        } else if (!isMigrated) {
             ResultSet set = sqlController.getRawData(p.getUniqueId());
 
             try {
-                if ( set.next() ) {
+                if (set.next()) {
                     int totalKills = set.getInt("kills");
                     int deaths = set.getInt("deaths");
                     int dailyKills = set.getInt("daily_kills");
@@ -93,15 +85,15 @@ public class KillDeathDataContainer {
                 } else {
                     data = new KDUserData(p.getUniqueId(), p.getName(), 0, 0, 0, 0, 0, -1);
                 }
-            } catch ( Exception e ) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             data = KDStatusReloaded.getPlugin().getKDData().getUserData(p.getUniqueId(), p.getName());
         }
 
         // データがnullの場合はnullを返す
-        if ( data == null ) {
+        if (data == null) {
             return null;
         }
 
@@ -121,13 +113,13 @@ public class KillDeathDataContainer {
      * @param save ファイルにセーブするかどうか
      */
     public boolean unloadPlayer(@NonNull Player p, boolean save) {
-        if ( !playerDataCache.containsKey(p.getUniqueId()) ) {
+        if (!playerDataCache.containsKey(p.getUniqueId())) {
             return true;
         }
 
-        if ( save ) {
+        if (save) {
             boolean success = savePlayerData(playerDataCache.get(p.getUniqueId()));
-            if ( !success ) {
+            if (!success) {
                 return false;
             }
         }
@@ -137,9 +129,9 @@ public class KillDeathDataContainer {
     }
 
     public boolean savePlayerData(@NonNull KDUserData data) {
-        if(!isMigrated){
+        if (!isMigrated) {
             return sqlController.save(data);
-        }else {
+        } else {
             return KDStatusReloaded.getPlugin().getKDData().update(data);
         }
     }
@@ -160,11 +152,11 @@ public class KillDeathDataContainer {
 
         List<KDUserData> data = new ArrayList<>(playerDataCache.values());
 
-        if ( data.size() <= 0 ) {
+        if (data.size() <= 0) {
             return;
         }
 
-        if ( async ) {
+        if (async) {
             new Thread() {
                 public void run() {
                     saveAllPlayerData(false, clear);
@@ -175,18 +167,18 @@ public class KillDeathDataContainer {
 
         boolean success;
 
-        if(!isMigrated){
+        if (!isMigrated) {
             success = sqlController.save(data.toArray(new KDUserData[data.size()]));
-        }else {
+        } else {
             data.forEach(d -> KDStatusReloaded.getPlugin().getKDData().update(d));
             success = true;
         }
 
-        if ( success && clear ) {
+        if (success && clear) {
             playerDataCache.clear();
-        } else if ( success ) {
-            for ( UUID uuid : new ArrayList<UUID>(playerDataCache.keySet()) ) {
-                if ( Bukkit.getPlayer(uuid) == null ) {
+        } else if (success) {
+            for (UUID uuid : new ArrayList<UUID>(playerDataCache.keySet())) {
+                if (Bukkit.getPlayer(uuid) == null) {
                     playerDataCache.remove(uuid);
                 }
             }
@@ -202,45 +194,45 @@ public class KillDeathDataContainer {
      */
     public List<KillRankingData> getTopKillRankingData(TimeUnit unit, int count) throws IllegalStateException {
 
-        if(!isMigrated){
+        if (!isMigrated) {
 
-        // SQLHandlerが初期化されていない場合
-        if ( !sqlController.getHandler().isInitialized() ) {
-            throw new IllegalStateException("SQLHandler is not initialized yet.");
-        }
-
-        // データを取得する
-        try {
-            ResultSet set = sqlController.getHandler().executeQuery("select uuid, name, " + unit.getSqlColumnName()
-                    + " from " + sqlController.getTableName()
-                    + " where last_updated >= " + getFirstMilliSecond(unit)
-                    + " order by " + unit.getSqlColumnName() + " DESC"
-                    + " LIMIT " + count);
-
-            // リスト作成
-            List<KillRankingData> ranking = new ArrayList<>();
-
-            // 行がある限り追加していく
-            while ( set.next() ) {
-                UUID uuid = UUID.fromString(UUIDConverter.insertDashUUID(set.getString("uuid")));
-                String mcid = set.getString("name");
-                int kills = set.getInt(unit.getSqlColumnName());
-
-                // プレイヤーデータの作成
-                KillRankingData data = new KillRankingData(uuid, mcid, kills);
-
-                // リストに追加
-                ranking.add(data);
+            // SQLHandlerが初期化されていない場合
+            if (!sqlController.getHandler().isInitialized()) {
+                throw new IllegalStateException("SQLHandler is not initialized yet.");
             }
 
-            // すべて追加し終わったら返す
-            return ranking;
-        } catch ( Exception e ) {
-            e.printStackTrace();
-        }
-        }else {
+            // データを取得する
+            try {
+                ResultSet set = sqlController.getHandler().executeQuery("select uuid, name, " + unit.getSqlColumnName()
+                        + " from " + sqlController.getTableName()
+                        + " where last_updated >= " + getFirstMilliSecond(unit)
+                        + " order by " + unit.getSqlColumnName() + " DESC"
+                        + " LIMIT " + count);
 
-            return KDStatusReloaded.getPlugin().getKDData().getTopKillRankingData(unit,count);
+                // リスト作成
+                List<KillRankingData> ranking = new ArrayList<>();
+
+                // 行がある限り追加していく
+                while (set.next()) {
+                    UUID uuid = UUID.fromString(UUIDConverter.insertDashUUID(set.getString("uuid")));
+                    String mcid = set.getString("name");
+                    int kills = set.getInt(unit.getSqlColumnName());
+
+                    // プレイヤーデータの作成
+                    KillRankingData data = new KillRankingData(uuid, mcid, kills);
+
+                    // リストに追加
+                    ranking.add(data);
+                }
+
+                // すべて追加し終わったら返す
+                return ranking;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            return KDStatusReloaded.getPlugin().getKDData().getTopKillRankingData(unit, count);
 
         }
 
@@ -250,26 +242,26 @@ public class KillDeathDataContainer {
 
     public int getRanking(@NonNull UUID uuid, @NonNull TimeUnit unit) {
 
-        if(!isMigrated){
-        ResultSet set = sqlController.getHandler().executeQuery(
-                "select uuid, name, kills, (SELECT count(*) FROM " + sqlController.getTableName()
-                        + " as p1 WHERE p1." + unit.getSqlColumnName() + " > p." + unit.getSqlColumnName()
-                        + ") + 1 as rank FROM " + sqlController.getTableName() + " as p"
-                        + " where uuid = '" + UUIDConverter.convert(uuid) + "' and last_updated > " + getFirstMilliSecond(unit) + " order by rank;");
+        if (!isMigrated) {
+            ResultSet set = sqlController.getHandler().executeQuery(
+                    "select uuid, name, kills, (SELECT count(*) FROM " + sqlController.getTableName()
+                            + " as p1 WHERE p1." + unit.getSqlColumnName() + " > p." + unit.getSqlColumnName()
+                            + ") + 1 as rank FROM " + sqlController.getTableName() + " as p"
+                            + " where uuid = '" + UUIDConverter.convert(uuid) + "' and last_updated > " + getFirstMilliSecond(unit) + " order by rank;");
 
-        try {
-            if ( set.next() ) {
-                return set.getInt("rank");
-            } else {
+            try {
+                if (set.next()) {
+                    return set.getInt("rank");
+                } else {
+                    return -1;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
                 return -1;
             }
-        } catch ( Exception e ) {
-            e.printStackTrace();
-            return -1;
-        }
-        }else {
+        } else {
 
-            return KDStatusReloaded.getPlugin().getKDData().getRank(uuid,unit);
+            return KDStatusReloaded.getPlugin().getKDData().getRank(uuid, unit);
 
         }
 
@@ -282,17 +274,17 @@ public class KillDeathDataContainer {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.HOUR_OF_DAY, 0);
 
-        if ( unit == TimeUnit.DAILY )
+        if (unit == TimeUnit.DAILY)
             return cal.getTimeInMillis();
 
         cal.set(Calendar.DATE, 1);
 
-        if ( unit == TimeUnit.MONTHLY )
+        if (unit == TimeUnit.MONTHLY)
             return cal.getTimeInMillis();
 
         cal.set(Calendar.MONTH, 0);
 
-        if ( unit == TimeUnit.YEARLY )
+        if (unit == TimeUnit.YEARLY)
             return cal.getTimeInMillis();
 
         return -1;
@@ -308,16 +300,16 @@ public class KillDeathDataContainer {
             public void run() {
                 fileCount = folder.listFiles().length;
 
-                for ( File file : Arrays.asList(folder.listFiles()) ) {
+                for (File file : Arrays.asList(folder.listFiles())) {
                     UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().lastIndexOf(".")));
 
-                    if ( !playerDataCache.containsKey(uuid) ) {
+                    if (!playerDataCache.containsKey(uuid)) {
                         // ロードしてSQLにセーブする
                         KDUserData data = new KDUserData(uuid);
 //                        data.fixCorrectValue();
                         boolean success = sqlController.save(data);
 
-                        if ( !success )
+                        if (!success)
                             break;
                     }
 
@@ -332,13 +324,13 @@ public class KillDeathDataContainer {
         }.start();
     }
 
-    public void migrationToMySQL(Player p){
+    public void migrationToMySQL(Player p) {
 
-        new Thread(){
+        new Thread() {
 
             private int finished = 0;
 
-            public void run(){
+            public void run() {
 
                 sqlController.getAllData().forEach(data -> {
 
@@ -348,7 +340,7 @@ public class KillDeathDataContainer {
                     p.sendMessage(Chat.f("&e移行中... &d{0}個完了", finished));
                 });
 
-                KDStatusReloaded.getPlugin().getConfig().set("migrated",true);
+                KDStatusReloaded.getPlugin().getConfig().set("migrated", true);
                 KDStatusReloaded.getPlugin().saveConfig();
                 isMigrated = true;
                 p.sendMessage(Chat.f("&a完了！"));

@@ -1,18 +1,17 @@
 package jp.azisaba.lgw.kdstatus.sql;
 
+import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
+import jp.azisaba.lgw.kdstatus.utils.UUIDConverter;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NonNull;
+
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-
-import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
-import jp.azisaba.lgw.kdstatus.utils.UUIDConverter;
 
 public class PlayerDataSQLController {
 
@@ -22,7 +21,7 @@ public class PlayerDataSQLController {
     @Getter(value = AccessLevel.PROTECTED)
     private final String tableName = "killdeathdata";
 
-    public PlayerDataSQLController(SQLHandler handler){
+    public PlayerDataSQLController(SQLHandler handler) {
         this.handler = handler;
     }
 
@@ -33,7 +32,7 @@ public class PlayerDataSQLController {
      */
     public PlayerDataSQLController init() {
         // initializedされていない場合はする
-        if ( !handler.isInitialized() ) {
+        if (!handler.isInitialized()) {
             handler.init();
         }
 
@@ -57,10 +56,10 @@ public class PlayerDataSQLController {
         try {
             ResultSet set = handler.executeQuery("select " + unit.getSqlColumnName() + " from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
 
-            if ( set.next() ) {
+            if (set.next()) {
                 return BigInteger.valueOf(set.getInt(0));
             }
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -71,10 +70,10 @@ public class PlayerDataSQLController {
         try {
             ResultSet set = handler.executeQuery("select deaths from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
 
-            if ( set.next() ) {
+            if (set.next()) {
                 return BigInteger.valueOf(set.getInt(0));
             }
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -85,10 +84,10 @@ public class PlayerDataSQLController {
         try {
             ResultSet set = handler.executeQuery("select name from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
 
-            if ( set.next() ) {
+            if (set.next()) {
                 return set.getString(0);
             }
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -99,10 +98,10 @@ public class PlayerDataSQLController {
         try {
             ResultSet set = handler.executeQuery("select last_updated from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
 
-            if ( set.next() ) {
+            if (set.next()) {
                 return set.getLong(0);
             }
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -113,14 +112,14 @@ public class PlayerDataSQLController {
         return handler.executeQuery("select * from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
     }
 
-    public List<KDUserData> getAllData(){
+    public List<KDUserData> getAllData() {
 
         List<KDUserData> list = new ArrayList<>();
 
-        ResultSet set = handler.executeQuery("SELECT * FROM \"" + tableName +"\";");
+        ResultSet set = handler.executeQuery("SELECT * FROM \"" + tableName + "\";");
 
         try {
-            while (set.next()){
+            while (set.next()) {
                 UUID uuid = UUID.fromString(UUIDConverter.insertDashUUID(set.getString("uuid")));
                 String name = set.getString("name");
                 int totalKills = set.getInt("kills");
@@ -130,7 +129,7 @@ public class PlayerDataSQLController {
                 int yearlyKills = set.getInt("yearly_kills");
                 long lastUpdated = set.getLong("last_updated");
 
-                list.add(new KDUserData(uuid,name,totalKills,deaths,dailyKills,monthlyKills,yearlyKills,lastUpdated));
+                list.add(new KDUserData(uuid, name, totalKills, deaths, dailyKills, monthlyKills, yearlyKills, lastUpdated));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -163,13 +162,13 @@ public class PlayerDataSQLController {
     }
 
     public boolean save(@NonNull KDUserData... data2) {
-        if ( data2.length <= 0 ) {
+        if (data2.length <= 0) {
             return true;
         }
 
         List<String> values = new ArrayList<>();
 
-        for ( KDUserData data : data2 ) {
+        for (KDUserData data : data2) {
             String uuid = UUIDConverter.convert(data.getUuid());
             String name = data.getName();
             String totalKills = "" + data.getKills(TimeUnit.LIFETIME);

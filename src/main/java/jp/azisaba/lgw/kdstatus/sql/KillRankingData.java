@@ -1,8 +1,8 @@
 package jp.azisaba.lgw.kdstatus.sql;
 
-import java.util.UUID;
-
 import lombok.Getter;
+
+import java.util.UUID;
 
 @Getter
 public class KillRankingData {

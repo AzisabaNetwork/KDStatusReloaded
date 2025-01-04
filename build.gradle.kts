@@ -11,11 +11,11 @@ val defaultEncoding: String = "UTF-8"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
-    mavenLocal()
     mavenCentral()
+
     maven {
-        name = "SpigotMC maven"
-        url = uri("https://hub.spigotmc.org/nexus/content/groups/public/")
+        name = "PaperMC Maven"
+        url = uri("https://repo.papermc.io/repository/maven-public/")
     }
 
     maven {
@@ -32,8 +32,8 @@ dependencies {
     implementation(libs.com.mysql.mysql.connector.j)
     implementation(libs.com.zaxxer.hikaricp)
 
-    // Plugin dependencies
-    compileOnly(libs.org.spigotmc.spigot.api)
+    // Minecraft plugin dependencies
+    compileOnly(libs.paper.api)
     implementation(libs.me.rayzr522.jsonmessage)
 
     // For testing

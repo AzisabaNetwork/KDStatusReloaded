@@ -1,11 +1,9 @@
 package jp.azisaba.lgw.kdstatus.utils;
 
-import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 
 import java.text.MessageFormat;
 
-@UtilityClass
 public class Chat {
 
     // メッセージをフォーマットして、&で色をつける

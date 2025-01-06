@@ -1,8 +1,6 @@
 package jp.azisaba.lgw.kdstatus.sql;
 
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
-import lombok.AccessLevel;
-import lombok.Getter;
 
 import java.util.logging.Logger;
 
@@ -10,15 +8,31 @@ import java.util.logging.Logger;
  * Safe auth config loader
  */
 public class DBAuthConfig {
-    @Getter(AccessLevel.PROTECTED)
     private static String host;
-    @Getter(AccessLevel.PROTECTED)
     private static String port;
-    @Getter(AccessLevel.PROTECTED)
     private static String database;
-    @Getter(AccessLevel.PROTECTED)
     private static String user;
-    @Getter(AccessLevel.PROTECTED)
+
+    protected static String getHost() {
+        return host;
+    }
+
+    protected static String getPort() {
+        return port;
+    }
+
+    protected static String getDatabase() {
+        return database;
+    }
+
+    protected static String getUser() {
+        return user;
+    }
+
+    protected static String getPassword() {
+        return password;
+    }
+
     private static String password;
 
     public static void loadAuthConfig() {

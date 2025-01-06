@@ -2,9 +2,7 @@ package jp.azisaba.lgw.kdstatus.sql;
 
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
 import jp.azisaba.lgw.kdstatus.utils.UUIDConverter;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.sql.ResultSet;
@@ -15,14 +13,20 @@ import java.util.UUID;
 
 public class PlayerDataSQLController {
 
-    @Getter(value = AccessLevel.PROTECTED)
     private final SQLHandler handler;
 
-    @Getter(value = AccessLevel.PROTECTED)
     private final String tableName = "killdeathdata";
 
     public PlayerDataSQLController(SQLHandler handler) {
         this.handler = handler;
+    }
+
+    protected SQLHandler getHandler() {
+        return handler;
+    }
+
+    protected String getTableName() {
+        return tableName;
     }
 
     /**
@@ -52,7 +56,7 @@ public class PlayerDataSQLController {
         return this;
     }
 
-    public BigInteger getKills(@NonNull UUID uuid, @NonNull TimeUnit unit) {
+    public BigInteger getKills(@NotNull UUID uuid, @NotNull TimeUnit unit) {
         try {
             ResultSet set = handler.executeQuery("select " + unit.getSqlColumnName() + " from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
 
@@ -66,7 +70,7 @@ public class PlayerDataSQLController {
         return BigInteger.valueOf(-1);
     }
 
-    public BigInteger getDeaths(@NonNull UUID uuid) {
+    public BigInteger getDeaths(@NotNull UUID uuid) {
         try {
             ResultSet set = handler.executeQuery("select deaths from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
 
@@ -80,7 +84,7 @@ public class PlayerDataSQLController {
         return BigInteger.valueOf(-1);
     }
 
-    public String getName(@NonNull UUID uuid) {
+    public String getName(@NotNull UUID uuid) {
         try {
             ResultSet set = handler.executeQuery("select name from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
 
@@ -94,7 +98,7 @@ public class PlayerDataSQLController {
         return null;
     }
 
-    public long getLastUpdated(@NonNull UUID uuid) {
+    public long getLastUpdated(@NotNull UUID uuid) {
         try {
             ResultSet set = handler.executeQuery("select last_updated from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
 
@@ -108,7 +112,7 @@ public class PlayerDataSQLController {
         return -1;
     }
 
-    public ResultSet getRawData(@NonNull UUID uuid) {
+    public ResultSet getRawData(@NotNull UUID uuid) {
         return handler.executeQuery("select * from \"" + tableName + "\" where uuid='" + UUIDConverter.convert(uuid) + "';");
     }
 
@@ -139,7 +143,7 @@ public class PlayerDataSQLController {
 
     }
 
-    public boolean save(@NonNull KDUserData data) {
+    public boolean save(@NotNull KDUserData data) {
         String uuid = UUIDConverter.convert(data.getUuid());
         String name = data.getName();
         String totalKills = "" + data.getKills(TimeUnit.LIFETIME);
@@ -161,7 +165,7 @@ public class PlayerDataSQLController {
         return changed >= 0;
     }
 
-    public boolean save(@NonNull KDUserData... data2) {
+    public boolean save(@NotNull KDUserData... data2) {
         if (data2.length <= 0) {
             return true;
         }

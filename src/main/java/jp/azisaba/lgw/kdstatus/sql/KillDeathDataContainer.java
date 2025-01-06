@@ -4,10 +4,10 @@ import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import jp.azisaba.lgw.kdstatus.utils.Chat;
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
 import jp.azisaba.lgw.kdstatus.utils.UUIDConverter;
-import lombok.NonNull;
 import me.rayzr522.jsonmessage.JSONMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.ResultSet;
@@ -56,7 +56,7 @@ public class KillDeathDataContainer {
      * @return cacheに保存されている戦績か、ファイルから読み込まれたプレイヤーの戦績
      * @throws NullPointerException 対象プレイヤーがnullの場合
      */
-    public KDUserData loadPlayerData(@NonNull Player p) {
+    public KDUserData loadPlayerData(@NotNull Player p) {
         if (playerDataCache.containsKey(p.getUniqueId())) {
             return playerDataCache.get(p.getUniqueId());
         }
@@ -112,7 +112,7 @@ public class KillDeathDataContainer {
      * @param p    対象プレイヤー
      * @param save ファイルにセーブするかどうか
      */
-    public boolean unloadPlayer(@NonNull Player p, boolean save) {
+    public boolean unloadPlayer(@NotNull Player p, boolean save) {
         if (!playerDataCache.containsKey(p.getUniqueId())) {
             return true;
         }
@@ -128,7 +128,7 @@ public class KillDeathDataContainer {
         return true;
     }
 
-    public boolean savePlayerData(@NonNull KDUserData data) {
+    public boolean savePlayerData(@NotNull KDUserData data) {
         if (!isMigrated) {
             return sqlController.save(data);
         } else {
@@ -136,7 +136,7 @@ public class KillDeathDataContainer {
         }
     }
 
-    public boolean savePlayerData(@NonNull Player p) {
+    public boolean savePlayerData(@NotNull Player p) {
         KDUserData userData = getPlayerData(p, false);
         if (userData == null) return true;
         return savePlayerData(userData);
@@ -240,7 +240,7 @@ public class KillDeathDataContainer {
         return null;
     }
 
-    public int getRanking(@NonNull UUID uuid, @NonNull TimeUnit unit) {
+    public int getRanking(@NotNull UUID uuid, @NotNull TimeUnit unit) {
 
         if (!isMigrated) {
             ResultSet set = sqlController.getHandler().executeQuery(

@@ -1,6 +1,5 @@
 [versions]
 # Plugins
-lombok = "8.11"
 
 # Project tools
 junit-jupiter = "5.11.3"
@@ -15,7 +14,6 @@ paper-api = "1.16.5-R0.1-SNAPSHOT"
 jsonmessage = "1.3.1"
 
 [plugins]
-lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
 
 [libraries]
 com-mysql-mysql-connector-j = { module = "com.mysql:mysql-connector-j", version.ref = "com-mysql-mysql-connector-j" }

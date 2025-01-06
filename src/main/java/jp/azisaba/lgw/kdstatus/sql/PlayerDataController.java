@@ -1,7 +1,7 @@
 package jp.azisaba.lgw.kdstatus.sql;
 
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
-import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.sql.ResultSet;
@@ -17,15 +17,15 @@ public interface PlayerDataController {
 
     boolean update(KDUserData data);
 
-    BigInteger getKills(@NonNull UUID uuid, @NonNull TimeUnit unit);
+    BigInteger getKills(@NotNull UUID uuid, @NotNull TimeUnit unit);
 
-    BigInteger getDeaths(@NonNull UUID uuid);
+    BigInteger getDeaths(@NotNull UUID uuid);
 
     String getName(UUID uuid);
 
-    long getLastUpdated(@NonNull UUID uuid);
+    long getLastUpdated(@NotNull UUID uuid);
 
-    ResultSet getRawData(@NonNull UUID uuid);
+    ResultSet getRawData(@NotNull UUID uuid);
 
     int getRank(UUID uuid, TimeUnit unit);
 

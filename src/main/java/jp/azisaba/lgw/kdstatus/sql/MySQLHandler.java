@@ -1,18 +1,19 @@
 package jp.azisaba.lgw.kdstatus.sql;
 
-import lombok.Getter;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MySQLHandler {
 
-    @Getter
     private Connection connection;
 
     public boolean isConnected() {
         return (connection != null);
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     /**

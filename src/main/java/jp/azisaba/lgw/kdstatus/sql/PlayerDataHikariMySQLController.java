@@ -1,8 +1,7 @@
 package jp.azisaba.lgw.kdstatus.sql;
 
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.sql.PreparedStatement;
@@ -14,10 +13,13 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@RequiredArgsConstructor
 public class PlayerDataHikariMySQLController implements PlayerDataController {
     private final Logger logger;
     private HikariMySQLDatabase db;
+
+    public PlayerDataHikariMySQLController(Logger logger) {
+        this.logger = logger;
+    }
 
     public void connect() {
     }
@@ -91,12 +93,12 @@ public class PlayerDataHikariMySQLController implements PlayerDataController {
     }
 
     @Override
-    public BigInteger getKills(@NonNull UUID uuid, @NonNull TimeUnit unit) {
+    public BigInteger getKills(@NotNull UUID uuid, @NotNull TimeUnit unit) {
         return null;
     }
 
     @Override
-    public BigInteger getDeaths(@NonNull UUID uuid) {
+    public BigInteger getDeaths(@NotNull UUID uuid) {
         return null;
     }
 
@@ -106,12 +108,12 @@ public class PlayerDataHikariMySQLController implements PlayerDataController {
     }
 
     @Override
-    public long getLastUpdated(@NonNull UUID uuid) {
+    public long getLastUpdated(@NotNull UUID uuid) {
         return 0;
     }
 
     @Override
-    public ResultSet getRawData(@NonNull UUID uuid) {
+    public ResultSet getRawData(@NotNull UUID uuid) {
         return null;
     }
 

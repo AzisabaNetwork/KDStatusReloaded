@@ -17,7 +17,7 @@ public class KillDeathDataContainer {
 
     private final PlayerDataSQLController sqlController;
 
-    private HashMap<UUID, KDUserData> playerDataCache = new HashMap<>();
+    private final HashMap<UUID, KDUserData> playerDataCache = new HashMap<>();
 
     private boolean isMigrated = KDStatusReloaded.getPlugin().getConfig().getBoolean("migrated", false);
 
@@ -62,7 +62,7 @@ public class KillDeathDataContainer {
         }
 
         File folder = new File(KDStatusReloaded.getPlugin().getDataFolder(), "PlayerData");
-        File file = new File(folder, p.getUniqueId().toString() + ".yml");
+        File file = new File(folder, p.getUniqueId() + ".yml");
 
         KDUserData data = null;
 
@@ -293,7 +293,7 @@ public class KillDeathDataContainer {
     public void miguration(Player p) {
         new Thread() {
 
-            private File folder = new File(KDStatusReloaded.getPlugin().getDataFolder(), "PlayerData");
+            private final File folder = new File(KDStatusReloaded.getPlugin().getDataFolder(), "PlayerData");
             private int finished = 0;
             private int fileCount = -1;
 

@@ -100,7 +100,7 @@ public class PlayerDataMySQLController {
             return;
 
         try (Connection conn = sql.getConnection();
-             PreparedStatement ps = conn.prepareStatement("INSERT INTO kill_death_data (uuid,name,kills,deaths,daily_kills,monthly_kills,yearly_kills,last_updated) VALUES (?,?,?,?,?,?,?,?)");) {
+             PreparedStatement ps = conn.prepareStatement("INSERT INTO kill_death_data (uuid,name,kills,deaths,daily_kills,monthly_kills,yearly_kills,last_updated) VALUES (?,?,?,?,?,?,?,?)")) {
             ps.setString(1, data.getUuid().toString());
             ps.setString(2, data.getName());
             ps.setInt(3, data.getKills(TimeUnit.LIFETIME));

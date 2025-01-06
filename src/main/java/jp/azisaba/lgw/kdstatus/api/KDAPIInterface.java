@@ -25,7 +25,7 @@ interface KDAPIInterface {
     /**
      * Get specific user's ranking
      * @param uuid UUID of player
-     * @param unit Name of player
+     * @param unit Unit of ranking
      * @return returns ranking order. If failed, returns -1.
      */
     int getRank(@NotNull UUID uuid, @NotNull TimeUnit unit);

@@ -17,7 +17,7 @@ public class KillDeathDataContainer {
 
     private final PlayerDataSQLController sqlController;
 
-    private HashMap<UUID, KDUserData> playerDataCache = new HashMap<>();
+    private final HashMap<UUID, KDUserData> playerDataCache = new HashMap<>();
 
     private boolean isMigrated = KDStatusReloaded.getPlugin().getConfig().getBoolean("migrated", false);
 
@@ -62,7 +62,7 @@ public class KillDeathDataContainer {
         }
 
         File folder = new File(KDStatusReloaded.getPlugin().getDataFolder(), "PlayerData");
-        File file = new File(folder, p.getUniqueId().toString() + ".yml");
+        File file = new File(folder, p.getUniqueId() + ".yml");
 
         KDUserData data = null;
 
@@ -152,23 +152,19 @@ public class KillDeathDataContainer {
 
         List<KDUserData> data = new ArrayList<>(playerDataCache.values());
 
-        if (data.size() <= 0) {
+        if (data.isEmpty()) {
             return;
         }
 
         if (async) {
-            new Thread() {
-                public void run() {
-                    saveAllPlayerData(false, clear);
-                }
-            }.start();
+            new Thread(() -> saveAllPlayerData(false, clear)).start();
             return;
         }
 
         boolean success;
 
         if (!isMigrated) {
-            success = sqlController.save(data.toArray(new KDUserData[data.size()]));
+            success = sqlController.save(data.toArray(new KDUserData[0]));
         } else {
             data.forEach(d -> KDStatusReloaded.getPlugin().getKDData().update(d));
             success = true;
@@ -177,7 +173,7 @@ public class KillDeathDataContainer {
         if (success && clear) {
             playerDataCache.clear();
         } else if (success) {
-            for (UUID uuid : new ArrayList<UUID>(playerDataCache.keySet())) {
+            for (UUID uuid : new ArrayList<>(playerDataCache.keySet())) {
                 if (Bukkit.getPlayer(uuid) == null) {
                     playerDataCache.remove(uuid);
                 }
@@ -293,14 +289,14 @@ public class KillDeathDataContainer {
     public void miguration(Player p) {
         new Thread() {
 
-            private File folder = new File(KDStatusReloaded.getPlugin().getDataFolder(), "PlayerData");
+            private final File folder = new File(KDStatusReloaded.getPlugin().getDataFolder(), "PlayerData");
             private int finished = 0;
             private int fileCount = -1;
 
             public void run() {
                 fileCount = folder.listFiles().length;
 
-                for (File file : Arrays.asList(folder.listFiles())) {
+                for (File file : folder.listFiles()) {
                     UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().lastIndexOf(".")));
 
                     if (!playerDataCache.containsKey(uuid)) {

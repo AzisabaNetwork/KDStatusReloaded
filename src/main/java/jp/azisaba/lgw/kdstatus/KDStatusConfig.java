@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class KDStatusConfig {
 
@@ -87,8 +88,7 @@ public class KDStatusConfig {
 
                     plugin.saveConfig();
                 } catch (Exception e) {
-                    Bukkit.getLogger().warning("Error: " + e.getMessage());
-                    e.printStackTrace();
+                    Bukkit.getLogger().log(Level.SEVERE, "An error occurred in loading default config", e);
                 }
             } else {
 
@@ -173,9 +173,9 @@ public class KDStatusConfig {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface ConfigOptions {
-        public String path();
+        String path();
 
-        public OptionType type() default OptionType.NONE;
+        OptionType type() default OptionType.NONE;
     }
 
     public enum OptionType {

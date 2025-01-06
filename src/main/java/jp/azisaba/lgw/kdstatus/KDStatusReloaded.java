@@ -70,11 +70,9 @@ public class KDStatusReloaded extends JavaPlugin {
         Bukkit.getPluginCommand("kdstatus").setExecutor(new KDStatusCommand(this));
         Bukkit.getPluginCommand("kdstatus").setPermissionMessage(Chat.f("&cこのコマンドを実行する権限がありません！"));
 
-        if (Bukkit.getOnlinePlayers().size() > 0) {
+        if (!Bukkit.getOnlinePlayers().isEmpty()) {
 
-            Bukkit.getOnlinePlayers().forEach(player -> {
-                kdDataContainer.loadPlayerData(player);
-            });
+            Bukkit.getOnlinePlayers().forEach(kdDataContainer::loadPlayerData);
         }
 
         Bukkit.getLogger().info(getName() + " enabled.");

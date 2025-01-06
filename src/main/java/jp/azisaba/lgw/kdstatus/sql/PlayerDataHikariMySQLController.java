@@ -21,9 +21,6 @@ public class PlayerDataHikariMySQLController implements PlayerDataController {
         this.logger = logger;
     }
 
-    public void connect() {
-    }
-
     @Override
     public boolean createTable() {
         return db.executeUpdate("CREATE TABLE IF NOT EXISTS kill_death_data "

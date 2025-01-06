@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class MyStatusCommand implements CommandExecutor {
 
@@ -21,14 +22,13 @@ public class MyStatusCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player p)) {
             sender.sendMessage(Chat.f("&cこのコマンドはプレイヤーのみ有効です！"));
             return true;
         }
 
-        Player p = (Player) sender;
         KDUserData data = dataContainer.getPlayerData(p, true);
 
         int kills = data.getKills(TimeUnit.LIFETIME);
@@ -37,7 +37,7 @@ public class MyStatusCommand implements CommandExecutor {
         if (deaths > 0) {
             kdRaito = (double) kills / (double) deaths;
         } else {
-            kdRaito = (double) kills;
+            kdRaito = kills;
         }
 
         int dailyKills = data.getKills(TimeUnit.DAILY);

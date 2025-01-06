@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,9 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ConnectionTest {
     @Test
     public void ConnectToDatabase() throws InterruptedException {
+        var logger = Logger.getLogger("DBConnectionTest");
         Random rnd = new Random();
         HikariMySQLDatabase db = new HikariMySQLDatabase(
-                Logger.getLogger("DBConnectionTest"),
+                logger,
                 10,
                 "localhost",
                 "3306",
@@ -34,7 +36,7 @@ public class ConnectionTest {
                 PreparedStatement pstmt = conn.prepareStatement("SELECT 1")) {
                 assertTrue(pstmt.executeQuery().next());
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Failed to check connection", e);
             }
             Thread.sleep(rnd.nextInt(2000));
         }

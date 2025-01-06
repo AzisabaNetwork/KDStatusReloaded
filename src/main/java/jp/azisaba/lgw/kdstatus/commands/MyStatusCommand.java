@@ -37,7 +37,7 @@ public class MyStatusCommand implements CommandExecutor {
         if (deaths > 0) {
             kdRaito = (double) kills / (double) deaths;
         } else {
-            kdRaito = (double) kills;
+            kdRaito = kills;
         }
 
         int dailyKills = data.getKills(TimeUnit.DAILY);

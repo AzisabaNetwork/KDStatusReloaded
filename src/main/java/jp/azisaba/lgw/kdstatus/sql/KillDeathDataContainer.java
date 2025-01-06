@@ -152,7 +152,7 @@ public class KillDeathDataContainer {
 
         List<KDUserData> data = new ArrayList<>(playerDataCache.values());
 
-        if (data.size() <= 0) {
+        if (data.isEmpty()) {
             return;
         }
 
@@ -296,7 +296,7 @@ public class KillDeathDataContainer {
             public void run() {
                 fileCount = folder.listFiles().length;
 
-                for (File file : Arrays.asList(folder.listFiles())) {
+                for (File file : folder.listFiles()) {
                     UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().lastIndexOf(".")));
 
                     if (!playerDataCache.containsKey(uuid)) {

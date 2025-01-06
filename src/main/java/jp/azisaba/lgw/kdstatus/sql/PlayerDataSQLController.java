@@ -166,7 +166,7 @@ public class PlayerDataSQLController {
     }
 
     public boolean save(@NotNull KDUserData... data2) {
-        if (data2.length <= 0) {
+        if (data2.length == 0) {
             return true;
         }
 

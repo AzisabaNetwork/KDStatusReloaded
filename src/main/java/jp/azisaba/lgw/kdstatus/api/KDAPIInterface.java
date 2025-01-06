@@ -45,4 +45,28 @@ interface KDAPIInterface {
      * @return List of {@link KillRankingData}. If failed, returns empty list.
      */
     List<KillRankingData> getTopKillRankingData(@NotNull TimeUnit unit, int maxSize);
+
+    // === Won't need to implement each ===
+    /**
+     * Get specific user's kill count
+     * @param uuid UUID of player
+     * @param unit Unit of ranking
+     * @return returns kill count. If failed, returns -1.
+     */
+    default int getKills(@NotNull UUID uuid, @NotNull TimeUnit unit) {
+        var userdata = getUserData(uuid);
+        if(userdata == null) return -1;
+        return userdata.getKills(unit);
+    }
+
+    /**
+     * Get specific user's death count
+     * @param uuid UUID of player
+     * @return returns total death count. If failed, returns -1
+     */
+    default int getDeaths(@NotNull UUID uuid) {
+        var userdata = getUserData(uuid);
+        if(userdata == null) return -1;
+        return userdata.getDeaths();
+    }
 }

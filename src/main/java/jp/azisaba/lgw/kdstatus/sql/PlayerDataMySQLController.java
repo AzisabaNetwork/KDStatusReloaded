@@ -2,8 +2,7 @@ package jp.azisaba.lgw.kdstatus.sql;
 
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
@@ -17,11 +16,15 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@RequiredArgsConstructor
 public class PlayerDataMySQLController {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(PlayerDataMySQLController.class);
     private final HikariMySQLDatabase sql;
     private final Logger logger;
+
+    public PlayerDataMySQLController(HikariMySQLDatabase sql, Logger logger) {
+        this.sql = sql;
+        this.logger = logger;
+    }
 
     public void init() {
         if (sql.isConnected()) {
@@ -137,7 +140,7 @@ public class PlayerDataMySQLController {
 
     }
 
-    public BigInteger getKills(@NonNull UUID uuid, @NonNull TimeUnit unit) {
+    public BigInteger getKills(@NotNull UUID uuid, @NotNull TimeUnit unit) {
 
         try (Connection conn = sql.getConnection();
              PreparedStatement ps = conn.prepareStatement("SELECT " + unit.getSqlColumnName() + " FROM kill_death_data WHERE uuid=?")) {
@@ -162,7 +165,7 @@ public class PlayerDataMySQLController {
 
     }
 
-    public BigInteger getDeaths(@NonNull UUID uuid) {
+    public BigInteger getDeaths(@NotNull UUID uuid) {
 
         try {
 
@@ -187,7 +190,7 @@ public class PlayerDataMySQLController {
 
     }
 
-    public String getName(@NonNull UUID uuid) {
+    public String getName(@NotNull UUID uuid) {
 
         try (Connection conn = sql.getConnection();
              PreparedStatement ps = conn.prepareStatement("SELECT name FROM kill_death_data WHERE uuid=?")) {
@@ -212,7 +215,7 @@ public class PlayerDataMySQLController {
 
     }
 
-    public long getLastUpdated(@NonNull UUID uuid) {
+    public long getLastUpdated(@NotNull UUID uuid) {
 
         try {
 
@@ -237,7 +240,7 @@ public class PlayerDataMySQLController {
 
     }
 
-    public ResultSet getRawData(@NonNull UUID uuid) {
+    public ResultSet getRawData(@NotNull UUID uuid) {
         try (Connection conn = sql.getConnection();
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM kill_death_data WHERE uuid=?")) {
             ps.setString(1, uuid.toString());
@@ -253,7 +256,7 @@ public class PlayerDataMySQLController {
      * @param name Name of target player
      * @return returns userdata. If failed, returns null.
      */
-    public KDUserData getUserData(@NonNull UUID uuid, @NonNull String name) {
+    public KDUserData getUserData(@NotNull UUID uuid, @NotNull String name) {
         try (Connection conn = sql.getConnection();
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM kill_death_data WHERE uuid=?")) {
             ps.setString(1, uuid.toString());

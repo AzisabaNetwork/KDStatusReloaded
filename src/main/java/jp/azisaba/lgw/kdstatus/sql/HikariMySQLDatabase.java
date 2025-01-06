@@ -3,9 +3,7 @@ package jp.azisaba.lgw.kdstatus.sql;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,15 +16,27 @@ import java.util.logging.Logger;
 /**
  * Wrapper class of HikariDataSource for MySQL
  */
-@RequiredArgsConstructor
 public class HikariMySQLDatabase {
     private final Logger logger;
     private final int maxPoolSize;
     private final String host, port, databaseName, user, password;
 
-    @Getter
     private boolean initialized;
     private HikariDataSource hikari;
+
+    public HikariMySQLDatabase(Logger logger, int maxPoolSize, String host, String port, String databaseName, String user, String password) {
+        this.logger = logger;
+        this.maxPoolSize = maxPoolSize;
+        this.host = host;
+        this.port = port;
+        this.databaseName = databaseName;
+        this.user = user;
+        this.password = password;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
+    }
 
     public boolean isConnected() {
         if (hikari == null) return false;
@@ -102,7 +112,7 @@ public class HikariMySQLDatabase {
     }
 
 
-    public PreparedStatement preparedStatement(@NonNull String sql) {
+    public PreparedStatement preparedStatement(@NotNull String sql) {
         Connection conn = getConnectionOrNull();
         if (conn == null) {
             logger.log(Level.SEVERE, "Failed to create preparedStatement: connection is null");
@@ -124,7 +134,7 @@ public class HikariMySQLDatabase {
      * @return result of execution. If failed, return null
      */
 
-    public ResultSet executeQuery(@NonNull String sql, Consumer<PreparedStatement> pstmtConsumer) {
+    public ResultSet executeQuery(@NotNull String sql, Consumer<PreparedStatement> pstmtConsumer) {
         // get a connection
         Connection conn = getConnectionOrNull();
         if (conn == null) {

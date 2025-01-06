@@ -1,7 +1,6 @@
 package jp.azisaba.lgw.kdstatus.task;
 
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
-import lombok.Getter;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -12,11 +11,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class SavePlayerDataTask extends BukkitRunnable {
 
     private final KDStatusReloaded plugin;
-    @Getter
     private long lastSavedTime = System.currentTimeMillis();
 
     public SavePlayerDataTask(KDStatusReloaded plugin) {
         this.plugin = plugin;
+    }
+
+    public long getLastSavedTime() {
+        return lastSavedTime;
     }
 
     @Override

@@ -2,10 +2,9 @@ package jp.azisaba.lgw.kdstatus.sql;
 
 import jp.azisaba.lgw.kdstatus.KDStatusReloaded;
 import jp.azisaba.lgw.kdstatus.utils.TimeUnit;
-import lombok.Getter;
-import lombok.NonNull;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.util.UUID;
 
 public class KDUserData {
 
-    @Getter
     private final UUID uuid;
 
     private YamlConfiguration conf;
@@ -28,7 +26,6 @@ public class KDUserData {
     public static final String MONTHLY_KILLS_KEY = "MonthlyKill";
     public static final String YEARLY_KILLS_KEY = "YearlyKill";
 
-    @Getter
     private String name;
     private int totalKills, dailyKills, monthlyKills, yearlyKills;
     private int deaths;
@@ -135,13 +132,21 @@ public class KDUserData {
         updateLastUpdated();
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
     /**
      * 指定した期間のキル数を取得します
      *
      * @param unit 取得したい期間
      * @return 取得したキル数。なければ0
      */
-    public int getKills(@NonNull TimeUnit unit) {
+    public int getKills(@NotNull TimeUnit unit) {
         fixCorrectValue();
 
         if (unit == TimeUnit.LIFETIME) {

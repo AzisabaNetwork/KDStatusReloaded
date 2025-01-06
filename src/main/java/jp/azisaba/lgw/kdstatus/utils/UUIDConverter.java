@@ -1,12 +1,12 @@
 package jp.azisaba.lgw.kdstatus.utils;
 
-import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 public class UUIDConverter {
 
-    public static String convert(@NonNull UUID uuid) {
+    public static String convert(@NotNull UUID uuid) {
         return uuid.toString().replace("-", "");
     }
 

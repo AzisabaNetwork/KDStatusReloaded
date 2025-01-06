@@ -15,6 +15,7 @@ import java.util.UUID;
 interface KDAPIInterface {
     /**
      * Get specific user's data. If data wasn't found, create new userdata.
+     *
      * @param uuid UUID of player
      * @param name Name of player
      * @return returns KDUserData.
@@ -24,6 +25,7 @@ interface KDAPIInterface {
 
     /**
      * Get specific user's data
+     *
      * @param uuid UUID of player
      * @return returns KDUserData. If failed, returns null.
      */
@@ -32,6 +34,7 @@ interface KDAPIInterface {
 
     /**
      * Get specific user's ranking
+     *
      * @param uuid UUID of player
      * @param unit Unit of ranking
      * @return returns ranking order. If failed, returns -1.
@@ -40,33 +43,37 @@ interface KDAPIInterface {
 
     /**
      * Get ranking by timeunit
-     * @param unit TimeUnit of ranking
+     *
+     * @param unit    TimeUnit of ranking
      * @param maxSize Maximum size of ranking
      * @return List of {@link KillRankingData}. If failed, returns empty list.
      */
     List<KillRankingData> getTopKillRankingData(@NotNull TimeUnit unit, int maxSize);
 
     // === Won't need to implement each ===
+
     /**
      * Get specific user's kill count
+     *
      * @param uuid UUID of player
      * @param unit Unit of ranking
      * @return returns kill count. If failed, returns -1.
      */
     default int getKills(@NotNull UUID uuid, @NotNull TimeUnit unit) {
         var userdata = getUserData(uuid);
-        if(userdata == null) return -1;
+        if (userdata == null) return -1;
         return userdata.getKills(unit);
     }
 
     /**
      * Get specific user's death count
+     *
      * @param uuid UUID of player
      * @return returns total death count. If failed, returns -1
      */
     default int getDeaths(@NotNull UUID uuid) {
         var userdata = getUserData(uuid);
-        if(userdata == null) return -1;
+        if (userdata == null) return -1;
         return userdata.getDeaths();
     }
 }

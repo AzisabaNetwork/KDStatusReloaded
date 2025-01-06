@@ -14,13 +14,21 @@ import java.util.UUID;
  */
 interface KDAPIInterface {
     /**
-     * Get specific user's data
+     * Get specific user's data. If data wasn't found, create new userdata.
      * @param uuid UUID of player
      * @param name Name of player
+     * @return returns KDUserData.
+     */
+    @NotNull
+    KDUserData getOrCreateUserData(@NotNull UUID uuid, @NotNull String name);
+
+    /**
+     * Get specific user's data
+     * @param uuid UUID of player
      * @return returns KDUserData. If failed, returns null.
      */
     @Nullable
-    KDUserData getUserData(@NotNull UUID uuid, @NotNull String name);
+    KDUserData getUserData(@NotNull UUID uuid);
 
     /**
      * Get specific user's ranking

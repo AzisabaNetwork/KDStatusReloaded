@@ -72,9 +72,7 @@ public class KDStatusReloaded extends JavaPlugin {
 
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
 
-            Bukkit.getOnlinePlayers().forEach(player -> {
-                kdDataContainer.loadPlayerData(player);
-            });
+            Bukkit.getOnlinePlayers().forEach(kdDataContainer::loadPlayerData);
         }
 
         Bukkit.getLogger().info(getName() + " enabled.");

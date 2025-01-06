@@ -29,7 +29,7 @@ public class DBMain {
         PlayerDataMySQLController controller = new PlayerDataMySQLController(db, testLogger);
         List<KillRankingData> dataList = controller.getTopKillRankingData(TimeUnit.LIFETIME, 10);
         for(KillRankingData data: dataList) {
-            testLogger.info("Name: " + data.getName());
+            testLogger.info("Name: " + data.name());
         }
         int rank = controller.getRank(UUID.fromString("e76cae7b-dc41-40f9-86bb-01afc463e66c"), TimeUnit.LIFETIME);
         testLogger.info("Ranking: " + rank);

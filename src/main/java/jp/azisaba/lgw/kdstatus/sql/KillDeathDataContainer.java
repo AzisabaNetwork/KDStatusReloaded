@@ -157,11 +157,7 @@ public class KillDeathDataContainer {
         }
 
         if (async) {
-            new Thread() {
-                public void run() {
-                    saveAllPlayerData(false, clear);
-                }
-            }.start();
+            new Thread(() -> saveAllPlayerData(false, clear)).start();
             return;
         }
 
@@ -177,7 +173,7 @@ public class KillDeathDataContainer {
         if (success && clear) {
             playerDataCache.clear();
         } else if (success) {
-            for (UUID uuid : new ArrayList<UUID>(playerDataCache.keySet())) {
+            for (UUID uuid : new ArrayList<>(playerDataCache.keySet())) {
                 if (Bukkit.getPlayer(uuid) == null) {
                     playerDataCache.remove(uuid);
                 }

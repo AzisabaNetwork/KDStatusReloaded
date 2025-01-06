@@ -172,9 +172,7 @@ public class KDUserData {
         long start = System.currentTimeMillis();
 
         if (async) {
-            new Thread(() -> {
-                saveData(false);
-            }).start();
+            new Thread(() -> saveData(false)).start();
             return;
         }
 

@@ -23,12 +23,11 @@ public class MyStatusCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player p)) {
             sender.sendMessage(Chat.f("&cこのコマンドはプレイヤーのみ有効です！"));
             return true;
         }
 
-        Player p = (Player) sender;
         KDUserData data = dataContainer.getPlayerData(p, true);
 
         int kills = data.getKills(TimeUnit.LIFETIME);

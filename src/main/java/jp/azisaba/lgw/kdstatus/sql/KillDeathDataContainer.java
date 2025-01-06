@@ -164,7 +164,7 @@ public class KillDeathDataContainer {
         boolean success;
 
         if (!isMigrated) {
-            success = sqlController.save(data.toArray(new KDUserData[data.size()]));
+            success = sqlController.save(data.toArray(new KDUserData[0]));
         } else {
             data.forEach(d -> KDStatusReloaded.getPlugin().getKDData().update(d));
             success = true;

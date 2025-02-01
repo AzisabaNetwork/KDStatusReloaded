@@ -18,7 +18,7 @@ public interface IDatabase {
      *
      * @return is succeeded
      */
-    boolean init();
+    boolean connect();
 
     /**
      * Close database connection.
@@ -73,4 +73,14 @@ public interface IDatabase {
      * @return List of RankingData. If failed, returns empty list.
      */
     List<KillRankingData> getTopKillRankingData(TimeUnit unit, int maxCount);
+
+    // === wrapper methods ===
+
+    /**
+     * reconnect to database
+     */
+    default boolean reconnect() {
+        if(!close()) return false;
+        return connect();
+    }
 }

@@ -13,7 +13,7 @@ commands:
     alias: ["kds"]
     permission: kdstatusreloaded.command.kdstatus
 permissions:
-  mystatus.command.mystatus:
+  kdstatusreloaded.command.mystatus:
     default: true
   kdstatusreloaded.command.kdstatus:
     default: op

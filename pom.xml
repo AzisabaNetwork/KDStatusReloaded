@@ -3,7 +3,7 @@
 
   <groupId>net.azisaba</groupId>
   <artifactId>KDStatusReloaded</artifactId>
-  <version>1.6.2</version>
+  <version>1.6.3</version>
 
   <name>${project.artifactId}</name>
   <description>Record player kills and deaths</description>
@@ -150,4 +150,15 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>azisaba</id>
+      <url>https://repo.azisaba.net/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>azisaba</id>
+      <url>https://repo.azisaba.net/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>

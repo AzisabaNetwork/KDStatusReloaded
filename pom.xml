@@ -3,7 +3,7 @@
 
   <groupId>net.azisaba</groupId>
   <artifactId>KDStatusReloaded</artifactId>
-  <version>1.6.3</version>
+  <version>1.7.2</version>
 
   <name>${project.artifactId}</name>
   <description>Record player kills and deaths</description>

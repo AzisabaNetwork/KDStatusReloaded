@@ -287,7 +287,9 @@ public class PlayerDataMySQLController {
              PreparedStatement p = conn.prepareStatement(RANK_QUERY.replace("${COLUMN_NAME}", unit.getSqlColumnName()))) {
             p.setLong(1, TimeUnit.getFirstMilliSecond(unit));
             p.setString(2, uuid.toString());
-            logger.info("Executed query: " + p);
+            if(KDStatusReloaded.getPlugin().getPluginConfig().showLogInConsole) {
+                logger.info("Executed query: " + p);
+            }
             ResultSet result = p.executeQuery();
             if (result.next()) {
                 return result.getInt("rank");

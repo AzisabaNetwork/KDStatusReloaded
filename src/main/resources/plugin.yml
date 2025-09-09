@@ -1,5 +1,5 @@
 name: '${name}'
-main: jp.azisaba.lgw.kdstatus.KDStatusReloaded
+main: net.azisaba.kdstatusreloaded.KDStatusReloaded
 version: '${version}'
 authors: [siloneco, matsu1213, sysnote8main]
 description: "${description}"

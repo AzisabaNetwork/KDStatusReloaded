@@ -68,7 +68,7 @@ tasks {
     }
 
     shadowJar {
-        isEnableRelocation = true
+        enableAutoRelocation = true
         relocationPrefix = "net.azisaba.kdstatusreloaded.libs"
     }
 

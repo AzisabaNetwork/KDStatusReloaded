@@ -35,7 +35,9 @@ dependencies {
 
     // check
     implementation(libs.jspecify)
-    testImplementation(libs.junit)
+    testImplementation(platform(libs.junitBom))
+    testImplementation(libs.junitJupiter)
+    testRuntimeOnly(libs.junitPlatformLauncher)
 }
 
 java {

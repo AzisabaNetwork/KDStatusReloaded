@@ -11,7 +11,7 @@ hikaricp = "7.0.2"
 jdbi = "3.49.5"
 flyway = "9.13.0"
 jspecify = "1.0.0"
-junit = "5.11.4"
+junit = "5.13.4"
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
@@ -34,7 +34,9 @@ flywayMysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
 
 # check
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
-junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junitBom = { module = "org.junit.jupiter:junit-bom", version.ref = "junit" }
+junitJupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" }
 
 [bundles]
 jdbi = [

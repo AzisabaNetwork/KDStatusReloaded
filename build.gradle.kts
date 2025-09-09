@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.runPaper)
 }
 
-val targetJavaVersion = 8
+val targetJavaVersion = 17
 version = System.getenv("VERSION") ?: "0.1.0-indev"
 
 // plugin metadata

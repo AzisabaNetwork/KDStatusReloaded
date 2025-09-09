@@ -1,7 +1,7 @@
 package net.azisaba.kdstatusreloaded.sql;
 
 import net.azisaba.kdstatusreloaded.utils.TimeUnit;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import java.math.BigInteger;
 import java.sql.ResultSet;

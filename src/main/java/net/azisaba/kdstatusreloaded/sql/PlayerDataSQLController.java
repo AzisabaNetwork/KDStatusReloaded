@@ -4,7 +4,7 @@ import net.azisaba.kdstatusreloaded.utils.TimeUnit;
 import net.azisaba.kdstatusreloaded.utils.UUIDConverter;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import java.math.BigInteger;
 import java.sql.ResultSet;

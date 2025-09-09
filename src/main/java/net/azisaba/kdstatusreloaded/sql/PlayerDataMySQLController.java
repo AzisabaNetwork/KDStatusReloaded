@@ -2,8 +2,8 @@ package net.azisaba.kdstatusreloaded.sql;
 
 import net.azisaba.kdstatusreloaded.KDStatusReloaded;
 import net.azisaba.kdstatusreloaded.utils.TimeUnit;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;

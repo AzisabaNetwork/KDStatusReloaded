@@ -3,9 +3,9 @@ package net.azisaba.kdstatusreloaded.sql;
 import net.azisaba.kdstatusreloaded.KDStatusReloaded;
 import net.azisaba.kdstatusreloaded.utils.TimeUnit;
 import lombok.Getter;
-import lombok.NonNull;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.io.IOException;

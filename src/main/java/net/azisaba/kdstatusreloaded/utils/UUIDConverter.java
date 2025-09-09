@@ -1,6 +1,6 @@
 package net.azisaba.kdstatusreloaded.utils;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 

@@ -4,10 +4,10 @@ import net.azisaba.kdstatusreloaded.KDStatusReloaded;
 import net.azisaba.kdstatusreloaded.utils.Chat;
 import net.azisaba.kdstatusreloaded.utils.TimeUnit;
 import net.azisaba.kdstatusreloaded.utils.UUIDConverter;
-import lombok.NonNull;
 import me.rayzr522.jsonmessage.JSONMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.sql.ResultSet;

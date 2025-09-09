@@ -1,7 +1,6 @@
 [versions]
 # plugin
 shadow = "8.3.9"
-lombok = "8.14.2"
 runPaper = "2.3.1" # Latest version for java 8
 
 # library
@@ -16,7 +15,6 @@ spigotApi = "1.16.5-R0.1-SNAPSHOT"
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
-lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
 runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 
 [libraries]

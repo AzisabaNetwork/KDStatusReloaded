@@ -2,7 +2,6 @@ plugins {
     `java-library`
     `maven-publish`
     alias(libs.plugins.shadow)
-    alias(libs.plugins.lombok)
     alias(libs.plugins.runPaper)
 }
 

@@ -28,7 +28,8 @@ public class PlayerEventListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        kdCache.store(e.getPlayer().getUniqueId());
+        Player p = e.getPlayer();
+        kdCache.store(p.getUniqueId(), p.getName());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -48,7 +49,7 @@ public class PlayerEventListener implements Listener {
                 logger.info(Chat.f("{0}のデス数加算をキャンセル (\"{1}\" が無効化にするワールドに指定されているため)", victim.getName(), victimWorld.getName()));
             }
         } else {
-            kdCache.addDeath(victim.getUniqueId(), 1);
+            kdCache.addDeath(victim.getUniqueId(), victim.getName(), 1);
         }
 
         // increment kill count
@@ -59,7 +60,7 @@ public class PlayerEventListener implements Listener {
                     logger.info(Chat.f("{0}のキル数加算をキャンセル (\"{1}\" が無効にするワールドに指定されているため)", killer.getName(), killerWorld.getName()));
                 }
             } else {
-                kdCache.addKill(killer.getUniqueId(), 1);
+                kdCache.addKill(killer.getUniqueId(), killer.getName(), 1);
             }
         }
     }

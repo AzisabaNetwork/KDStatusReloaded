@@ -2,11 +2,13 @@ package net.azisaba.kdstatusreloaded.playerkd.cache;
 
 import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
 import net.azisaba.kdstatusreloaded.playerkd.db.KDUserDataRepository;
+import org.bukkit.Bukkit;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @NullMarked
 public class KDCache {
@@ -19,24 +21,32 @@ public class KDCache {
     }
 
     public KDUserData getData(UUID uuid) {
-        return get(uuid).clone();
+        return get(uuid, () -> {
+            var findResult = Bukkit.getOnlinePlayers().stream().filter(p -> p.getUniqueId() == uuid).findFirst();
+            if(findResult.isEmpty()) throw new RuntimeException("Failed to get name for " + uuid);
+            return findResult.get().getName();
+        }).clone();
     }
 
     // For internal
-    protected KDUserData get(UUID uuid) {
+    protected KDUserData get(UUID uuid, String name) {
+        return get(uuid, () -> name);
+    }
+
+    protected KDUserData get(UUID uuid, Supplier<String> nameSupplier) {
         if (!cacheMap.containsKey(uuid)) {
             cacheMap.put(
                     uuid,
-                    dataRepository.findById(uuid).orElse(new KDUserData(uuid, ""))
+                    dataRepository.findById(uuid).orElse(new KDUserData(uuid, nameSupplier.get()))
             );
         }
         return cacheMap.get(uuid);
     }
 
-    public void store(UUID uuid) {
+    public void store(UUID uuid, String name) {
         cacheMap.put(
                 uuid,
-                dataRepository.findById(uuid).orElse(new KDUserData(uuid, ""))
+                dataRepository.findById(uuid).orElse(new KDUserData(uuid, name))
         );
     }
 
@@ -57,8 +67,8 @@ public class KDCache {
     }
 
     // 責務を超えてしまうが、ここにkill/deathのincrement処理を追記する。
-    public void addKill(UUID uuid, int count) {
-        KDUserData kdUserData = get(uuid);
+    public void addKill(UUID uuid, String name, int count) {
+        KDUserData kdUserData = get(uuid, name);
         kdUserData.totalKills += count;
 
         fixCorrectValue(kdUserData);
@@ -69,8 +79,8 @@ public class KDCache {
         updateTimestamp(kdUserData);
     }
 
-    public void addDeath(UUID uuid, int count) {
-        KDUserData kdUserData = get(uuid);
+    public void addDeath(UUID uuid, String name, int count) {
+        KDUserData kdUserData = get(uuid, name);
         kdUserData.deaths += count;
 
         updateTimestamp(kdUserData);

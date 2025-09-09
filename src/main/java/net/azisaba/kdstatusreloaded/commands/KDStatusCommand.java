@@ -14,7 +14,7 @@ import java.util.List;
 
 @NullMarked
 public class KDStatusCommand implements CommandExecutor, TabCompleter {
-    private static final List<String> modes = Arrays.asList("reload", "migration", "reconnect-db");
+    private static final List<String> modes = Arrays.asList("check", "migration");
 
     private final KDStatusReloaded plugin;
 

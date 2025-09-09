@@ -64,7 +64,7 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
         with:
-          draft: true
+          tag_name: ${{ github.event.inputs.version }}
           files: build/libs/*.jar
           generate_release_notes: true
 

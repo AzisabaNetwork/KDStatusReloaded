@@ -9,7 +9,7 @@ hikaricp = "4.0.3"
 jdbiCore = "3.39.1"
 jdbiSqlobject = "3.39.1"
 jspecify = "1.0.0"
-junit = "5.11.4"
+junit = "5.13.4"
 spigotApi = "1.16.5-R0.1-SNAPSHOT"
 
 [plugins]

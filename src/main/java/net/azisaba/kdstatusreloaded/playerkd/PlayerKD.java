@@ -21,6 +21,7 @@ public class PlayerKD {
 
     public void onDisable() {
         kdCache.removeAll();
+        kdDatabase.shutdown();
     }
 
     public void loadAll(List<UUID> playerUuids) {

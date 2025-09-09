@@ -8,9 +8,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.StringJoiner;
 
+@NullMarked
 public class MyStatusCommand implements CommandExecutor {
     private static final String arrow = "➣";
 

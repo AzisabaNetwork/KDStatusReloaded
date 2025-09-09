@@ -1,6 +1,7 @@
 package net.azisaba.kdstatusreloaded;
 
 import de.exlll.configlib.YamlConfigurations;
+import net.azisaba.kdstatusreloaded.commands.KDSCommands;
 import net.azisaba.kdstatusreloaded.config.KDConfig;
 import net.azisaba.kdstatusreloaded.playerkd.PlayerKD;
 import net.azisaba.kdstatusreloaded.playerkd.db.KDDatabase;
@@ -44,6 +45,8 @@ public class KDStatusReloaded extends JavaPlugin {
 
         playerKd = new PlayerKD(this);
 
+        KDSCommands.init(this);
+
         // If player already in server, load data for each player
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
             playerKd.loadAll(Bukkit.getOnlinePlayers().stream().map(Entity::getUniqueId).collect(Collectors.toList()));
@@ -64,10 +67,6 @@ public class KDStatusReloaded extends JavaPlugin {
 
     public KDConfig getPluginConfig() {
         return kdConfig;
-    }
-
-    public KDDatabase getKdDatabase() {
-        return kdDatabase;
     }
 
     public PlayerKD getPlayerKd() {

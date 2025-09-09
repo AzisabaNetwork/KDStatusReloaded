@@ -29,7 +29,7 @@ dependencies {
 
     // database
     implementation(libs.hikaricp)
-    implementation(libs.mysqlConnectorJ)
+    implementation(libs.mariaDBConnectorJ)
     implementation(libs.bundles.jdbi)
     implementation(libs.bundles.flyway)
 
@@ -57,8 +57,8 @@ tasks {
     processResources {
         val props =
             mapOf(
-                "version" to version,
-                "name" to name,
+                "version" to project.version,
+                "name" to project.name,
                 "description" to plDescription,
                 "websiteUrl" to plWebsiteUrl,
             )
@@ -70,12 +70,14 @@ tasks {
     }
 
     shadowJar {
-        enableAutoRelocation = true
-        relocationPrefix = "net.azisaba.kdstatusreloaded.libs"
+//        enableAutoRelocation = true
+//        relocationPrefix = "net.azisaba.kdstatusreloaded.libs"
+        mergeServiceFiles()
     }
 
     runServer {
         minecraftVersion("1.16.5")
+        ignoreUnsupportedJvm()
     }
 
     compileJava {

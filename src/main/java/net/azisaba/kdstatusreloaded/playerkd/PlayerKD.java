@@ -17,7 +17,7 @@ public class PlayerKD {
     private final KDCache kdCache;
 
     public PlayerKD(KDStatusReloaded plugin) {
-        kdDatabase = new KDDatabase(plugin.getPluginConfig().database);
+        kdDatabase = new KDDatabase(plugin.getPluginConfig().database, plugin.getDataFolder());
         kdCache = new KDCache(kdDatabase.kdUserDataRepository());
         plugin.register(new PlayerEventListener(kdCache, plugin.getPluginConfig().world));
     }

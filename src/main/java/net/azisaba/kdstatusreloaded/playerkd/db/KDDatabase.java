@@ -3,21 +3,41 @@ package net.azisaba.kdstatusreloaded.playerkd.db;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.azisaba.kdstatusreloaded.config.KDConfig;
+import org.bukkit.Bukkit;
 import org.flywaydb.core.Flyway;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jspecify.annotations.NullMarked;
+
+import java.io.File;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 @NullMarked
 public class KDDatabase {
     private final HikariDataSource hikariDataSource;
     private Jdbi jdbi;
     private KDUserDataRepository kdUserDataRepository;
+    private final File tmpFolder;
 
-    public KDDatabase(KDConfig.DatabaseConfig dbConfig) {
+    public KDDatabase(KDConfig.DatabaseConfig dbConfig, File pluginFolder) {
+        try {
+            Class.forName("org.mariadb.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        tmpFolder = new File(pluginFolder, "migration_tmp");
+        if(!tmpFolder.exists()) tmpFolder.mkdirs();
+
         // create HikariCP datasource
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s", dbConfig.host, dbConfig.port, dbConfig.dbName));
+        config.setJdbcUrl(String.format("jdbc:mariadb://%s:%d/%s", dbConfig.host, dbConfig.port, dbConfig.dbName));
         config.setUsername(dbConfig.username);
         config.setPassword(dbConfig.password);
         hikariDataSource = new HikariDataSource(config);

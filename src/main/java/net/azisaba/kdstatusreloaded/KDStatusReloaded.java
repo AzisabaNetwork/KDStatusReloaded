@@ -4,7 +4,6 @@ import de.exlll.configlib.YamlConfigurations;
 import net.azisaba.kdstatusreloaded.commands.KDSCommands;
 import net.azisaba.kdstatusreloaded.config.KDConfig;
 import net.azisaba.kdstatusreloaded.playerkd.PlayerKD;
-import net.azisaba.kdstatusreloaded.playerkd.db.KDDatabase;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Listener;
@@ -19,7 +18,6 @@ public class KDStatusReloaded extends JavaPlugin {
     private static final Logger logger = LoggerFactory.getLogger(KDStatusReloaded.class);
     private static KDStatusReloaded plugin;
     protected File configFile;
-    protected KDDatabase kdDatabase;
     protected KDConfig kdConfig;
     protected PlayerKD playerKd;
 
@@ -41,7 +39,6 @@ public class KDStatusReloaded extends JavaPlugin {
         }
 
         kdConfig = YamlConfigurations.load(configFile.toPath(), KDConfig.class);
-        kdDatabase = new KDDatabase(kdConfig.database);
 
         playerKd = new PlayerKD(this);
 

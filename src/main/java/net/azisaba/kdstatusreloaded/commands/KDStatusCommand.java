@@ -35,6 +35,15 @@ public class KDStatusCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        if(args[0].equalsIgnoreCase("check")) {
+            var worldConfig = plugin.getPluginConfig().world;
+            sender.sendMessage("- ShowCountCancelled: " + worldConfig.showCountCancelled);
+            sender.sendMessage("->>> disables <<<-");
+            sender.sendMessage("Kill: " + String.join(", ", worldConfig.disableKillWorldList));
+            sender.sendMessage("Death: " + String.join(", ", worldConfig.disableDeathWorldList));
+            sender.sendMessage("------------------");
+        }
+
         sender.sendMessage(Chat.f("&cUsage: {0}", cmd.getUsage().replace("{LABEL}", label)));
         return true;
     }

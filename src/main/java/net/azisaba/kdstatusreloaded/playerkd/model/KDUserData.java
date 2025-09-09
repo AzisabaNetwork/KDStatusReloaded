@@ -17,7 +17,7 @@ public class KDUserData implements Cloneable {
         this(uuid, name, 0, 0, 0, 0, 0, -1);
     }
 
-    @ConstructorProperties({"uuid", "name", "total_kills", "daily_kills", "monthly_kills", "yearly_kills", "deaths", "last_updated"})
+    @ConstructorProperties({"uuid", "name", "kills", "daily_kills", "monthly_kills", "yearly_kills", "deaths", "last_updated"})
     public KDUserData(UUID uuid, String name, int totalKills, int dailyKills, int monthlyKills, int yearlyKills, int deaths, long lastUpdated) {
         this.uuid = uuid;
         this.name = name;

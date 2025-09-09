@@ -70,8 +70,6 @@ tasks {
     }
 
     shadowJar {
-//        enableAutoRelocation = true
-//        relocationPrefix = "net.azisaba.kdstatusreloaded.libs"
         mergeServiceFiles()
     }
 

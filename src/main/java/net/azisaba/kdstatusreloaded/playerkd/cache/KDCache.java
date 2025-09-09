@@ -18,14 +18,19 @@ public class KDCache {
         this.dataRepository = dataRepository;
     }
 
-    public KDUserData get(UUID uuid) {
+    public KDUserData getData(UUID uuid) {
+        return get(uuid).clone();
+    }
+
+    // For internal
+    protected KDUserData get(UUID uuid) {
         if (!cacheMap.containsKey(uuid)) {
             cacheMap.put(
                     uuid,
                     dataRepository.findById(uuid).orElse(new KDUserData(uuid, ""))
             );
         }
-        return cacheMap.get(uuid).clone();
+        return cacheMap.get(uuid);
     }
 
     public void store(UUID uuid) {

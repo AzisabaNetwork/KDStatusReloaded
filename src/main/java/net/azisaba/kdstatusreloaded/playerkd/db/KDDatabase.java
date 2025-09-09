@@ -3,24 +3,30 @@ package net.azisaba.kdstatusreloaded.playerkd.db;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.azisaba.kdstatusreloaded.config.KDConfig;
-import org.bukkit.Bukkit;
-import org.flywaydb.core.Flyway;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jspecify.annotations.NullMarked;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @NullMarked
 public class KDDatabase {
+    private static final Logger logger = LoggerFactory.getLogger(KDDatabase.class);
     private final HikariDataSource hikariDataSource;
     private Jdbi jdbi;
     private KDUserDataRepository kdUserDataRepository;
@@ -47,21 +53,7 @@ public class KDDatabase {
         jdbi.installPlugin(new SqlObjectPlugin());
         kdUserDataRepository = jdbi.onDemand(KDUserDataRepository.class);
 
-        migration();
-    }
-
-    public void migration() {
-        Flyway flyway = Flyway.configure(KDDatabase.class.getClassLoader())
-                .baselineVersion("0")
-                .baselineOnMigrate(true)
-                .dataSource(hikariDataSource)
-                .locations("queries/migrations/mysql")
-                .validateMigrationNaming(true)
-                .validateOnMigrate(true)
-                .load();
-
-        flyway.repair();
-        flyway.migrate();
+        migrate();
     }
 
     public KDUserDataRepository kdUserDataRepository() {
@@ -76,5 +68,31 @@ public class KDDatabase {
 
         // close datasource
         hikariDataSource.close();
+    }
+
+    public void migrate() {
+        // v0
+        jdbi.useHandle(handle ->
+                handle.execute(
+                        "CREATE TABLE IF NOT EXISTS kill_death_data (" +
+                                "    uuid VARCHAR(64) NOT NULL," +
+                                "    name VARCHAR(36) NOT NULL," +
+                                "    kills INT DEFAULT 0," +
+                                "    deaths INT DEFAULT 0 ," +
+                                "    daily_kills INT DEFAULT 0," +
+                                "    monthly_kills INT DEFAULT 0," +
+                                "    yearly_kills INT DEFAULT 0," +
+                                "    last_updated BIGINT DEFAULT -1" +
+                                ");"
+                )
+        );
+
+        // v1
+        jdbi.useHandle(handle ->
+                handle.execute(
+                        "ALTER TABLE kill_death_data " +
+                                "ADD UNIQUE KEY IF NOT EXISTS uniq_uuid (uuid);"
+                )
+        );
     }
 }

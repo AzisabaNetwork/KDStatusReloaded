@@ -28,19 +28,19 @@ public class PlayerKD {
     }
 
     public void loadAll(List<UUID> playerUuids) {
-        playerUuids.forEach(kdCache::get);
+        playerUuids.forEach(kdCache::getData);
     }
 
     public KDUserData getPlayerData(UUID uuid) {
-        return kdCache.get(uuid);
+        return kdCache.getData(uuid);
     }
 
     public Optional<KDUserData> getPlayerDataWithNoCaching(UUID uuid) {
-        if(kdCache.isCached(uuid)) return Optional.of(kdCache.get(uuid));
+        if(kdCache.isCached(uuid)) return Optional.of(kdCache.getData(uuid));
         return kdDatabase.kdUserDataRepository().findById(uuid);
     }
 
     public void migrate() {
-        kdDatabase.migration();
+        kdDatabase.migrate();
     }
 }

@@ -3,6 +3,7 @@ package net.azisaba.kdstatusreloaded.playerkd.db;
 import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
 import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.customizer.BindFields;
 import org.jdbi.v3.sqlobject.customizer.BindMethods;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
@@ -19,6 +20,11 @@ public interface KDUserDataRepository {
     @SqlQuery("SELECT * FROM kill_death_data ORDER BY kills DESC LIMIT :limit")
     List<KDUserData> findTopByTotalKills(@Bind("limit") int limit);
 
-    @SqlUpdate("INSERT INTO kill_death_data (uuid, name, kills, deaths, daily_kills, monthly_kills, yearly_kills, last_updated) VALUES (:uuid, :name, :totalKills, :deaths, :dailyKills, :monthlyKills, :yearlyKills, :lastUpdated)")
-    void upsert(@BindMethods KDUserData data);
+    @SqlUpdate("INSERT INTO kill_death_data (uuid, name, kills, deaths, daily_kills, monthly_kills, yearly_kills, last_updated) " +
+            "VALUES (:uuid, :name, :totalKills, :deaths, :dailyKills, :monthlyKills, :yearlyKills, :lastUpdated) " +
+            "ON DUPLICATE KEY UPDATE " +
+            "name=VALUES(name), kills=VALUES(kills), deaths=VALUES(deaths), " +
+            "daily_kills=VALUES(daily_kills), monthly_kills=VALUES(monthly_kills), " +
+            "yearly_kills=VALUES(yearly_kills), last_updated=VALUES(last_updated)")
+    void upsert(@BindFields KDUserData data);
 }

@@ -1,80 +1,52 @@
 package net.azisaba.kdstatusreloaded;
 
-import net.azisaba.kdstatusreloaded.commands.KDSCommands;
-import net.azisaba.kdstatusreloaded.commands.KDStatusCommand;
-import net.azisaba.kdstatusreloaded.commands.MyStatusCommand;
-import net.azisaba.kdstatusreloaded.listeners.JoinQuitListener;
-import net.azisaba.kdstatusreloaded.listeners.KDSListeners;
-import net.azisaba.kdstatusreloaded.listeners.KillDeathListener;
-import net.azisaba.kdstatusreloaded.sql.DBAuthConfig;
-import net.azisaba.kdstatusreloaded.sql.HikariMySQLDatabase;
-import net.azisaba.kdstatusreloaded.sql.KillDeathDataContainer;
-import net.azisaba.kdstatusreloaded.sql.PlayerDataMySQLController;
-import net.azisaba.kdstatusreloaded.sql.PlayerDataSQLController;
-import net.azisaba.kdstatusreloaded.sql.SQLHandler;
-import net.azisaba.kdstatusreloaded.task.DBConnectionCheckTask;
-import net.azisaba.kdstatusreloaded.task.SavePlayerDataTask;
-import net.azisaba.kdstatusreloaded.utils.Chat;
+import de.exlll.configlib.YamlConfigurations;
+import net.azisaba.kdstatusreloaded.config.KDConfig;
+import net.azisaba.kdstatusreloaded.playerkd.PlayerKD;
+import net.azisaba.kdstatusreloaded.playerkd.db.KDDatabase;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.stream.Collectors;
 
 public class KDStatusReloaded extends JavaPlugin {
-
-    private KDStatusConfig pluginConfig;
-    private KillDeathDataContainer kdDataContainer;
+    private static final Logger logger = LoggerFactory.getLogger(KDStatusReloaded.class);
     private static KDStatusReloaded plugin;
-    private SavePlayerDataTask saveTask;
-    private DBConnectionCheckTask dbCheckTask;
+    public static KDStatusReloaded getPlugin() {
+        return plugin;
+    }
 
-    private SQLHandler sqlHandler = null;
-
-    public HikariMySQLDatabase sql;
-
-    private PlayerDataMySQLController kdData;
+    protected File configFile;
+    protected KDDatabase kdDatabase;
+    protected KDConfig kdConfig;
+    protected PlayerKD playerKd;
 
     @Override
     public void onEnable() {
 
         plugin = this;
+        configFile = new File(getDataFolder(), "config.yml");
 
-        getConfig().addDefault("migrated", false);
-        getConfig().addDefault("host", "localhost");
-        getConfig().addDefault("port", 3306);
-        getConfig().addDefault("database", "kdstatusreloaded");
-        getConfig().addDefault("username", "root");
-        getConfig().addDefault("password", "password");
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+        if(!configFile.exists()) {
+            YamlConfigurations.save(configFile.toPath(), KDConfig.class, new KDConfig());
+            logger.error("設定ファイルを編集してから、再度有効化してください。");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
 
-        pluginConfig = new KDStatusConfig(this);
+        kdConfig = YamlConfigurations.load(configFile.toPath(), KDConfig.class);
+        kdDatabase = new KDDatabase(kdConfig.database);
 
-        sqlHandler = new SQLHandler(new File(getDataFolder(), "playerData.db"));
-        kdDataContainer = new KillDeathDataContainer(new PlayerDataSQLController(sqlHandler).init());
-
-        DBAuthConfig.loadAuthConfig();
-        sql = DBAuthConfig.getDatabase(getLogger(), 10);
-        sql.connect();
-
-        this.kdData = new PlayerDataMySQLController(sql, getLogger());
-        this.kdData.init();
-
-        saveTask = new SavePlayerDataTask(this);
-        saveTask.runTaskTimerAsynchronously(this, 20 * 60 * 3, 20 * 60 * 3);
-
-        dbCheckTask = new DBConnectionCheckTask(this);
-        dbCheckTask.runTaskTimerAsynchronously(this, 20, 20 * 5);
-
-        KDSListeners.init(this);
-
-        KDSCommands.init(this);
+        playerKd = new PlayerKD(this);
 
         // If player already in server, load data for each player
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
-            Bukkit.getOnlinePlayers().forEach(player -> {
-                kdDataContainer.loadPlayerData(player);
-            });
+            playerKd.loadAll(Bukkit.getOnlinePlayers().stream().map(Entity::getUniqueId).collect(Collectors.toList()));
         }
 
         Bukkit.getLogger().info(getName() + " enabled.");
@@ -82,42 +54,23 @@ public class KDStatusReloaded extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        kdDataContainer.saveAllPlayerData(false, true);
-
-        if (sqlHandler != null) {
-            sqlHandler.closeConnection();
-        }
-        if (sql.isConnected()) {
-            sql.close();
-        }
-        if (saveTask != null) saveTask.cancel();
-        if (dbCheckTask != null) dbCheckTask.cancel();
+        if(playerKd != null) playerKd.onDisable();
         Bukkit.getLogger().info(getName() + " disabled.");
     }
 
-    public void reloadPluginConfig() {
-        reloadConfig();
-        this.pluginConfig = new KDStatusConfig(this);
+    public void register(Listener listener) {
+        Bukkit.getPluginManager().registerEvents(listener, this);
     }
 
-    public PlayerDataMySQLController getKDData() {
-        return kdData;
+    public KDConfig getPluginConfig() {
+        return kdConfig;
     }
 
-    public KDStatusConfig getPluginConfig() {
-        return pluginConfig;
+    public KDDatabase getKdDatabase() {
+        return kdDatabase;
     }
 
-    public KillDeathDataContainer getKdDataContainer() {
-        return kdDataContainer;
+    public PlayerKD getPlayerKd() {
+        return playerKd;
     }
-
-    public static KDStatusReloaded getPlugin() {
-        return plugin;
-    }
-
-    public SavePlayerDataTask getSaveTask() {
-        return saveTask;
-    }
-
 }

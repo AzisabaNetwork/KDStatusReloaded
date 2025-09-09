@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 public class KDSCommands {
     public static void init(KDStatusReloaded plugin) {
         registerCommand("mystatus", cmd -> {
-            cmd.setExecutor(new MyStatusCommand(plugin.getKdDataContainer()));
+            cmd.setExecutor(new MyStatusCommand(plugin.getPlayerKd()));
             cmd.setPermissionMessage(Chat.f("&c権限がありません。運営に報告してください。"));
         });
 

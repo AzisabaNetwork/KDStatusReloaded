@@ -1,23 +1,23 @@
 package net.azisaba.kdstatusreloaded.commands;
 
 import com.google.common.base.Strings;
-import net.azisaba.kdstatusreloaded.sql.KDUserData;
-import net.azisaba.kdstatusreloaded.sql.KillDeathDataContainer;
+import net.azisaba.kdstatusreloaded.api.KDUserData;
+import net.azisaba.kdstatusreloaded.playerkd.PlayerKD;
 import net.azisaba.kdstatusreloaded.utils.Chat;
-import net.azisaba.kdstatusreloaded.utils.TimeUnit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.StringJoiner;
+
 public class MyStatusCommand implements CommandExecutor {
+    private static final String arrow = "➣";
 
-    private final KillDeathDataContainer dataContainer;
+    private final PlayerKD playerKd;
 
-    private final String arrow = "➣";
-
-    public MyStatusCommand(KillDeathDataContainer dataContainer) {
-        this.dataContainer = dataContainer;
+    public MyStatusCommand(PlayerKD playerKd) {
+        this.playerKd = playerKd;
     }
 
     @Override
@@ -29,31 +29,31 @@ public class MyStatusCommand implements CommandExecutor {
         }
 
         Player p = (Player) sender;
-        KDUserData data = dataContainer.getPlayerData(p, true);
+        KDUserData data = playerKd.getPlayerData(p.getUniqueId());
 
-        int kills = data.getKills(TimeUnit.LIFETIME);
-        int deaths = data.getDeaths();
+        int kills = data.totalKills;
+        int deaths = data.deaths;
         double kdRaito;
         if (deaths > 0) {
             kdRaito = (double) kills / (double) deaths;
         } else {
-            kdRaito = (double) kills;
+            kdRaito = kills;
         }
 
-        int dailyKills = data.getKills(TimeUnit.DAILY);
-        int monthlyKills = data.getKills(TimeUnit.MONTHLY);
-        int yearlyKills = data.getKills(TimeUnit.YEARLY);
+        int dailyKills = data.dailyKills;
+        int monthlyKills = data.monthlyKills;
+        int yearlyKills = data.yearlyKills;
 
-        StringBuilder builder = new StringBuilder();
+        StringJoiner builder = new StringJoiner("\n");
 
-        builder.append(Chat.f("&b&m&l{0}&c&l[{1}の戦績]&b&m&l{0}&r", Strings.repeat("━", 18), p.getName())).append("\n \n");
-        builder.append(Chat.f("&9{0}&eキル数&a: &b{1}&r", arrow, kills)).append("\n");
-        builder.append(Chat.f("&9{0}&eデス数&a: &b{1}&r", arrow, deaths)).append("\n \n");
-        builder.append(Chat.f("&9{0}&eK/D&a: &b{1}&r", arrow, String.format("%.3f", kdRaito))).append("\n \n");
-        builder.append(Chat.f("&9{0}&eDailyキル数&a: &b{1}&r", arrow, dailyKills)).append("\n");
-        builder.append(Chat.f("&9{0}&eMonthlyキル数&a: &b{1}&r", arrow, monthlyKills)).append("\n");
-        builder.append(Chat.f("&9{0}&eYearlyキル数&a: &b{1}&r", arrow, yearlyKills)).append("\n \n");
-        builder.append(Chat.f("&b&m&l{0}", Strings.repeat("━", 52)));
+        builder.add(Chat.f("&b&m&l{0}&c&l[{1}の戦績]&b&m&l{0}&r", Strings.repeat("━", 18), p.getName())).add(" ");
+        builder.add(Chat.f("&9{0}&eキル数&a: &b{1}&r", arrow, kills));
+        builder.add(Chat.f("&9{0}&eデス数&a: &b{1}&r", arrow, deaths)).add(" ");
+        builder.add(Chat.f("&9{0}&eK/D&a: &b{1}&r", arrow, String.format("%.3f", kdRaito))).add(" ");
+        builder.add(Chat.f("&9{0}&eDailyキル数&a: &b{1}&r", arrow, dailyKills));
+        builder.add(Chat.f("&9{0}&eMonthlyキル数&a: &b{1}&r", arrow, monthlyKills));
+        builder.add(Chat.f("&9{0}&eYearlyキル数&a: &b{1}&r", arrow, yearlyKills)).add(" ");
+        builder.add(Chat.f("&b&m&l{0}", Strings.repeat("━", 52)));
 
         p.sendMessage(builder.toString());
         return true;

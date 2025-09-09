@@ -24,6 +24,9 @@ dependencies {
     // system
     compileOnly(libs.spigotApi)
 
+    // config
+    implementation(libs.configLib)
+
     // database
     implementation(libs.hikaricp)
     implementation(libs.mysqlConnectorJ)

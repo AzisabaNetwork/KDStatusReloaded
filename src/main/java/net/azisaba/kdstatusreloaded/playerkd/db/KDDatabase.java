@@ -1,26 +1,29 @@
-package net.azisaba.kdstatusreloaded.db;
+package net.azisaba.kdstatusreloaded.playerkd.db;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import net.azisaba.kdstatusreloaded.config.KDConfig;
 import org.flywaydb.core.Flyway;
 import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jspecify.annotations.NonNull;
 
-public class Database {
+public class KDDatabase {
     private final HikariDataSource hikariDataSource;
     private Jdbi jdbi;
     private KDUserDataRepository kdUserDataRepository;
 
-    public Database(String host, int port, String database, String username, String password) {
+    public KDDatabase(KDConfig.DatabaseConfig dbConfig) {
         // create HikariCP datasource
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s", host, port, database));
-        config.setUsername(username);
-        config.setPassword(password);
+        config.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s", dbConfig.host, dbConfig.port, dbConfig.dbName));
+        config.setUsername(dbConfig.username);
+        config.setPassword(dbConfig.password);
         hikariDataSource = new HikariDataSource(config);
 
         // jdbi initialization
         jdbi = Jdbi.create(hikariDataSource);
+        jdbi.installPlugin(new SqlObjectPlugin());
         kdUserDataRepository = jdbi.onDemand(KDUserDataRepository.class);
 
         // Todo: move this to correct place
@@ -28,7 +31,7 @@ public class Database {
     }
 
     public void migration() {
-        Flyway flyway = Flyway.configure(Database.class.getClassLoader())
+        Flyway flyway = Flyway.configure(KDDatabase.class.getClassLoader())
                 .baselineVersion("0")
                 .baselineOnMigrate(true)
                 .dataSource(hikariDataSource)

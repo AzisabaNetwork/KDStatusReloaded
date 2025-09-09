@@ -4,13 +4,14 @@ shadow = "8.3.9"
 runPaper = "2.3.1" # Latest version for java 8
 
 # library
+spigotApi = "1.16.5-R0.1-SNAPSHOT"
+configLib = "4.6.1"
 mysqlConnectorJ = "9.1.0"
 hikaricp = "4.0.3"
 jdbi = "3.39.1"
 flyway = "9.13.0"
 jspecify = "1.0.0"
 junit = "5.11.4"
-spigotApi = "1.16.5-R0.1-SNAPSHOT"
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
@@ -19,6 +20,9 @@ runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 [libraries]
 # system
 spigotApi = { module = "org.spigotmc:spigot-api", version.ref = "spigotApi" }
+
+# config
+configLib = { module = "de.exlll:configlib-yaml", version.ref = "configLib" }
 
 # database
 mysqlConnectorJ = { module = "com.mysql:mysql-connector-j", version.ref = "mysqlConnectorJ" }

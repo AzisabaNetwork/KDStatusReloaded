@@ -6,8 +6,8 @@ runPaper = "2.3.1" # Latest version for java 8
 # library
 mysqlConnectorJ = "9.1.0"
 hikaricp = "4.0.3"
-jdbiCore = "3.39.1"
-jdbiSqlobject = "3.39.1"
+jdbi = "3.39.1"
+flyway = "9.13.0"
 jspecify = "1.0.0"
 junit = "5.11.4"
 spigotApi = "1.16.5-R0.1-SNAPSHOT"
@@ -17,16 +17,28 @@ shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 
 [libraries]
+# system
+spigotApi = { module = "org.spigotmc:spigot-api", version.ref = "spigotApi" }
+
+# database
 mysqlConnectorJ = { module = "com.mysql:mysql-connector-j", version.ref = "mysqlConnectorJ" }
 hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
-jdbiCore = { module = "org.jdbi:jdbi3-core", version.ref = "jdbiCore" }
-jdbiSqlobject = { module = "org.jdbi:jdbi3-sqlobject", version.ref = "jdbiSqlobject" }
+jdbiCore = { module = "org.jdbi:jdbi3-core", version.ref = "jdbi" }
+jdbiSqlobject = { module = "org.jdbi:jdbi3-sqlobject", version.ref = "jdbi" }
+flywayCore = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flywayMysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
+
+# check
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
-spigotApi = { module = "org.spigotmc:spigot-api", version.ref = "spigotApi" }
 
 [bundles]
 jdbi = [
     "jdbiCore",
     "jdbiSqlobject"
+]
+
+flyway = [
+    "flywayCore",
+    "flywayMysql"
 ]

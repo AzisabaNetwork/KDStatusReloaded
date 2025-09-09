@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.hikaricp)
     implementation(libs.mysqlConnectorJ)
     implementation(libs.bundles.jdbi)
+    implementation(libs.bundles.flyway)
 
     // check
     implementation(libs.jspecify)

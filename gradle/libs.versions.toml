@@ -4,7 +4,7 @@ shadow = "8.3.9"
 runPaper = "2.3.1" # Latest version for java 8
 
 # library
-mysqlConnectorJ = "9.1.0"
+mysqlConnectorJ = "9.4.0"
 hikaricp = "4.0.3"
 jdbiCore = "3.39.1"
 jdbiSqlobject = "3.39.1"

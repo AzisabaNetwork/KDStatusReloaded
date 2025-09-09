@@ -1,6 +1,5 @@
 package net.azisaba.kdstatusreloaded.sql;
 
-import lombok.Getter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +7,6 @@ import java.sql.SQLException;
 
 public class MySQLHandler {
 
-    @Getter
     private Connection connection;
 
     public boolean isConnected() {
@@ -23,11 +21,11 @@ public class MySQLHandler {
     public void connect() throws SQLException {
         if (isConnected()) return;
         String jdbcUrl = String.format("jdbc:mysql://%s:%s/%s?useSSL=false",
-                DBAuthConfig.getHost(),
-                DBAuthConfig.getPort(),
-                DBAuthConfig.getDatabase()
+                DBAuthConfig.host,
+                DBAuthConfig.port,
+                DBAuthConfig.database
         );
-        connection = DriverManager.getConnection(jdbcUrl, DBAuthConfig.getUser(), DBAuthConfig.getPassword());
+        connection = DriverManager.getConnection(jdbcUrl, DBAuthConfig.user, DBAuthConfig.password);
     }
 
     public void reconnect() throws SQLException {
@@ -43,4 +41,7 @@ public class MySQLHandler {
         connection = null;
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
 }

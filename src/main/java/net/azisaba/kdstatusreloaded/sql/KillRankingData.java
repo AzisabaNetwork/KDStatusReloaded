@@ -1,10 +1,7 @@
 package net.azisaba.kdstatusreloaded.sql;
 
-import lombok.Getter;
-
 import java.util.UUID;
 
-@Getter
 public class KillRankingData {
 
     private final UUID uuid;

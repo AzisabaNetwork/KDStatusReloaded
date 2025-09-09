@@ -13,7 +13,6 @@ import net.azisaba.kdstatusreloaded.sql.SQLHandler;
 import net.azisaba.kdstatusreloaded.task.DBConnectionCheckTask;
 import net.azisaba.kdstatusreloaded.task.SavePlayerDataTask;
 import net.azisaba.kdstatusreloaded.utils.Chat;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,13 +20,9 @@ import java.io.File;
 
 public class KDStatusReloaded extends JavaPlugin {
 
-    @Getter
     private KDStatusConfig pluginConfig;
-    @Getter
     private KillDeathDataContainer kdDataContainer;
-    @Getter
     private static KDStatusReloaded plugin;
-    @Getter
     private SavePlayerDataTask saveTask;
     private DBConnectionCheckTask dbCheckTask;
 
@@ -111,6 +106,22 @@ public class KDStatusReloaded extends JavaPlugin {
 
     public PlayerDataMySQLController getKDData() {
         return kdData;
+    }
+
+    public KDStatusConfig getPluginConfig() {
+        return pluginConfig;
+    }
+
+    public KillDeathDataContainer getKdDataContainer() {
+        return kdDataContainer;
+    }
+
+    public static KDStatusReloaded getPlugin() {
+        return plugin;
+    }
+
+    public SavePlayerDataTask getSaveTask() {
+        return saveTask;
     }
 
 }

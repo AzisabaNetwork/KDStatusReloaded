@@ -2,7 +2,6 @@ package net.azisaba.kdstatusreloaded.sql;
 
 import net.azisaba.kdstatusreloaded.KDStatusReloaded;
 import net.azisaba.kdstatusreloaded.utils.TimeUnit;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +16,15 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@RequiredArgsConstructor
 public class PlayerDataMySQLController {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(PlayerDataMySQLController.class);
     private final HikariMySQLDatabase sql;
     private final Logger logger;
+
+    public PlayerDataMySQLController(HikariMySQLDatabase sql, Logger logger) {
+        this.sql = sql;
+        this.logger = logger;
+    }
 
     public void init() {
         if (sql.isConnected()) {

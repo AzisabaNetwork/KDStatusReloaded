@@ -1,7 +1,6 @@
 package net.azisaba.kdstatusreloaded.sql;
 
 import net.azisaba.kdstatusreloaded.utils.TimeUnit;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 
 import java.math.BigInteger;
@@ -14,10 +13,13 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@RequiredArgsConstructor
 public class PlayerDataHikariMySQLController implements PlayerDataController {
     private final Logger logger;
     private HikariMySQLDatabase db;
+
+    public PlayerDataHikariMySQLController(Logger logger) {
+        this.logger = logger;
+    }
 
     public void connect() {
     }

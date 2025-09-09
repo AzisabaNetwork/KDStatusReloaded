@@ -2,7 +2,6 @@ package net.azisaba.kdstatusreloaded.sql;
 
 import net.azisaba.kdstatusreloaded.KDStatusReloaded;
 import net.azisaba.kdstatusreloaded.utils.TimeUnit;
-import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
@@ -14,7 +13,6 @@ import java.util.UUID;
 
 public class KDUserData {
 
-    @Getter
     private final UUID uuid;
 
     private YamlConfiguration conf;
@@ -28,7 +26,6 @@ public class KDUserData {
     public static final String MONTHLY_KILLS_KEY = "MonthlyKill";
     public static final String YEARLY_KILLS_KEY = "YearlyKill";
 
-    @Getter
     private String name;
     private int totalKills, dailyKills, monthlyKills, yearlyKills;
     private int deaths;
@@ -60,6 +57,14 @@ public class KDUserData {
         this.lastUpdated = lastUpdated;
 
         fixCorrectValue();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     /**

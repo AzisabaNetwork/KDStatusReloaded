@@ -3,8 +3,6 @@ package net.azisaba.kdstatusreloaded.sql;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 
 import java.sql.Connection;
@@ -18,15 +16,27 @@ import java.util.logging.Logger;
 /**
  * Wrapper class of HikariDataSource for MySQL
  */
-@RequiredArgsConstructor
 public class HikariMySQLDatabase {
     private final Logger logger;
     private final int maxPoolSize;
     private final String host, port, databaseName, user, password;
 
-    @Getter
     private boolean initialized;
     private HikariDataSource hikari;
+
+    public HikariMySQLDatabase(Logger logger, int maxPoolSize, String host, String port, String databaseName, String user, String password) {
+        this.logger = logger;
+        this.maxPoolSize = maxPoolSize;
+        this.host = host;
+        this.port = port;
+        this.databaseName = databaseName;
+        this.user = user;
+        this.password = password;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
+    }
 
     public boolean isConnected() {
         if (hikari == null) return false;

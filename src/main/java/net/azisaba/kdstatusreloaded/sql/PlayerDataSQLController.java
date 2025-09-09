@@ -2,8 +2,6 @@ package net.azisaba.kdstatusreloaded.sql;
 
 import net.azisaba.kdstatusreloaded.utils.TimeUnit;
 import net.azisaba.kdstatusreloaded.utils.UUIDConverter;
-import lombok.AccessLevel;
-import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 
 import java.math.BigInteger;
@@ -15,11 +13,9 @@ import java.util.UUID;
 
 public class PlayerDataSQLController {
 
-    @Getter(value = AccessLevel.PROTECTED)
-    private final SQLHandler handler;
+    protected SQLHandler handler;
 
-    @Getter(value = AccessLevel.PROTECTED)
-    private final String tableName = "killdeathdata";
+    protected String tableName = "killdeathdata";
 
     public PlayerDataSQLController(SQLHandler handler) {
         this.handler = handler;

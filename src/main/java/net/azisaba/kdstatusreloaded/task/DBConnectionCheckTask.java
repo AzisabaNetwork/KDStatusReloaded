@@ -1,7 +1,6 @@
 package net.azisaba.kdstatusreloaded.task;
 
 import net.azisaba.kdstatusreloaded.KDStatusReloaded;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
@@ -9,9 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-@RequiredArgsConstructor
 public class DBConnectionCheckTask extends BukkitRunnable {
     private final KDStatusReloaded plugin;
+
+    public DBConnectionCheckTask(KDStatusReloaded plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public void run() {

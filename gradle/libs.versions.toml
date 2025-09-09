@@ -1,0 +1,36 @@
+[versions]
+# plugin
+shadow = "8.3.9"
+lombok = "8.14.2"
+runPaper = "2.3.1" # Latest version for java 8
+
+# library
+mysqlConnectorJ = "9.1.0"
+hikaricp = "4.0.3"
+jsonmessage = "1.3.1"
+jdbiCore = "3.39.1"
+jdbiSqlobject = "3.39.1"
+jspecify = "1.0.0"
+junit = "5.11.4"
+spigotApi = "1.16.5-R0.1-SNAPSHOT"
+
+[plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
+runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
+
+[libraries]
+mysqlConnectorJ = { module = "com.mysql:mysql-connector-j", version.ref = "mysqlConnectorJ" }
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
+jsonmessage = { module = "me.rayzr522:jsonmessage", version.ref = "jsonmessage" }
+jdbiCore = { module = "org.jdbi:jdbi3-core", version.ref = "jdbiCore" }
+jdbiSqlobject = { module = "org.jdbi:jdbi3-sqlobject", version.ref = "jdbiSqlobject" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
+junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+spigotApi = { module = "org.spigotmc:spigot-api", version.ref = "spigotApi" }
+
+[bundles]
+jdbi = [
+    "jdbiCore",
+    "jdbiSqlobject"
+]

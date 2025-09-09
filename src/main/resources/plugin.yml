@@ -1,9 +1,9 @@
-name: ${project.name}
+name: '${name}'
 main: jp.azisaba.lgw.kdstatus.KDStatusReloaded
-version: ${project.version}
+version: '${version}'
 authors: [siloneco, matsu1213, sysnote8main]
-description: "KDStatus reloaded."
-website: ${project.url}
+description: "${description}"
+website: '${websiteUrl}'
 api-version: 1.16
 commands:
   mystatus:

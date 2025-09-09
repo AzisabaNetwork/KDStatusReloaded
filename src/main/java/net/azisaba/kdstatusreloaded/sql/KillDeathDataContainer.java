@@ -197,14 +197,14 @@ public class KillDeathDataContainer {
         if (!isMigrated) {
 
             // SQLHandlerが初期化されていない場合
-            if (!sqlController.getHandler().isInitialized()) {
+            if (!sqlController.handler.isInitialized()) {
                 throw new IllegalStateException("SQLHandler is not initialized yet.");
             }
 
             // データを取得する
             try {
-                ResultSet set = sqlController.getHandler().executeQuery("select uuid, name, " + unit.getSqlColumnName()
-                        + " from " + sqlController.getTableName()
+                ResultSet set = sqlController.handler.executeQuery("select uuid, name, " + unit.getSqlColumnName()
+                        + " from " + sqlController.tableName
                         + " where last_updated >= " + getFirstMilliSecond(unit)
                         + " order by " + unit.getSqlColumnName() + " DESC"
                         + " LIMIT " + count);
@@ -243,10 +243,10 @@ public class KillDeathDataContainer {
     public int getRanking(@NonNull UUID uuid, @NonNull TimeUnit unit) {
 
         if (!isMigrated) {
-            ResultSet set = sqlController.getHandler().executeQuery(
-                    "select uuid, name, kills, (SELECT count(*) FROM " + sqlController.getTableName()
+            ResultSet set = sqlController.handler.executeQuery(
+                    "select uuid, name, kills, (SELECT count(*) FROM " + sqlController.tableName
                             + " as p1 WHERE p1." + unit.getSqlColumnName() + " > p." + unit.getSqlColumnName()
-                            + ") + 1 as rank FROM " + sqlController.getTableName() + " as p"
+                            + ") + 1 as rank FROM " + sqlController.tableName + " as p"
                             + " where uuid = '" + UUIDConverter.convert(uuid) + "' and last_updated > " + getFirstMilliSecond(unit) + " order by rank;");
 
             try {

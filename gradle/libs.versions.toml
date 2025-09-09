@@ -6,7 +6,7 @@ runPaper = "2.3.1" # Latest version for java 8
 # library
 mysqlConnectorJ = "9.1.0"
 hikaricp = "4.0.3"
-jdbiCore = "3.39.1"
+jdbiCore = "3.49.5"
 jdbiSqlobject = "3.39.1"
 jspecify = "1.0.0"
 junit = "5.11.4"

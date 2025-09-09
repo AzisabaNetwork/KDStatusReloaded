@@ -25,7 +25,6 @@ dependencies {
     compileOnly(libs.spigotApi)
 
     // include
-    implementation(libs.jsonmessage)
     implementation(libs.mysqlConnectorJ)
     implementation(libs.hikaricp)
     implementation(libs.bundles.jdbi)

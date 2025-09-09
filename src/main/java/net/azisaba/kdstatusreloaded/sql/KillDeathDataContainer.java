@@ -4,7 +4,8 @@ import net.azisaba.kdstatusreloaded.KDStatusReloaded;
 import net.azisaba.kdstatusreloaded.utils.Chat;
 import net.azisaba.kdstatusreloaded.utils.TimeUnit;
 import net.azisaba.kdstatusreloaded.utils.UUIDConverter;
-import me.rayzr522.jsonmessage.JSONMessage;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
@@ -316,10 +317,10 @@ public class KillDeathDataContainer {
                     file.delete();
 
                     finished++;
-                    JSONMessage.create(Chat.f("&e移行中... &d{0}/{1}", finished, fileCount)).actionbar(p);
+                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Chat.f("&e移行中... &d{0}/{1}", finished, fileCount)));
                 }
 
-                JSONMessage.create(Chat.f("&a完了！")).actionbar(p);
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("&a完了！"));
             }
         }.start();
     }

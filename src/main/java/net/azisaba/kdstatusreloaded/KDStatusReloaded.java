@@ -1,8 +1,10 @@
 package net.azisaba.kdstatusreloaded;
 
+import net.azisaba.kdstatusreloaded.commands.KDSCommands;
 import net.azisaba.kdstatusreloaded.commands.KDStatusCommand;
 import net.azisaba.kdstatusreloaded.commands.MyStatusCommand;
 import net.azisaba.kdstatusreloaded.listeners.JoinQuitListener;
+import net.azisaba.kdstatusreloaded.listeners.KDSListeners;
 import net.azisaba.kdstatusreloaded.listeners.KillDeathListener;
 import net.azisaba.kdstatusreloaded.sql.DBAuthConfig;
 import net.azisaba.kdstatusreloaded.sql.HikariMySQLDatabase;
@@ -53,11 +55,9 @@ public class KDStatusReloaded extends JavaPlugin {
 
         DBAuthConfig.loadAuthConfig();
         sql = DBAuthConfig.getDatabase(getLogger(), 10);
-
         sql.connect();
 
         this.kdData = new PlayerDataMySQLController(sql, getLogger());
-
         this.kdData.init();
 
         saveTask = new SavePlayerDataTask(this);
@@ -66,16 +66,12 @@ public class KDStatusReloaded extends JavaPlugin {
         dbCheckTask = new DBConnectionCheckTask(this);
         dbCheckTask.runTaskTimerAsynchronously(this, 20, 20 * 5);
 
-        Bukkit.getPluginManager().registerEvents(new JoinQuitListener(kdDataContainer), this);
-        Bukkit.getPluginManager().registerEvents(new KillDeathListener(this), this);
+        KDSListeners.init(this);
 
-        Bukkit.getPluginCommand("mystatus").setExecutor(new MyStatusCommand(kdDataContainer));
-        Bukkit.getPluginCommand("mystatus").setPermissionMessage(Chat.f("&c権限がありません。運営に報告してください。"));
-        Bukkit.getPluginCommand("kdstatus").setExecutor(new KDStatusCommand(this));
-        Bukkit.getPluginCommand("kdstatus").setPermissionMessage(Chat.f("&cこのコマンドを実行する権限がありません！"));
+        KDSCommands.init(this);
 
-        if (Bukkit.getOnlinePlayers().size() > 0) {
-
+        // If player already in server, load data for each player
+        if (!Bukkit.getOnlinePlayers().isEmpty()) {
             Bukkit.getOnlinePlayers().forEach(player -> {
                 kdDataContainer.loadPlayerData(player);
             });

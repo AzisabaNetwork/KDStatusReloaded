@@ -33,11 +33,11 @@ public class MyStatusCommand implements CommandExecutor {
 
         int kills = data.totalKills;
         int deaths = data.deaths;
-        double kdRaito;
+        double kdRatio;
         if (deaths > 0) {
-            kdRaito = (double) kills / (double) deaths;
+            kdRatio = (double) kills / (double) deaths;
         } else {
-            kdRaito = kills;
+            kdRatio = kills;
         }
 
         int dailyKills = data.dailyKills;
@@ -49,7 +49,7 @@ public class MyStatusCommand implements CommandExecutor {
         builder.add(Chat.f("&b&m&l{0}&c&l[{1}の戦績]&b&m&l{0}&r", Strings.repeat("━", 18), p.getName())).add(" ");
         builder.add(Chat.f("&9{0}&eキル数&a: &b{1}&r", arrow, kills));
         builder.add(Chat.f("&9{0}&eデス数&a: &b{1}&r", arrow, deaths)).add(" ");
-        builder.add(Chat.f("&9{0}&eK/D&a: &b{1}&r", arrow, String.format("%.3f", kdRaito))).add(" ");
+        builder.add(Chat.f("&9{0}&eK/D&a: &b{1}&r", arrow, String.format("%.3f", kdRatio))).add(" ");
         builder.add(Chat.f("&9{0}&eDailyキル数&a: &b{1}&r", arrow, dailyKills));
         builder.add(Chat.f("&9{0}&eMonthlyキル数&a: &b{1}&r", arrow, monthlyKills));
         builder.add(Chat.f("&9{0}&eYearlyキル数&a: &b{1}&r", arrow, yearlyKills)).add(" ");

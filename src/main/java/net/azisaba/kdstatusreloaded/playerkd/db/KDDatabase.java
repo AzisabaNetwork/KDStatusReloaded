@@ -6,8 +6,9 @@ import net.azisaba.kdstatusreloaded.config.KDConfig;
 import org.flywaydb.core.Flyway;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class KDDatabase {
     private final HikariDataSource hikariDataSource;
     private Jdbi jdbi;
@@ -43,7 +44,6 @@ public class KDDatabase {
         flyway.migrate();
     }
 
-    @NonNull
     public KDUserDataRepository kdUserDataRepository() {
         if (kdUserDataRepository == null) throw new RuntimeException("KDUserDataRepository was already closed.");
         return kdUserDataRepository;

@@ -1,9 +1,11 @@
 package net.azisaba.kdstatusreloaded.utils;
 
 import org.bukkit.ChatColor;
+import org.jspecify.annotations.NullMarked;
 
 import java.text.MessageFormat;
 
+@NullMarked
 public class Chat {
 
     // メッセージをフォーマットして、&で色をつける

@@ -1,8 +1,11 @@
 package net.azisaba.kdstatusreloaded.playerkd.model;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.beans.ConstructorProperties;
 import java.util.UUID;
 
+@NullMarked
 public class KDUserData implements Cloneable {
     public final UUID uuid;
     public String name;

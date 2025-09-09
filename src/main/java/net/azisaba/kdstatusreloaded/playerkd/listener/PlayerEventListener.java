@@ -11,9 +11,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@NullMarked
 public class PlayerEventListener implements Listener {
     private static final Logger logger = LoggerFactory.getLogger(PlayerEventListener.class);
     private final KDCache kdCache;

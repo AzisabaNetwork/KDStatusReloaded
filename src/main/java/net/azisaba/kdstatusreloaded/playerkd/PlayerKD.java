@@ -5,11 +5,13 @@ import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
 import net.azisaba.kdstatusreloaded.playerkd.cache.KDCache;
 import net.azisaba.kdstatusreloaded.playerkd.db.KDDatabase;
 import net.azisaba.kdstatusreloaded.playerkd.listener.PlayerEventListener;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@NullMarked
 public class PlayerKD {
     private final KDDatabase kdDatabase;
     private final KDCache kdCache;

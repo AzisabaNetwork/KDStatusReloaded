@@ -1,9 +1,11 @@
 package net.azisaba.kdstatusreloaded.utils;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.UUID;
 
+@NullMarked
 public class UUIDConverter {
 
     public static String convert(@NonNull UUID uuid) {

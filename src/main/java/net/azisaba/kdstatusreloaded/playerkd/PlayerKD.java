@@ -1,6 +1,7 @@
 package net.azisaba.kdstatusreloaded.playerkd;
 
 import net.azisaba.kdstatusreloaded.KDStatusReloaded;
+import net.azisaba.kdstatusreloaded.api.KillCountType;
 import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
 import net.azisaba.kdstatusreloaded.playerkd.cache.KDCache;
 import net.azisaba.kdstatusreloaded.playerkd.db.KDDatabase;
@@ -38,6 +39,14 @@ public class PlayerKD {
     public Optional<KDUserData> getPlayerDataWithNoCaching(UUID uuid) {
         if(kdCache.isCached(uuid)) return Optional.of(kdCache.getData(uuid));
         return kdDatabase.kdUserDataRepository().findById(uuid);
+    }
+
+    public int getRanking(KillCountType type, UUID uuid) {
+        return kdDatabase.kdUserDataRepository().getRanking(type.columnName, type.getFirstMilliSecond(), uuid);
+    }
+
+    public List<KDUserData> getTops(KillCountType type, int limit) {
+        return kdDatabase.kdUserDataRepository().findTop(type.columnName, limit);
     }
 
     public void migrate() {

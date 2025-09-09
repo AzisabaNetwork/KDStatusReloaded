@@ -17,8 +17,11 @@ public interface KDUserDataRepository {
     @SqlQuery("SELECT * FROM kill_death_data WHERE uuid = :uuid")
     Optional<KDUserData> findById(@Bind("uuid") UUID uuid);
 
-    @SqlQuery("SELECT * FROM kill_death_data ORDER BY kills DESC LIMIT :limit")
-    List<KDUserData> findTopByTotalKills(@Bind("limit") int limit);
+    @SqlQuery("SELECT * FROM kill_death_data ORDER BY :targetColumn DESC LIMIT :limit")
+    List<KDUserData> findTop(@Bind("targetColumn") String columnName, @Bind("limit") int limit);
+
+    @SqlQuery("SELECT * FROM (SELECT uuid, :targetColumn, last_updated, RANK() over (ORDER BY :targetColumn DESC) as 'rank' FROM kill_death_data WHERE last_updated > :unitFirstMilli ) s WHERE s.uuid = :uuid")
+    int getRanking(@Bind("targetColumn") String columnName, @Bind("unitFirstMilli") long unitFirstMilliSecond, @Bind("uuid") UUID uuid);
 
     @SqlUpdate("INSERT INTO kill_death_data (uuid, name, kills, deaths, daily_kills, monthly_kills, yearly_kills, last_updated) " +
             "VALUES (:uuid, :name, :totalKills, :deaths, :dailyKills, :monthlyKills, :yearlyKills, :lastUpdated) " +

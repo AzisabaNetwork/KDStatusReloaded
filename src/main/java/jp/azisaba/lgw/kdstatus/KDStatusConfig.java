@@ -33,6 +33,9 @@ public class KDStatusConfig {
 
         disableDeathWorldList.add("world");
         disableKillWorldList.add("world");
+
+        // load config from FileConfiguration
+        loadConfig();
     }
 
     public void loadConfig() {

@@ -47,7 +47,6 @@ public class KDStatusReloaded extends JavaPlugin {
         saveConfig();
 
         pluginConfig = new KDStatusConfig(this);
-        pluginConfig.loadConfig();
 
         sqlHandler = new SQLHandler(new File(getDataFolder(), "playerData.db"));
         kdDataContainer = new KillDeathDataContainer(new PlayerDataSQLController(sqlHandler).init());
@@ -103,7 +102,6 @@ public class KDStatusReloaded extends JavaPlugin {
     public void reloadPluginConfig() {
         reloadConfig();
         this.pluginConfig = new KDStatusConfig(this);
-        this.pluginConfig.loadConfig();
     }
 
     public PlayerDataMySQLController getKDData() {

@@ -19,7 +19,7 @@ public class KDCache {
     }
 
     public KDUserData get(UUID uuid) {
-        if(!cacheMap.containsKey(uuid)) {
+        if (!cacheMap.containsKey(uuid)) {
             cacheMap.put(
                     uuid,
                     dataRepository.findById(uuid).orElse(new KDUserData(uuid, ""))
@@ -37,7 +37,7 @@ public class KDCache {
 
     public void remove(UUID uuid) {
         KDUserData kdUserData = cacheMap.remove(uuid);
-        if(kdUserData != null) {
+        if (kdUserData != null) {
             // If data cached, upsert to db.
             dataRepository.upsert(kdUserData);
         }

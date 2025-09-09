@@ -41,8 +41,8 @@ public class PlayerEventListener implements Listener {
 
         // increment death count
         World victimWorld = victim.getWorld();
-        if(killDeathConfig.disableDeathWorldList.contains(victimWorld.getName())) {
-            if(killDeathConfig.showCountCancelled) {
+        if (killDeathConfig.disableDeathWorldList.contains(victimWorld.getName())) {
+            if (killDeathConfig.showCountCancelled) {
                 logger.info(Chat.f("{0}のデス数加算をキャンセル (\"{1}\" が無効化にするワールドに指定されているため)", victim.getName(), victimWorld.getName()));
             }
         } else {
@@ -50,10 +50,10 @@ public class PlayerEventListener implements Listener {
         }
 
         // increment kill count
-        if(killer != null) {
+        if (killer != null) {
             World killerWorld = killer.getWorld();
-            if(killDeathConfig.disableKillWorldList.contains(killerWorld.getName())) {
-                if(killDeathConfig.showCountCancelled) {
+            if (killDeathConfig.disableKillWorldList.contains(killerWorld.getName())) {
+                if (killDeathConfig.showCountCancelled) {
                     logger.info(Chat.f("{0}のキル数加算をキャンセル (\"{1}\" が無効にするワールドに指定されているため)", killer.getName(), killerWorld.getName()));
                 }
             } else {

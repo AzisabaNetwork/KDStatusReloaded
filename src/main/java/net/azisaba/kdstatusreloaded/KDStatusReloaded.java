@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 public class KDStatusReloaded extends JavaPlugin {
     private static final Logger logger = LoggerFactory.getLogger(KDStatusReloaded.class);
     private static KDStatusReloaded plugin;
-    public static KDStatusReloaded getPlugin() {
-        return plugin;
-    }
-
     protected File configFile;
     protected KDDatabase kdDatabase;
     protected KDConfig kdConfig;
     protected PlayerKD playerKd;
+
+    public static KDStatusReloaded getPlugin() {
+        return plugin;
+    }
 
     @Override
     public void onEnable() {
@@ -32,7 +32,7 @@ public class KDStatusReloaded extends JavaPlugin {
         plugin = this;
         configFile = new File(getDataFolder(), "config.yml");
 
-        if(!configFile.exists()) {
+        if (!configFile.exists()) {
             YamlConfigurations.save(configFile.toPath(), KDConfig.class, new KDConfig());
             logger.error("設定ファイルを編集してから、再度有効化してください。");
             Bukkit.getPluginManager().disablePlugin(this);
@@ -54,7 +54,7 @@ public class KDStatusReloaded extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if(playerKd != null) playerKd.onDisable();
+        if (playerKd != null) playerKd.onDisable();
         Bukkit.getLogger().info(getName() + " disabled.");
     }
 

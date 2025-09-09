@@ -24,7 +24,7 @@ public class KDSCommands {
 
     private static void registerCommand(String name, Consumer<PluginCommand> commandConsumer) {
         PluginCommand cmd = Bukkit.getPluginCommand(name);
-        if(cmd == null) throw new RuntimeException("Failed to get command " + name);
+        if (cmd == null) throw new RuntimeException("Failed to get command " + name);
         commandConsumer.accept(cmd);
     }
 }

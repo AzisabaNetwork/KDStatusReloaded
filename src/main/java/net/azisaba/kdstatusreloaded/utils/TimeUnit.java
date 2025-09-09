@@ -14,10 +14,6 @@ public enum TimeUnit {
         this.sqlColumnName = sqlColumnName;
     }
 
-    public String getSqlColumnName() {
-        return sqlColumnName;
-    }
-
     public static long getFirstMilliSecond(TimeUnit unit) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MILLISECOND, 0);
@@ -39,5 +35,9 @@ public enum TimeUnit {
             return cal.getTimeInMillis();
 
         return -1;
+    }
+
+    public String getSqlColumnName() {
+        return sqlColumnName;
     }
 }

@@ -45,7 +45,7 @@ public class KDDatabase {
 
     @NonNull
     public KDUserDataRepository kdUserDataRepository() {
-        if(kdUserDataRepository == null) throw new RuntimeException("KDUserDataRepository was already closed.");
+        if (kdUserDataRepository == null) throw new RuntimeException("KDUserDataRepository was already closed.");
         return kdUserDataRepository;
     }
 

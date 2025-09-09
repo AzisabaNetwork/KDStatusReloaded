@@ -1,7 +1,7 @@
 [versions]
 # plugin
 shadow = "8.3.9"
-runPaper = "2.3.1" # Latest version for java 8
+runPaper = "3.0.0" # Latest version for java 8
 
 # library
 mysqlConnectorJ = "9.1.0"

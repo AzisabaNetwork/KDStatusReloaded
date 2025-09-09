@@ -43,6 +43,10 @@ public class KDCache {
         }
     }
 
+    public boolean isCached(UUID uuid) {
+        return cacheMap.containsKey(uuid);
+    }
+
     public void removeAll() {
         cacheMap.forEach((uuid, kdUserData) -> dataRepository.upsert(kdUserData));
     }

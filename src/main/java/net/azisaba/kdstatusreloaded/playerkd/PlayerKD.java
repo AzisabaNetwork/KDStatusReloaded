@@ -7,6 +7,7 @@ import net.azisaba.kdstatusreloaded.playerkd.db.KDDatabase;
 import net.azisaba.kdstatusreloaded.playerkd.listener.PlayerEventListener;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class PlayerKD {
@@ -30,6 +31,11 @@ public class PlayerKD {
 
     public KDUserData getPlayerData(UUID uuid) {
         return kdCache.get(uuid);
+    }
+
+    public Optional<KDUserData> getPlayerDataWithNoCaching(UUID uuid) {
+        if(kdCache.isCached(uuid)) return Optional.of(kdCache.get(uuid));
+        return kdDatabase.kdUserDataRepository().findById(uuid);
     }
 
     public void migrate() {

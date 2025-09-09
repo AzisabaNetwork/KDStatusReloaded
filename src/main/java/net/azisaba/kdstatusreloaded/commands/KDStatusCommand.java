@@ -29,11 +29,11 @@ public class KDStatusCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        // Todo: impl this
-//        if (args[0].equalsIgnoreCase("migration")) {
-//            plugin.getKdDataContainer().migrationToMySQL((Player) sender);
-//            return true;
-//        }
+        if (args[0].equalsIgnoreCase("migration")) {
+            plugin.getPlayerKd().migrate();
+            sender.sendMessage("Migrated.");
+            return true;
+        }
 
         sender.sendMessage(Chat.f("&cUsage: {0}", cmd.getUsage().replace("{LABEL}", label)));
         return true;

@@ -30,4 +30,8 @@ public class PlayerKD {
     public KDUserData getPlayerData(UUID uuid) {
         return kdCache.get(uuid);
     }
+
+    public void migrate() {
+        kdDatabase.migration();
+    }
 }

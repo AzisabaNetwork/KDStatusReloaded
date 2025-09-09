@@ -26,7 +26,6 @@ public class KDDatabase {
         jdbi.installPlugin(new SqlObjectPlugin());
         kdUserDataRepository = jdbi.onDemand(KDUserDataRepository.class);
 
-        // Todo: move this to correct place
         migration();
     }
 

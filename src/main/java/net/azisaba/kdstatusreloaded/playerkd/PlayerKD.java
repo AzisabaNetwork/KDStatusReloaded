@@ -1,7 +1,7 @@
 package net.azisaba.kdstatusreloaded.playerkd;
 
 import net.azisaba.kdstatusreloaded.KDStatusReloaded;
-import net.azisaba.kdstatusreloaded.api.KDUserData;
+import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
 import net.azisaba.kdstatusreloaded.playerkd.cache.KDCache;
 import net.azisaba.kdstatusreloaded.playerkd.db.KDDatabase;
 import net.azisaba.kdstatusreloaded.playerkd.listener.PlayerEventListener;

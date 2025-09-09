@@ -1,6 +1,6 @@
 package net.azisaba.kdstatusreloaded.playerkd.db;
 
-import net.azisaba.kdstatusreloaded.api.KDUserData;
+import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
 import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindMethods;

@@ -1,6 +1,6 @@
 package net.azisaba.kdstatusreloaded.playerkd.cache;
 
-import net.azisaba.kdstatusreloaded.api.KDUserData;
+import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
 import net.azisaba.kdstatusreloaded.playerkd.db.KDUserDataRepository;
 import org.jspecify.annotations.NullMarked;
 

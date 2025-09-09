@@ -1,7 +1,7 @@
 package net.azisaba.kdstatusreloaded.commands;
 
 import com.google.common.base.Strings;
-import net.azisaba.kdstatusreloaded.api.KDUserData;
+import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
 import net.azisaba.kdstatusreloaded.playerkd.PlayerKD;
 import net.azisaba.kdstatusreloaded.utils.Chat;
 import org.bukkit.command.Command;

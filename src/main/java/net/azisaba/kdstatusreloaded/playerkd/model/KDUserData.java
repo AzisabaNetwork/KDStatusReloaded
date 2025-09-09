@@ -1,4 +1,4 @@
-package net.azisaba.kdstatusreloaded.api;
+package net.azisaba.kdstatusreloaded.playerkd.model;
 
 import java.beans.ConstructorProperties;
 import java.util.UUID;

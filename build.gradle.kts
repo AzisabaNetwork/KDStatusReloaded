@@ -24,10 +24,12 @@ dependencies {
     // system
     compileOnly(libs.spigotApi)
 
-    // include
-    implementation(libs.mysqlConnectorJ)
+    // database
     implementation(libs.hikaricp)
+    implementation(libs.mysqlConnectorJ)
     implementation(libs.bundles.jdbi)
+
+    // check
     implementation(libs.jspecify)
     testImplementation(libs.junit)
 }

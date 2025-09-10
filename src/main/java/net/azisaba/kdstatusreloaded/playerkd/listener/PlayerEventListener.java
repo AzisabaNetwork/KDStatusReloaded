@@ -34,7 +34,7 @@ public class PlayerEventListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
-        kdCache.remove(e.getPlayer().getUniqueId());
+        kdCache.remove(e.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

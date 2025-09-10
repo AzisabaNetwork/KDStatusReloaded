@@ -41,15 +41,25 @@ public class PlayerKD {
         return kdDatabase.kdUserDataRepository().findById(uuid);
     }
 
+    /**
+     * プレイヤーの順位を取得します。
+     * @param type キルの種類
+     * @param uuid プレイヤーのUUID
+     * @return 順位 (存在しなかった場合は-1)
+     */
     public int getRanking(KillCountType type, UUID uuid) {
-        return kdDatabase.kdUserDataRepository().getRanking(type.columnName, type.getFirstMilliSecond(), uuid);
+        return kdDatabase.kdUserDataRepository().getRanking(type.columnName, type.getFirstMilliSecond(), uuid).orElse(-1);
     }
 
     public List<KDUserData> getTops(KillCountType type, int limit) {
-        return kdDatabase.kdUserDataRepository().findTop(type.columnName, limit);
+        return kdDatabase.kdUserDataRepository().findTop(type.columnName, type.getFirstMilliSecond(), limit);
     }
 
     public void migrate() {
         kdDatabase.migrate();
+    }
+
+    public void flushAll() {
+        kdCache.flushAll();
     }
 }

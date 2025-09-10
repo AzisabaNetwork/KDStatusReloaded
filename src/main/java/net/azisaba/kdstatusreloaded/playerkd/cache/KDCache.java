@@ -3,15 +3,23 @@ package net.azisaba.kdstatusreloaded.playerkd.cache;
 import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
 import net.azisaba.kdstatusreloaded.playerkd.db.KDUserDataRepository;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 @NullMarked
 public class KDCache {
+    private static final Function<UUID, String> usernameGetter = (uuid) -> {
+        var findResult = Bukkit.getOnlinePlayers().stream().filter(p -> p.getUniqueId() == uuid).findFirst();
+        if(findResult.isEmpty()) throw new RuntimeException("Failed to get name for " + uuid);
+        return findResult.get().getName();
+    };
+
     private final HashMap<UUID, KDUserData> cacheMap = new HashMap<>();
 
     private final KDUserDataRepository dataRepository;
@@ -21,23 +29,19 @@ public class KDCache {
     }
 
     public KDUserData getData(UUID uuid) {
-        return get(uuid, () -> {
-            var findResult = Bukkit.getOnlinePlayers().stream().filter(p -> p.getUniqueId() == uuid).findFirst();
-            if(findResult.isEmpty()) throw new RuntimeException("Failed to get name for " + uuid);
-            return findResult.get().getName();
-        }).clone();
+        return get(uuid, usernameGetter).clone();
     }
 
     // For internal
     protected KDUserData get(UUID uuid, String name) {
-        return get(uuid, () -> name);
+        return get(uuid, (id) -> name);
     }
 
-    protected KDUserData get(UUID uuid, Supplier<String> nameSupplier) {
+    protected KDUserData get(UUID uuid, Function<UUID, String> nameGetter) {
         if (!cacheMap.containsKey(uuid)) {
             cacheMap.put(
                     uuid,
-                    dataRepository.findById(uuid).orElse(new KDUserData(uuid, nameSupplier.get()))
+                    dataRepository.findById(uuid).orElse(new KDUserData(uuid, nameGetter.apply(uuid)))
             );
         }
         return cacheMap.get(uuid);
@@ -50,12 +54,17 @@ public class KDCache {
         );
     }
 
-    public void remove(UUID uuid) {
-        KDUserData kdUserData = cacheMap.remove(uuid);
+    public void remove(Player player) {
+        KDUserData kdUserData = cacheMap.remove(player.getUniqueId());
         if (kdUserData != null) {
+            kdUserData.name = player.getName();
             // If data cached, upsert to db.
             dataRepository.upsert(kdUserData);
         }
+    }
+
+    public void flushAll() {
+        cacheMap.forEach((uuid, kdUserData) -> dataRepository.upsert(kdUserData));
     }
 
     public boolean isCached(UUID uuid) {

@@ -5,6 +5,7 @@ import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindFields;
 import org.jdbi.v3.sqlobject.customizer.BindMethods;
+import org.jdbi.v3.sqlobject.customizer.Define;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
@@ -17,11 +18,21 @@ public interface KDUserDataRepository {
     @SqlQuery("SELECT * FROM kill_death_data WHERE uuid = :uuid")
     Optional<KDUserData> findById(@Bind("uuid") UUID uuid);
 
-    @SqlQuery("SELECT * FROM kill_death_data ORDER BY :targetColumn DESC LIMIT :limit")
-    List<KDUserData> findTop(@Bind("targetColumn") String columnName, @Bind("limit") int limit);
+    @SqlQuery("SELECT * FROM kill_death_data WHERE last_updated > :unitFirstMilli ORDER BY <column> DESC LIMIT :limit")
+    List<KDUserData> findTop(@Define("column") String columnName, @Bind("unitFirstMilli") long unitFirstMilliSecond, @Bind("limit") int limit);
 
-    @SqlQuery("SELECT * FROM (SELECT uuid, :targetColumn, last_updated, RANK() over (ORDER BY :targetColumn DESC) as 'rank' FROM kill_death_data WHERE last_updated > :unitFirstMilli ) s WHERE s.uuid = :uuid")
-    int getRanking(@Bind("targetColumn") String columnName, @Bind("unitFirstMilli") long unitFirstMilliSecond, @Bind("uuid") UUID uuid);
+    @SqlQuery("""
+            SELECT s.rank
+            FROM (
+              SELECT uuid,
+                     RANK() OVER (ORDER BY <column> DESC) AS rank
+              FROM kill_death_data
+              WHERE last_updated > :unitFirstMilli
+                AND <column> >= 1
+            ) s
+            WHERE s.uuid = :uuid
+            """)
+    Optional<Integer> getRanking(@Define("column") String columnName, @Bind("unitFirstMilli") long unitFirstMilliSecond, @Bind("uuid") UUID uuid);
 
     @SqlUpdate("INSERT INTO kill_death_data (uuid, name, kills, deaths, daily_kills, monthly_kills, yearly_kills, last_updated) " +
             "VALUES (:uuid, :name, :totalKills, :deaths, :dailyKills, :monthlyKills, :yearlyKills, :lastUpdated) " +

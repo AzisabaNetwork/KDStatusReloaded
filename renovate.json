@@ -5,6 +5,13 @@
   ],
   "configMigration": true,
   "minimumReleaseAge": "7 days",
+  "timezone": "Asia/Tokyo",
+  "schedule": [
+    "every 1 hour after 06:00 and before 23:59 every day"
+  ],
+  "automergeSchedule": [
+    "every 1 hour after 06:00 and before 23:59 every day"
+  ],
   "packageRules": [
     {
       "groupName": "auto-update-junit",

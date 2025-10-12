@@ -11,7 +11,7 @@ hikaricp = "7.0.2"
 jdbi = "3.49.5"
 flyway = "11.14.0"
 jspecify = "1.0.0"
-junit = "5.13.4"
+junit = "5.14.0"
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

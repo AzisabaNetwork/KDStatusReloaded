@@ -1,5 +1,39 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>AzisabaNetwork/renovate-config"
+  ],
+  "configMigration": true,
+  "minimumReleaseAge": "7 days",
+  "packageRules": [
+    {
+      "groupName": "auto-update-junit",
+      "automerge": true,
+      "matchPackageNames": [
+        "org.junit:junit-bom"
+      ]
+    },
+    {
+      "groupName": "auto-update-plugins",
+      "automerge": true,
+      "matchPackageNames": [
+        "com.gradleup.shadow",
+        "xyz.jpenilla.run-paper"
+      ]
+    },
+    {
+      "groupName": "auto-update-external",
+      "automerge": true,
+      "matchPackageNames": [
+        "de.exlll:configlib-yaml",
+        "org.mariadb.jdbc:mariadb-java-client",
+        "com.zaxxer:HikariCP",
+        "org.jdbi:jdbi3-core",
+        "org.jdbi:jdbi3-sqlobject",
+        "org.flywaydb:flyway-core",
+        "org.flywaydb:flyway-mysql",
+        "org.jspecify:jspecify"
+      ]
+    }
   ]
 }

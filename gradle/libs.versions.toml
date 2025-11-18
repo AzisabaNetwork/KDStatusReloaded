@@ -1,7 +1,7 @@
 [versions]
 # plugin
 shadow = "9.2.2"
-runPaper = "3.0.1"
+runPaper = "3.0.2"
 
 # library
 spigotApi = "1.16.5-R0.1-SNAPSHOT"

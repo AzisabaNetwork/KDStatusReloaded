@@ -1,18 +1,18 @@
 package net.azisaba.kdstatusreloaded.api;
 
-import net.azisaba.kdstatusreloaded.KDStatusReloaded;
-import net.azisaba.kdstatusreloaded.playerkd.PlayerKD;
-import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
-import org.jspecify.annotations.NullMarked;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import net.azisaba.kdstatusreloaded.KDStatusReloaded;
+import net.azisaba.kdstatusreloaded.playerkd.PlayerKD;
+import net.azisaba.kdstatusreloaded.playerkd.model.KDUserData;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class KDSAPI {
     private static PlayerKD playerKd() {
-        return KDStatusReloaded.getPlugin().getPlayerKd();
+        return JavaPlugin.getPlugin(KDStatusReloaded.class).getPlayerKd();
     }
 
     public static KDUserData getPlayerData(UUID uuid) {

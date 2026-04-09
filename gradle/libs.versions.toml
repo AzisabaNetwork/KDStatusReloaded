@@ -6,7 +6,7 @@ runPaper = "3.0.2"
 # library
 spigotApi = "1.16.5-R0.1-SNAPSHOT"
 configLib = "4.8.1"
-mariaDBConnectorJ = "3.5.7"
+mariaDBConnectorJ = "3.5.8"
 hikaricp = "7.0.2"
 jdbi = "3.52.0"
 flyway = "12.3.0"

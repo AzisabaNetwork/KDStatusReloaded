@@ -4,7 +4,7 @@ shadow = "9.4.2"
 runPaper = "3.0.2"
 
 # library
-spigotApi = "1.16.5-R0.1-SNAPSHOT"
+paperApi = "1.21.11-R0.1-SNAPSHOT"
 configLib = "4.8.1"
 mariaDBConnectorJ = "3.5.9"
 hikaricp = "7.0.2"
@@ -19,7 +19,7 @@ runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 
 [libraries]
 # system
-spigotApi = { module = "org.spigotmc:spigot-api", version.ref = "spigotApi" }
+paperApi = { module = "io.papermc.paper:paper-api", version.ref = "paperApi" }
 
 # config
 configLib = { module = "de.exlll:configlib-yaml", version.ref = "configLib" }

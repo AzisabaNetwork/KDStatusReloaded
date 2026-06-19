@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.runPaper)
 }
 
-val targetJavaVersion = 17
+val targetJavaVersion = 21
 version = System.getenv("VERSION") ?: "0.1.0-indev"
 
 // plugin metadata
@@ -14,15 +14,12 @@ val plDescription: String by project
 
 repositories {
     mavenCentral()
-    maven("https://oss.sonatype.org/content/groups/public/")
-    maven("https://hub.spigotmc.org/nexus/content/groups/public/")
-    maven("https://raw.githubusercontent.com/Rayzr522/maven-repo/master/")
-    maven("https://repo.maven.apache.org/maven2/")
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
     // system
-    compileOnly(libs.spigotApi)
+    compileOnly(libs.paperApi)
 
     // config
     implementation(libs.configLib)
@@ -74,16 +71,12 @@ tasks {
     }
 
     runServer {
-        minecraftVersion("1.16.5")
-        ignoreUnsupportedJvm()
+        minecraftVersion("1.21.11")
     }
 
     compileJava {
         options.encoding = "UTF-8"
-
-        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
-            options.release.set(targetJavaVersion)
-        }
+        options.release.set(targetJavaVersion)
     }
 
     javadoc {

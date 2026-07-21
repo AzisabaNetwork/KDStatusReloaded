@@ -40,8 +40,8 @@ jobs:
         run: ./gradlew publish
         env:
           VERSION: ${{ github.event.inputs.version }}
-          REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
-          REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
+          REPO_USERNAME: ${{ secrets.NEWREPO_USERNAME }}
+          REPO_PASSWORD: ${{ secrets.NEWREPO_PASSWORD }}
 
       - name: Create release
         uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1

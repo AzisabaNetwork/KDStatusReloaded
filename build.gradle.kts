@@ -105,8 +105,8 @@ publishing {
         maven {
             name = "azisaba-repo"
             credentials {
-                username = System.getenv("NEWREPO_USERNAME")
-                password = System.getenv("NEWREPO_PASSWORD")
+                username = System.getenv("REPO_USERNAME")
+                password = System.getenv("REPO_PASSWORD")
             }
             url =
                 if (project.version.toString().endsWith("-SNAPSHOT")) {

@@ -1,6 +1,6 @@
 [versions]
 # plugin
-shadow = "9.5.1"
+shadow = "9.6.0"
 runPaper = "3.0.2"
 
 # library

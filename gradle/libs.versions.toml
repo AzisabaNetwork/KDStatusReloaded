@@ -9,7 +9,7 @@ configLib = "4.8.1"
 mariaDBConnectorJ = "3.5.10"
 hikaricp = "7.1.0"
 jdbi = "3.54.0"
-flyway = "13.2.0"
+flyway = "13.3.0"
 jspecify = "1.0.1"
 junit = "6.1.3"
 
